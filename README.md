@@ -1,12 +1,12 @@
 # Serratec-Projeto-APIRestfull-Grupo3
 ## Participantes
-- MANOEL VITOR LAQUE COSTA
-- ANDRE LUIS MAIA DE CARVALHO
-- DOUGLAS MAIA RAMOS DA SILVA
-- GUSTAVO MONERAT ROSA
-- ISAQUE PEREZ RODRIGUES
-- LUCAS MEDEIROS CALDAS
-- RAYNAN AVILA TITONELI DE CASTRO
+- Manoel Vitor Laque Costa
+- Andre Luis Maia De Carvalho
+- Douglas Maia Ramos Da Silva
+- Gustavo Monerat Rosa
+- Isaque Perez Rodrigues
+- Lucas Medeiros Caldas
+- Raynan Avila Titoneli De Castro
 
 ### Abstract 
 Este projeto tem como objetivo exercitar a criação de uma APIRestful.
@@ -50,3 +50,6 @@ O seu grupo foi convidado a desenvolver uma API para um novo sistema de E Commer
 ### Extras:
 - Criar documentação no swagger.
 - Adicionar foto ao produto
+
+### DER:
+![DER](Trabalho%20Grupo%203%20-%20API%20Restful.png)
