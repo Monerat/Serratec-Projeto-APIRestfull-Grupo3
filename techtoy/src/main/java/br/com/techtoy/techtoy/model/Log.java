@@ -23,6 +23,7 @@ public class Log {
     private long id;
 
     @Column(nullable = false)
+    //verificar posteriormente se iremos utilizar enum
     private String tipoAcao;
 
     @Column(nullable = false)
@@ -39,6 +40,7 @@ public class Log {
     @JsonBackReference
     private long idUsuario;
 
+    // GETTERS AND SETTERS
     public long getId() {
         return id;
     }
