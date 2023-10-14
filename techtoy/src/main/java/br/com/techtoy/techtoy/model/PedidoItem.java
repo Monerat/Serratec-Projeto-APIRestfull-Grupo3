@@ -27,11 +27,15 @@ public class PedidoItem {
 
     private double acrescimo;
 
-    @OneToOne(mappedBy = "PedidoItem")
-    private Produto produto;
-
-    @OneToOne(mappedBy = "pedidoItem") 
+    @ManyToOne
+    @JoinColumn(name = "idPedido", nullable = false) // Aqui vai gerar no banco uma coluna na tabela contaBancaria com o id_titular
+    @JsonBackReference
     private Pedido pedido;
+
+    @ManyToOne
+    @JoinColumn(name = "idProduto", nullable = false) // Aqui vai gerar no banco uma coluna na tabela contaBancaria com o id_titular
+    @JsonBackReference
+    private Produto produto;
 
     public long getId() {
         return id;
