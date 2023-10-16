@@ -1,6 +1,9 @@
 package br.com.techtoy.techtoy.model;
 
-import java.sql.Date;
+
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,13 +35,37 @@ public class Pedido {
     private String observacao;
 
     @ManyToOne
-    @JoinColumn(name = "idCliente", nullable = false)
+    @JoinColumn(name = "idUsuario", nullable = false)
     @JsonBackReference
-    private long idCliente;
+    private Usuario usuario;
 
     @OneToMany(mappedBy = "pedido")
-    @JsonBackReference
-    private PedidoItem pedidoItem;
+    private List<PedidoItem> pedidoItens;
+
+    
+    
+    public Pedido(long id, int formaPagamento, String observacao, Usuario usuario,
+            PedidoItem pedidoItem) {
+        this.id = id;
+        this.dataPedido = new Date();
+        this.formaPagamento = formaPagamento;
+        this.observacao = observacao;
+        this.usuario = usuario;
+        this.pedidoItens = new ArrayList<>();
+        this.pedidoItens.add(pedidoItem);
+    } 
+    
+    
+    public Pedido(long id) {
+        this.id = id;
+        this.dataPedido = new Date();
+    }
+
+
+    public Pedido() {
+        this.dataPedido = new Date();
+    }
+
 
     public long getId() {
         return id;
@@ -72,13 +99,23 @@ public class Pedido {
         this.observacao = observacao;
     }
 
-    public long getIdCliente() {
-        return idCliente;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setIdCliente(long idCliente) {
-        this.idCliente = idCliente;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
-    
+
+    public List<PedidoItem> getPedidoItens() {
+        return pedidoItens;
+    }
+
+    public void setPedidoItens(List<PedidoItem> pedidoItem) {
+        this.pedidoItens = pedidoItem;
+    }
+
+
+
  
 }

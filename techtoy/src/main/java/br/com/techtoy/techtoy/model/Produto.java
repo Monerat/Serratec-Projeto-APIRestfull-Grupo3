@@ -1,5 +1,8 @@
 package br.com.techtoy.techtoy.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -32,15 +35,38 @@ public class Produto {
     @Column(nullable = false)
     private Double valorUn;
 
+    @Column(nullable = false)
+    private boolean ativo;
+
     @ManyToOne
     @JoinColumn(name = "idCategoria", nullable = false)
     @JsonBackReference
-    private long idCategoria;
+    private Categoria categoria;
 
     @OneToMany(mappedBy = "produto")
-    @JsonBackReference
-    private PedidoItem pedidoItem;
+    private List<PedidoItem> pedidoItens;
+
     
+
+    public Produto(long id, String nome, String observacao, int estoque, Double valorUn, boolean ativo,
+            PedidoItem pedidoItem) {
+        this.id = id;
+        this.nome = nome;
+        this.observacao = observacao;
+        this.estoque = estoque;
+        this.valorUn = valorUn;
+        this.ativo = ativo;
+        this.pedidoItens = new ArrayList<>();
+        this.pedidoItens.add(pedidoItem);
+    }
+
+    public Produto(long id) {
+        this.id = id;
+    }
+
+    public Produto() {
+    }
+
     public long getId() {
         return id;
     }
@@ -81,12 +107,30 @@ public class Produto {
         this.valorUn = valorUn;
     }
 
-    public long getIdCategoria() {
-        return idCategoria;
+    public boolean isAtivo() {
+        return ativo;
     }
 
-    public void setIdCategoria(long idCategoria) {
-        this.idCategoria = idCategoria;
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
+
+    public List<PedidoItem> getPedidoItens() {
+        return pedidoItens;
+    }
+
+    public void setPedidoItens(List<PedidoItem> pedidoItens) {
+        this.pedidoItens = pedidoItens;
     }
     
+    
+   
 }

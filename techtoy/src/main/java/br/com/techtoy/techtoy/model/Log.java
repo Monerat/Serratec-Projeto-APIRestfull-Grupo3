@@ -38,7 +38,20 @@ public class Log {
     @ManyToOne
     @JoinColumn(name = "idUsuario", nullable = false)
     @JsonBackReference
-    private long idUsuario;
+    private Usuario usuario;
+
+    
+    public Log(long id, String tipoAcao, long valorOriginal, long valorAtual) {
+        this.id = id;
+        this.tipoAcao = tipoAcao;
+        this.dataAcao = new Date();
+        this.valorOriginal = valorOriginal;
+        this.valorAtual = valorAtual;
+    }
+
+    public Log() {
+        this.dataAcao = new Date();
+    }
 
     // GETTERS AND SETTERS
     public long getId() {
@@ -81,12 +94,12 @@ public class Log {
         this.valorAtual = valorAtual;
     }
 
-    public long getIdUsuario() {
-        return idUsuario;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setIdUsuario(long idUsuario) {
-        this.idUsuario = idUsuario;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
-
+    
 }
