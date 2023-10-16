@@ -40,7 +40,7 @@ private String senha;
 @Column(nullable = false)
 private String perfil;
 
-@OneToMany(mappedBy = "log")
+@OneToMany(mappedBy = "usuario")
 private List<Log> logs;
 
 @OneToMany(mappedBy = "usuario")
