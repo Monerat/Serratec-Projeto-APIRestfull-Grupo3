@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -34,6 +35,10 @@ public class Pedido {
     @JoinColumn(name = "idCliente", nullable = false)
     @JsonBackReference
     private long idCliente;
+
+    @OneToMany(mappedBy = "pedido")
+    @JsonBackReference
+    private PedidoItem pedidoItem;
 
     public long getId() {
         return id;

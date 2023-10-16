@@ -40,7 +40,7 @@ private String perfil;
 @JsonBackReference
 private Log log;
 
-@OneToMany(mappedBy = "pedido")
+@OneToMany(mappedBy = "usuario")
 @JsonBackReference
 private Pedido pedido;
 

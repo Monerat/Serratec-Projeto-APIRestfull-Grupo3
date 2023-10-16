@@ -37,7 +37,7 @@ public class Produto {
     @JsonBackReference
     private long idCategoria;
 
-    @OneToMany(mappedBy = "pedidoItem")
+    @OneToMany(mappedBy = "produto")
     @JsonBackReference
     private PedidoItem pedidoItem;
     
