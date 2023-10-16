@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.techtoy.techtoy.model.Categoria;
+import br.com.techtoy.techtoy.model.exceptions.ResourceNotFound;
 import br.com.techtoy.techtoy.repository.CategoriaRepository;
 
 @Service
@@ -30,7 +31,7 @@ public class CategoriaService {
         Optional<Categoria> categoria = categoriaRepository.findById(id);
 
         if(categoria.isEmpty()){
-            throw new RuntimeException("Não existe uma categoria com o ID " + id);
+            throw new ResourceNotFound("Não existe uma categoria com o ID " + id);
         }
         return categoria.get();
     }

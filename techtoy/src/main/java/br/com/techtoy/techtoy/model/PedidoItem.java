@@ -7,7 +7,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -30,12 +29,12 @@ public class PedidoItem {
     @ManyToOne
     @JoinColumn(name = "idPedido", nullable = false) // Aqui vai gerar no banco uma coluna na tabela contaBancaria com o id_titular
     @JsonBackReference
-    private Pedido pedido;
+    private long idPedido;
 
     @ManyToOne
     @JoinColumn(name = "idProduto", nullable = false) // Aqui vai gerar no banco uma coluna na tabela contaBancaria com o id_titular
     @JsonBackReference
-    private Produto produto;
+    private long idProduto;
 
     public long getId() {
         return id;

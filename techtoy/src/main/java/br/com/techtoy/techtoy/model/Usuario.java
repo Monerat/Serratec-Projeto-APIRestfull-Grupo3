@@ -5,7 +5,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "usuario")
@@ -32,6 +35,14 @@ private String email;
 
 @Column(nullable = false)
 private String perfil;
+
+@OneToMany(mappedBy = "log")
+@JsonBackReference
+private Log log;
+
+@OneToMany(mappedBy = "pedido")
+@JsonBackReference
+private Pedido pedido;
 
 //#endregion
 

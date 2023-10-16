@@ -11,9 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.techtoy.techtoy.model.PedidoItem;
-import br.com.techtoy.techtoy.model.Produto;
 import br.com.techtoy.techtoy.service.PedidoItemService;
-import br.com.techtoy.techtoy.service.ProdutoService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;

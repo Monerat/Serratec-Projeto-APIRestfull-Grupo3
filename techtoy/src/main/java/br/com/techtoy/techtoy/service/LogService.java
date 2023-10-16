@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.techtoy.techtoy.model.Log;
+import br.com.techtoy.techtoy.model.exceptions.ResourceNotFound;
 import br.com.techtoy.techtoy.repository.LogRepository;
 
 @Service
@@ -33,7 +34,7 @@ public class LogService {
         Optional<Log> log = logRepository.findById(id);
 
         if(log.isEmpty()){
-            throw new RuntimeException("Log não foi encontrado na base com o Id: "+id);
+            throw new ResourceNotFound("Log não foi encontrado na base com o Id: "+id);
         }
         return log.get();
     }

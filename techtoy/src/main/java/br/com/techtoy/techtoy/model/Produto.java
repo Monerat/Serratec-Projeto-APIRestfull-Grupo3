@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -17,7 +18,7 @@ public class Produto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idEndereço")
+    @Column(name = "idProduto")
     private long id;
 
     @Column(nullable = false)
@@ -35,6 +36,10 @@ public class Produto {
     @JoinColumn(name = "idCategoria", nullable = false)
     @JsonBackReference
     private long idCategoria;
+
+    @OneToMany(mappedBy = "pedidoItem")
+    @JsonBackReference
+    private PedidoItem pedidoItem;
     
     public long getId() {
         return id;

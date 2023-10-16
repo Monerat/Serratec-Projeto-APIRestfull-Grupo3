@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.techtoy.techtoy.model.Produto;
+import br.com.techtoy.techtoy.model.exceptions.ResourceNotFound;
 import br.com.techtoy.techtoy.repository.ProdutoRepository;
 
 @Service
@@ -32,7 +33,7 @@ public class ProdutoService {
         Optional<Produto> produto = produtoRepository.findById(id);
 
         if(produto.isEmpty()){
-            throw new RuntimeException("Produto não foi encontrado na base com o Id: "+id);
+            throw new ResourceNotFound("Produto não foi encontrado na base com o Id: "+id);
         }
         return produto.get();
     }
