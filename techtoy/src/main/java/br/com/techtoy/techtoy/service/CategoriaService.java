@@ -1,11 +1,15 @@
 package br.com.techtoy.techtoy.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.techtoy.techtoy.dto.categoria.CategoriaRequestDTO;
+import br.com.techtoy.techtoy.dto.categoria.CategoriaResponseDTO;
 import br.com.techtoy.techtoy.model.Categoria;
 import br.com.techtoy.techtoy.model.exceptions.ResourceNotFound;
 import br.com.techtoy.techtoy.repository.CategoriaRepository;
@@ -16,30 +20,49 @@ public class CategoriaService {
     @Autowired
     private CategoriaRepository categoriaRepository;
 
+    @Autowired
+    private ModelMapper mapper;
     //CRUD
 
     //Create
-    public Categoria adicionar(Categoria categoria){
-        categoria.setId(0);
-        return categoriaRepository.save(categoria);
+    public CategoriaResponseDTO adicionar(CategoriaRequestDTO categoriaRequest){
+        
+        Categoria categoria = mapper.map(categoriaRequest, Categoria.class);
+
+        categoria = categoriaRepository.save(categoria);
+        
+        return mapper.map(categoria, CategoriaResponseDTO.class);
     }
     //Read
-    public List<Categoria> obterTodos(){
-        return categoriaRepository.findAll();
-    }
-    public Categoria obterPorId(Long id) {
-        Optional<Categoria> categoria = categoriaRepository.findById(id);
+    public List<CategoriaResponseDTO> obterTodos(){
+        
+        List<Categoria> categorias = categoriaRepository.findAll();
 
-        if(categoria.isEmpty()){
+        List<CategoriaResponseDTO> categoriasResponse = new ArrayList<>();
+
+        for (Categoria categoria : categorias){
+            categoriasResponse.add(mapper.map(categoria, CategoriaResponseDTO.class));
+        }
+        
+        return categoriasResponse;
+    }
+    public CategoriaResponseDTO obterPorId(Long id) {
+        Optional<Categoria> optCategoria = categoriaRepository.findById(id);
+
+        if(optCategoria.isEmpty()){
             throw new ResourceNotFound("Não existe uma categoria com o ID " + id);
         }
-        return categoria.get();
+        return mapper.map(optCategoria.get(), CategoriaResponseDTO.class);
     }
     //Update
-    public Categoria atualizar(Long id, Categoria categoria){
+    public CategoriaResponseDTO atualizar(Long id, CategoriaRequestDTO categoriaRequest){
+        
         obterPorId(id);
-        categoria.setId(id);
-        return categoriaRepository.save(categoria);
+        
+        categoriaRequest.setId(id);
+        Categoria categoria = categoriaRepository.save(mapper.map(categoriaRequest, Categoria.class));
+
+        return mapper.map(categoria, CategoriaResponseDTO.class);
     }
     //Delete
     public void deletar(Long id){
