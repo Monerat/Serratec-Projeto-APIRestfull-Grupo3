@@ -1,6 +1,7 @@
 package br.com.techtoy.techtoy.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -26,7 +27,7 @@ private long id;
 private String nome;
 
 @Column(nullable = false)
-private String dataCadastro;
+private Date dataCadastro;
 
 @Column(nullable = false)
 private String telefone;
@@ -50,7 +51,6 @@ public Usuario(long id, String nome, String dataCadastro, String telefone, Strin
         Log log, Pedido pedido) {
     this.id = id;
     this.nome = nome;
-    this.dataCadastro = dataCadastro;
     this.telefone = telefone;
     this.email = email;
     this.senha = senha;
@@ -84,11 +84,11 @@ public void setNome(String nome) {
     this.nome = nome;
 }
 
-public String getDataCadastro() {
+public Date getDataCadastro() {
     return dataCadastro;
 }
 
-public void setDataCadastro(String dataCadastro) {
+public void setDataCadastro(Date dataCadastro) {
     this.dataCadastro = dataCadastro;
 }
 

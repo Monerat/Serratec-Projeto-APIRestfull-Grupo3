@@ -1,5 +1,6 @@
 package br.com.techtoy.techtoy.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -33,6 +34,8 @@ public class UsuarioService {
 
         Usuario usuarioModel = mapper.map(usuarioReq, Usuario.class);
         usuarioModel.setId(0);
+        usuarioModel.setDataCadastro(new Date());
+        usuarioRepository.save(usuarioModel);
         return mapper.map(usuarioModel, UsuarioResponseDTO.class);
     }
 
@@ -55,12 +58,13 @@ public class UsuarioService {
     }
 
     // Update
+    @Transactional
     public UsuarioResponseDTO atualizar(Long id, UsuarioRequestDTO usuarioReq) {
         obterPorId(id);
         usuarioReq.setId(id);
 
-        Usuario usuarioModel = usuarioRepository.save(mapper.map(usuarioReq, Usuario.class));
-
+        Usuario usuarioModel = mapper.map(usuarioReq, Usuario.class);
+        usuarioModel.setDataCadastro(new Date());
         return mapper.map(usuarioModel, UsuarioResponseDTO.class);
     }
 
