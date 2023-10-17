@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.techtoy.techtoy.dto.usuario.UsuarioRequestDTO;
+import br.com.techtoy.techtoy.dto.usuario.UsuarioResponseDTO;
 import br.com.techtoy.techtoy.model.Usuario;
 import br.com.techtoy.techtoy.service.UsuarioService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,7 +27,7 @@ public class UsuarioController {
 
     //Create
     @PostMapping
-    public ResponseEntity<Usuario> adicionar(@RequestBody Usuario usuario) {
+    public ResponseEntity<UsuarioResponseDTO> adicionar(@RequestBody UsuarioRequestDTO usuario) {
         return ResponseEntity
             .status(201)
             .body(usuarioService.adicionar(usuario));
@@ -33,14 +35,14 @@ public class UsuarioController {
 
     //Read
     @GetMapping
-    public ResponseEntity<List<Usuario>> obterTodos(){
+    public ResponseEntity<List<UsuarioResponseDTO>> obterTodos(){
         return ResponseEntity
             .status(200)
             .body(usuarioService.obterTodos());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> obterPorId(@PathVariable Long id){
+    public ResponseEntity<UsuarioResponseDTO> obterPorId(@PathVariable Long id){
         return ResponseEntity
             .status(200)
             .body(usuarioService.obterPorId(id));
@@ -48,7 +50,7 @@ public class UsuarioController {
 
     //Update
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> atualizar(@PathVariable Long id, @RequestBody Usuario usuario){
+    public ResponseEntity<UsuarioResponseDTO> atualizar(@PathVariable Long id, @RequestBody UsuarioRequestDTO usuario){
         return ResponseEntity
             .status(200)
             .body(usuarioService.atualizar(id, usuario)); 
