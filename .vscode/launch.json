@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-TechtoyApplication<techtoy>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "br.com.techtoy.techtoy.TechtoyApplication",
+            "projectName": "techtoy",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

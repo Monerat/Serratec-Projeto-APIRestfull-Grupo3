@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.techtoy.techtoy.dto.categoria.CategoriaRequestDTO;
+import br.com.techtoy.techtoy.dto.categoria.CategoriaResponseDTO;
 import br.com.techtoy.techtoy.model.Categoria;
 import br.com.techtoy.techtoy.service.CategoriaService;
 
@@ -25,35 +27,37 @@ public class CategoriaController {
 
     //Create
     @PostMapping
-    public ResponseEntity<Categoria> adicionar(@RequestBody Categoria categoria){
+    public ResponseEntity<CategoriaResponseDTO> adicionar(@RequestBody CategoriaRequestDTO categoriaRequest){
+        CategoriaResponseDTO categoriaAdicionado = categoriaService.adicionar(categoriaRequest);
+
         return ResponseEntity
             .status(201)
-            .body(categoriaService.adicionar(categoria));
+            .body(categoriaAdicionado);
     }
     //Read
     @GetMapping
-    public ResponseEntity<List<Categoria>> obterTodos(){
-        return ResponseEntity
-            .status(200)
-            .body(categoriaService.obterTodos());
+    public ResponseEntity<List<CategoriaResponseDTO>> obterTodos(){
+        return ResponseEntity.ok(categoriaService.obterTodos());
     }
+
     @GetMapping("/{id}")
-    public ResponseEntity<Categoria> obterPorId(@PathVariable Long id){
-        return ResponseEntity 
-            .status(200)
-            .body(categoriaService.obterPorId(id));
+    public ResponseEntity<CategoriaResponseDTO> obterPorId(@PathVariable Long id){
+        return ResponseEntity.ok(categoriaService.obterPorId(id));
     }
     //Update
     @PutMapping("/{id}")
-    public ResponseEntity<Categoria> atualizar(@PathVariable Long id, @RequestBody Categoria categoria){
+    public ResponseEntity<CategoriaResponseDTO> atualizar(@PathVariable Long id, @RequestBody CategoriaRequestDTO categoriaRequest){
+        CategoriaResponseDTO categoriaAtualizado = categoriaService.atualizar(id, categoriaRequest);
+        
         return ResponseEntity
             .status(200)
-            .body(categoriaService.atualizar(id, categoria));
+            .body(categoriaAtualizado);
     }
     //Delete
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletar(@PathVariable Long id){
         categoriaService.deletar(id);
+      
         return ResponseEntity
             .status(204)
             .build();
