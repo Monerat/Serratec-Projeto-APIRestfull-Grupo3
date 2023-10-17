@@ -54,6 +54,7 @@ public class ProdutoService {
 
     //Update
     public ProdutoResponseDTO atualizar(Long id, ProdutoRequestDTO produtoRequest){
+        
         obterPorId(id);
 
         Produto produtoModel = mapper.map(produtoRequest, Produto.class);

@@ -2,6 +2,7 @@ package br.com.techtoy.techtoy.dto.usuario;
 
 import java.util.List;
 
+import br.com.techtoy.techtoy.dto.Pedido.PedidoResponseDTO;
 import br.com.techtoy.techtoy.dto.log.LogResponseDTO;
 
 public abstract class UsuarioResponseDTO extends UsuarioBaseDTO{

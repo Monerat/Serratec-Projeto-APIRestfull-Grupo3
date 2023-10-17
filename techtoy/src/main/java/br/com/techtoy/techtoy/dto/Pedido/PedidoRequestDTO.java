@@ -2,41 +2,23 @@ package br.com.techtoy.techtoy.dto.Pedido;
 
 import java.util.List;
 
-import br.com.techtoy.techtoy.model.PedidoItem;
+import br.com.techtoy.techtoy.dto.usuario.UsuarioRequestDTO;
 
-
-public class PedidoRequestDTO {
+public class PedidoRequestDTO extends PedidoBaseDTO {
     
-   
-    private int formaPagamento;
-    private String observacao;
-    private Long idUsuario;
-    private List<PedidoItem> pedidoItens;
+    private UsuarioRequestDTO usuario;
+    private List<PedidoItemRequestDTO> pedidoItens;
 
-    public int getFormaPagamento() {
-        return formaPagamento;
+    public UsuarioRequestDTO getUsuario() {
+        return usuario;
     }
-    public void setFormaPagamento(int formaPagamento) {
-        this.formaPagamento = formaPagamento;
+    public void setUsuario(UsuarioRequestDTO usuario) {
+        this.usuario = usuario;
     }
-    public String getObservacao() {
-        return observacao;
-    }
-    public void setObservacao(String observacao) {
-        this.observacao = observacao;
-    }
-    public Long getIdUsuario() {
-        return idUsuario;
-    }
-    public void setIdUsuario(Long idUsuario) {
-        this.idUsuario = idUsuario;
-    }
-    public List<PedidoItem> getPedidoItens() {
+    public List<PedidoItemRequestDTO> getPedidoItens() {
         return pedidoItens;
     }
-    public void setPedidoItens(List<PedidoItem> pedidoItens) {
+    public void setPedidoItens(List<PedidoItemRequestDTO> pedidoItens) {
         this.pedidoItens = pedidoItens;
     }
-
-    
 }

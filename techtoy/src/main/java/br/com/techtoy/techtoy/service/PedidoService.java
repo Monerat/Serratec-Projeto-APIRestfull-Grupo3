@@ -40,7 +40,6 @@ public class PedidoService {
 
         List<Pedido> pedidos = pedidoRepository.findAll();
 
-
         return pedidos.stream().map(pedido -> mapper
         .map(pedido, PedidoResponseDTO.class))
         .collect(Collectors.toList());
@@ -57,16 +56,14 @@ public class PedidoService {
         return mapper.map(optpedido.get(), PedidoResponseDTO.class);
     }
 
-
     //Update
-    public PedidoResponseDTO atualizar(Long id, PedidoRequestDTO pedido){
-        
+    public PedidoResponseDTO atualizar(Long id, PedidoRequestDTO pedidoRequest){
         
         obterPorId(id);
+        
+        pedidoRequest.setId(id);
 
-        pedido.setIdUsuario(id);
-
-        Pedido pedidoModel = pedidoRepository.save(mapper.map(pedido, Pedido.class));
+        Pedido pedidoModel = pedidoRepository.save(mapper.map(pedidoRequest, Pedido.class));
        
         return mapper.map(pedidoModel, PedidoResponseDTO.class);
     }

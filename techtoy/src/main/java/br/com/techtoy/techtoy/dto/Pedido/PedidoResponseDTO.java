@@ -1,28 +1,26 @@
 package br.com.techtoy.techtoy.dto.Pedido;
 
-import java.util.Date;
+import java.util.List;
 
-public class PedidoResponseDTO extends PedidoRequestDTO {
-    
-    private Long id;
-    private Date dataPedido;
+import br.com.techtoy.techtoy.dto.usuario.UsuarioResponseDTO;
 
-    
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public Date getDataPedido() {
-        return dataPedido;
-    }
-    public void setDataPedido(Date dataPedido) {
-        this.dataPedido = dataPedido;
+public class PedidoResponseDTO extends PedidoBaseDTO {
+    private UsuarioResponseDTO usuario;
+    private List<PedidoItemResponseDTO> pedidoItens;
+
+    public UsuarioResponseDTO getUsuario() {
+        return usuario;
     }
 
+    public void setUsuario(UsuarioResponseDTO usuario) {
+        this.usuario = usuario;
+    }
 
-   
+    public List<PedidoItemResponseDTO> getPedidoItens() {
+        return pedidoItens;
+    }
 
-    
+    public void setPedidoItens(List<PedidoItemResponseDTO> pedidoItens) {
+        this.pedidoItens = pedidoItens;
+    }
 }
