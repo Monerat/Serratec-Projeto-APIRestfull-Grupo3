@@ -1,11 +1,12 @@
 package br.com.techtoy.techtoy.dto.pedidoItem;
 
+import br.com.techtoy.techtoy.dto.Pedido.PedidoRequestDTO;
 import br.com.techtoy.techtoy.dto.produto.ProdutoRequestDTO;
 
 public class PedidoItemRequestDTO extends PedidoItemBaseDTO {
     
     private ProdutoRequestDTO produto;
-    private PedidoItemRequestDTO pedido;
+    private PedidoRequestDTO pedido;
     
     public ProdutoRequestDTO getProduto() {
         return produto;
@@ -13,10 +14,10 @@ public class PedidoItemRequestDTO extends PedidoItemBaseDTO {
     public void setProduto(ProdutoRequestDTO produto) {
         this.produto = produto;
     }
-    public PedidoItemRequestDTO getPedido() {
+    public PedidoRequestDTO getPedido() {
         return pedido;
     }
-    public void setPedido(PedidoItemRequestDTO pedido) {
+    public void setPedido(PedidoRequestDTO pedido) {
         this.pedido = pedido;
     }
     
