@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import br.com.techtoy.techtoy.service.LogService;
 import br.com.techtoy.techtoy.dto.log.LogRequestDTO;
 import br.com.techtoy.techtoy.dto.log.LogResponseDTO;
-import br.com.techtoy.techtoy.model.Log;
 
 @RestController
 @RequestMapping("/api/logs")

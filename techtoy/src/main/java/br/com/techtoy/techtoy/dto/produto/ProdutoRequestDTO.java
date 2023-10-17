@@ -3,7 +3,7 @@ package br.com.techtoy.techtoy.dto.produto;
 import java.util.List;
 
 import br.com.techtoy.techtoy.dto.categoria.CategoriaRequestDTO;
-import br.com.techtoy.techtoy.dto.pedidoItem.pedidoItemRequestDTO;
+import br.com.techtoy.techtoy.dto.pedidoItem.PedidoItemRequestDTO;
 
 public class ProdutoRequestDTO extends ProdutoBaseDTO {
 

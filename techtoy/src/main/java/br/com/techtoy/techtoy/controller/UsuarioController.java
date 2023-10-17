@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.techtoy.techtoy.dto.usuario.UsuarioRequestDTO;
 import br.com.techtoy.techtoy.dto.usuario.UsuarioResponseDTO;
-import br.com.techtoy.techtoy.model.Usuario;
 import br.com.techtoy.techtoy.service.UsuarioService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;

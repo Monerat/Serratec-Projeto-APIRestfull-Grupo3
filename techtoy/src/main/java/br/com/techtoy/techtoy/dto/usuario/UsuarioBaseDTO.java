@@ -1,6 +1,5 @@
 package br.com.techtoy.techtoy.dto.usuario;
 
-import java.util.List;
 public abstract class UsuarioBaseDTO {
 
     protected long id;
@@ -58,22 +57,6 @@ public abstract class UsuarioBaseDTO {
 
     public void setPerfil(String perfil) {
         this.perfil = perfil;
-    }
-
-    public List<Log> getLogs() {
-        return logs;
-    }
-
-    public void setLogs(List<Log> logs) {
-        this.logs = logs;
-    }
-
-    public List<Pedido> getPedidos() {
-        return pedidos;
-    }
-
-    public void setPedidos(List<Pedido> pedidos) {
-        this.pedidos = pedidos;
     }
 
     public long getId() {

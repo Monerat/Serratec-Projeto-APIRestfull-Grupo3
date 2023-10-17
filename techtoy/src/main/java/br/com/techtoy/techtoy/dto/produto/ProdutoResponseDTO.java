@@ -6,6 +6,7 @@ import br.com.techtoy.techtoy.dto.categoria.CategoriaResponseDTO;
 import br.com.techtoy.techtoy.dto.pedidoItem.PedidoItemResponseDTO;
 
 public class ProdutoResponseDTO extends ProdutoBaseDTO{
+    
     private CategoriaResponseDTO categoria;
     private List<PedidoItemResponseDTO> pedidoItens;
 
