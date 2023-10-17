@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.techtoy.techtoy.model.PedidoItem;
+import br.com.techtoy.techtoy.dto.pedidoItem.PedidoItemRequestDTO;
+import br.com.techtoy.techtoy.dto.pedidoItem.PedidoItemResponseDTO;
 import br.com.techtoy.techtoy.service.PedidoItemService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -25,7 +26,7 @@ public class PedidoItemController {
 
     //Create
     @PostMapping
-    public ResponseEntity<PedidoItem> adicionar(@RequestBody PedidoItem pedidoItem) {
+    public ResponseEntity<PedidoItemResponseDTO> adicionar(@RequestBody PedidoItemRequestDTO pedidoItem) {
         return ResponseEntity
             .status(201)
             .body(pedidoItemService.adicionar(pedidoItem));
@@ -33,14 +34,14 @@ public class PedidoItemController {
 
     //Read
     @GetMapping
-    public ResponseEntity<List<PedidoItem>> obterTodos(){
+    public ResponseEntity<List<PedidoItemResponseDTO>> obterTodos(){
         return ResponseEntity
             .status(200)
             .body(pedidoItemService.obterTodos());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PedidoItem> obterPorId(@PathVariable Long id){
+    public ResponseEntity<PedidoItemResponseDTO> obterPorId(@PathVariable Long id){
         return ResponseEntity
             .status(200)
             .body(pedidoItemService.obterPorId(id));
@@ -48,7 +49,7 @@ public class PedidoItemController {
 
       //Update
       @PutMapping("/{id}")
-      public ResponseEntity<PedidoItem> atualizar(@PathVariable Long id, @RequestBody PedidoItem pedidoItem){
+      public ResponseEntity<PedidoItemResponseDTO> atualizar(@PathVariable Long id, @RequestBody PedidoItemRequestDTO pedidoItem){
           return ResponseEntity
               .status(200)
               .body(pedidoItemService.atualizar(id, pedidoItem)); 
