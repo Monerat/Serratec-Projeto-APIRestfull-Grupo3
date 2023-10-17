@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.techtoy.techtoy.model.Produto;
+import br.com.techtoy.techtoy.dto.produto.ProdutoRequestDTO;
+import br.com.techtoy.techtoy.dto.produto.ProdutoResponseDTO;
 import br.com.techtoy.techtoy.service.ProdutoService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -25,7 +26,7 @@ public class ProdutoController {
 
     //Create
     @PostMapping
-    public ResponseEntity<Produto> adicionar(@RequestBody Produto produto) {
+    public ResponseEntity<ProdutoResponseDTO> adicionar(@RequestBody ProdutoRequestDTO produto) {
         return ResponseEntity
             .status(201)
             .body(produtoService.adicionar(produto));
@@ -33,14 +34,14 @@ public class ProdutoController {
 
     //Read
     @GetMapping
-    public ResponseEntity<List<Produto>> obterTodos(){
+    public ResponseEntity<List<ProdutoResponseDTO>> obterTodos(){
         return ResponseEntity
             .status(200)
             .body(produtoService.obterTodos());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Produto> obterPorId(@PathVariable Long id){
+    public ResponseEntity<ProdutoResponseDTO> obterPorId(@PathVariable Long id){
         return ResponseEntity
             .status(200)
             .body(produtoService.obterPorId(id));
@@ -48,7 +49,7 @@ public class ProdutoController {
 
     //Update
     @PutMapping("/{id}")
-    public ResponseEntity<Produto> atualizar(@PathVariable Long id, @RequestBody Produto produto){
+    public ResponseEntity<ProdutoResponseDTO> atualizar(@PathVariable Long id, @RequestBody ProdutoRequestDTO produto){
         return ResponseEntity
             .status(200)
             .body(produtoService.atualizar(id, produto)); 
