@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.techtoy.techtoy.dto.produto.ProdutoRequestDTO;
 import br.com.techtoy.techtoy.dto.produto.ProdutoResponseDTO;
@@ -53,13 +54,29 @@ public class ProdutoService {
     }
 
     //Update
+    @Transactional
     public ProdutoResponseDTO atualizar(Long id, ProdutoRequestDTO produtoRequest){
-        
-        obterPorId(id);
+        Produto produtoBase = mapper.map(obterPorId(id), Produto.class);
 
         Produto produtoModel = mapper.map(produtoRequest, Produto.class);
 
         produtoModel.setId(id);
+        if (produtoModel.getNome()==null){
+            produtoModel.setNome(produtoBase.getNome());
+        }
+        if (produtoModel.getObservacao()==null){
+            produtoModel.setObservacao(produtoBase.getObservacao());
+        }
+        if (produtoModel.getValorUn()==null){
+            produtoModel.setValorUn(produtoBase.getValorUn());
+        }
+        if (produtoModel.isAtivo()==null){
+            produtoModel.setAtivo(produtoBase.isAtivo());//entrou aqui nao alterou
+        }
+        if(produtoModel.getCategoria()==null){
+            produtoModel.setCategoria(produtoBase.getCategoria());
+        }
+
         produtoModel = produtoRepository.save(produtoModel);
         
         return mapper.map(produtoModel, ProdutoResponseDTO.class);

@@ -36,7 +36,7 @@ public class Produto {
     private Double valorUn;
 
     @Column(nullable = false)
-    private boolean ativo;
+    private Boolean ativo;
 
     @ManyToOne
     @JoinColumn(name = "idCategoria", nullable = false)
@@ -107,11 +107,11 @@ public class Produto {
         this.valorUn = valorUn;
     }
 
-    public boolean isAtivo() {
+    public Boolean isAtivo() {
         return ativo;
     }
 
-    public void setAtivo(boolean ativo) {
+    public void setAtivo(Boolean ativo) {
         this.ativo = ativo;
     }
 
