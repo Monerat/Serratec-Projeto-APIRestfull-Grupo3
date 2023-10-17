@@ -2,6 +2,7 @@ package br.com.techtoy.techtoy.dto.Pedido;
 
 import java.util.List;
 
+import br.com.techtoy.techtoy.dto.pedidoItem.PedidoItemRequestDTO;
 import br.com.techtoy.techtoy.dto.usuario.UsuarioRequestDTO;
 
 public class PedidoRequestDTO extends PedidoBaseDTO {
