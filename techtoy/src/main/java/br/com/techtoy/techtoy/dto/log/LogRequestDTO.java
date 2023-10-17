@@ -1,4 +1,6 @@
-package br.com.techtoy.techtoy.dto.LogDTO;
+package br.com.techtoy.techtoy.dto.log;
+
+import br.com.techtoy.techtoy.dto.usuario.UsuarioRequestDTO;
 
 public class LogRequestDTO {
     private String tipoAcao;

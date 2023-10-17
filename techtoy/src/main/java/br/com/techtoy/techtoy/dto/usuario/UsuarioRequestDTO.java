@@ -1,8 +1,8 @@
 package br.com.techtoy.techtoy.dto.usuario;
 
 import java.util.List;
-import br.com.techtoy.techtoy.model.Log;
-import br.com.techtoy.techtoy.model.Pedido;
+
+import br.com.techtoy.techtoy.dto.log.LogRequestDTO;
 
 public abstract class UsuarioRequestDTO extends UsuarioBaseDTO {
 
@@ -20,9 +20,9 @@ public abstract class UsuarioRequestDTO extends UsuarioBaseDTO {
     public List<PedidoRequestDTO> getPedidos() {
         return pedidos;
     }
-
+    
     public void setPedidos(List<PedidoRequestDTO> pedidos) {
         this.pedidos = pedidos;
     }
-
+      
 }

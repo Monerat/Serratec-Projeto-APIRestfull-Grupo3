@@ -8,8 +8,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.techtoy.techtoy.dto.LogDTO.LogResponseDTO;
-import br.com.techtoy.techtoy.dto.LogDTO.LogRequestDTO;
+import br.com.techtoy.techtoy.dto.log.LogRequestDTO;
+import br.com.techtoy.techtoy.dto.log.LogResponseDTO;
 import br.com.techtoy.techtoy.model.Log;
 import br.com.techtoy.techtoy.model.exceptions.ResourceNotFound;
 import br.com.techtoy.techtoy.repository.LogRepository;

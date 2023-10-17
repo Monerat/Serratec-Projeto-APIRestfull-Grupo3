@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import br.com.techtoy.techtoy.service.LogService;
-import br.com.techtoy.techtoy.dto.LogDTO.LogRequestDTO;
-import br.com.techtoy.techtoy.dto.LogDTO.LogResponseDTO;
+import br.com.techtoy.techtoy.dto.log.LogRequestDTO;
+import br.com.techtoy.techtoy.dto.log.LogResponseDTO;
 import br.com.techtoy.techtoy.model.Log;
 
 @RestController

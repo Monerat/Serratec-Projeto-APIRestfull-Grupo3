@@ -1,8 +1,11 @@
-package br.com.techtoy.techtoy.dto.LogDTO;
+package br.com.techtoy.techtoy.dto.log;
 
 import java.util.Date;
 
+import br.com.techtoy.techtoy.dto.usuario.UsuarioResponseDTO;
+
 public class LogResponseDTO {
+    
     private long id;
     private String tipoAcao;
     private Date dataAcao;

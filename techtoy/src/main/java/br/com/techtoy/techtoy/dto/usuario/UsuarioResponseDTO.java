@@ -1,10 +1,10 @@
 package br.com.techtoy.techtoy.dto.usuario;
 
 import java.util.List;
-import br.com.techtoy.techtoy.model.Log;
-import br.com.techtoy.techtoy.model.Pedido;
 
-public abstract class UsuarioResponseDTO {
+import br.com.techtoy.techtoy.dto.log.LogResponseDTO;
+
+public abstract class UsuarioResponseDTO extends UsuarioBaseDTO{
 
     private List<LogResponseDTO> logs;
     private List<PedidoResponseDTO> pedidos;

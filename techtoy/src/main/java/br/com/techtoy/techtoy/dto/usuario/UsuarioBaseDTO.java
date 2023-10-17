@@ -1,20 +1,15 @@
 package br.com.techtoy.techtoy.dto.usuario;
 
 import java.util.List;
-import br.com.techtoy.techtoy.model.Log;
-import br.com.techtoy.techtoy.model.Pedido;
 public abstract class UsuarioBaseDTO {
 
-    private long id;
-    private String nome;
-    private String dataCadastro;
-    private String telefone;
-    private String email;
-    private String senha;
-    private String perfil;
-
-    private List<Log> logs;
-    private List<Pedido> pedidos;
+    protected long id;
+    protected String nome;
+    protected String dataCadastro;
+    protected String telefone;
+    protected String email;
+    protected String senha;
+    protected String perfil;
 
     
     public String getNome() {
