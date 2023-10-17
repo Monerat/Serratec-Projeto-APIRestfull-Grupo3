@@ -13,12 +13,15 @@ public class ProdutoRequestDTO extends ProdutoBaseDTO {
     public CategoriaRequestDTO getCategoria() {
         return categoria;
     }
+
     public void setCategoria(CategoriaRequestDTO categoria) {
         this.categoria = categoria;
     }
+
     public List<PedidoItemRequestDTO> getPedidoItens() {
         return pedidoItens;
     }
+
     public void setPedidoItens(List<PedidoItemRequestDTO> pedidoItens) {
         this.pedidoItens = pedidoItens;
     }
