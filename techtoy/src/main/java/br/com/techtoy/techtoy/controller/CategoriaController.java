@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.techtoy.techtoy.dto.categoria.CategoriaRequestDTO;
 import br.com.techtoy.techtoy.dto.categoria.CategoriaResponseDTO;
-import br.com.techtoy.techtoy.model.Categoria;
 import br.com.techtoy.techtoy.service.CategoriaService;
 
 @RestController
