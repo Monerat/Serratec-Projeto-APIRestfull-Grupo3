@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import br.com.techtoy.techtoy.service.LogService;
+import br.com.techtoy.techtoy.dto.LogDTO.LogRequestDTO;
+import br.com.techtoy.techtoy.dto.LogDTO.LogResponseDTO;
 import br.com.techtoy.techtoy.model.Log;
 
 @RestController
@@ -23,45 +25,43 @@ public class LogController {
     @Autowired
     private LogService logService;
 
-    //Create
-    @PostMapping
-    public ResponseEntity<Log> adicionar(@RequestBody Log log){
-        return ResponseEntity
-        .status(201)
-        .body(logService.adicionar(log));
-    }
+    // verificar necessidade do create log
+
+    // //Create
+    // @PostMapping
+    // public ResponseEntity<LogResponseDTO> adicionar(@RequestBody LogRequestDTO logRequestDTO) {
+    //     LogResponseDTO logResponseDTO = logService.adicionar(logRequestDTO);
+    //     return ResponseEntity.ok(logResponseDTO);
+    // }
 
     
     //Read
     @GetMapping
-    public ResponseEntity<List<Log>> obterTodos(){
-        return ResponseEntity
-            .status(200)
-            .body(logService.obterTodos());
+    public ResponseEntity<List<LogResponseDTO>> obterTodos() {
+        List<LogResponseDTO> logs = logService.obterTodos();
+        return ResponseEntity.ok(logs);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Log> obterPorId(@PathVariable Long id){
-        return ResponseEntity
-            .status(200)
-            .body(logService.obterPorId(id));
+    public ResponseEntity<LogResponseDTO> obterPorId(@PathVariable Long id) {
+        LogResponseDTO log = logService.obterPorId(id);
+        return ResponseEntity.ok(log);
     }
 
-    //Update
-    @PutMapping("/{id}")
-    public ResponseEntity<Log> atualizar(@PathVariable Long id, @RequestBody Log log){
-        return ResponseEntity
-            .status(200)
-            .body(logService.atualizar(id, log)); 
-    }
+    // verificar necessidade do metodo PUT em log
+
+    // @PutMapping("/{id}")
+    // public ResponseEntity<LogResponseDTO> atualizar(@PathVariable Long id, @RequestBody LogRequestDTO logRequestDTO) {
+    //     LogResponseDTO updatedLog = logService.atualizar(id, logRequestDTO);
+    //     return ResponseEntity.ok(updatedLog);
+    // }
+
 
     //Delete
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletar(@PathVariable Long id){
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
         logService.deletar(id);
-        return ResponseEntity
-            .status(204)
-            .build();
+        return ResponseEntity.noContent().build();
     }
 
 }
