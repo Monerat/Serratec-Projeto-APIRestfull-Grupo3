@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.techtoy.techtoy.dto.Pedido.PedidoRequestDTO;
+import br.com.techtoy.techtoy.dto.Pedido.PedidoResponseDTO;
 import br.com.techtoy.techtoy.model.Pedido;
 import br.com.techtoy.techtoy.service.PedidoService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,7 +27,8 @@ public class PedidoController {
 
     //Create
     @PostMapping
-    public ResponseEntity<Pedido> adicionar(@RequestBody Pedido pedido) {
+    public ResponseEntity<PedidoResponseDTO> adicionar(@RequestBody PedidoRequestDTO pedido) {
+               
         return ResponseEntity
             .status(201)
             .body(pedidoService.adicionar(pedido));
@@ -33,14 +36,14 @@ public class PedidoController {
 
     //Read
     @GetMapping
-    public ResponseEntity<List<Pedido>> obterTodos(){
+    public ResponseEntity<List<PedidoResponseDTO>> obterTodos(){
         return ResponseEntity
             .status(200)
             .body(pedidoService.obterTodos());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Pedido> obterPorId(@PathVariable Long id){
+    public ResponseEntity<PedidoResponseDTO> obterPorId(@PathVariable Long id){
         return ResponseEntity
             .status(200)
             .body(pedidoService.obterPorId(id));
@@ -48,7 +51,8 @@ public class PedidoController {
 
     //Update
     @PutMapping("/{id}")
-    public ResponseEntity<Pedido> atualizar(@PathVariable Long id, @RequestBody Pedido pedido){
+    public ResponseEntity<PedidoResponseDTO> atualizar(@PathVariable Long id, @RequestBody PedidoRequestDTO pedido){
+        
         return ResponseEntity
             .status(200)
             .body(pedidoService.atualizar(id, pedido)); 
