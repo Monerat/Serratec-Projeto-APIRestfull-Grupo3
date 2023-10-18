@@ -55,6 +55,7 @@ public Usuario(long id, String nome, String dataCadastro, String telefone, Strin
     this.email = email;
     this.senha = senha;
     this.perfil = perfil;
+    this.dataCadastro = new Date();
     this.logs = new ArrayList<>();
     this.logs.add(log);
     this.pedidos = new ArrayList<>();
@@ -62,10 +63,12 @@ public Usuario(long id, String nome, String dataCadastro, String telefone, Strin
 }
 
 public Usuario(long id) {
+    this.dataCadastro = new Date();
     this.id = id;
 }
 
 public Usuario() {
+    this.dataCadastro = new Date();
 }
 
 public long getId() {

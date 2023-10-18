@@ -1,11 +1,15 @@
 package br.com.techtoy.techtoy.dto.pedidoItem;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import br.com.techtoy.techtoy.dto.Pedido.PedidoResponseDTO;
 import br.com.techtoy.techtoy.dto.produto.ProdutoResponseDTO;
 
 public class PedidoItemResponseDTO  extends PedidoItemBaseDTO{
     
+    @JsonBackReference
     private ProdutoResponseDTO produto;
+    @JsonBackReference
     private PedidoResponseDTO pedido;
 
     public ProdutoResponseDTO getProduto() {
