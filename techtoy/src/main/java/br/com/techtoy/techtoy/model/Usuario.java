@@ -32,7 +32,7 @@ private Date dataCadastro;
 @Column(nullable = false)
 private String telefone;
 
-@Column(nullable = false)
+@Column(nullable = false, unique = true)
 private String email;
 
 @Column(nullable = false)
@@ -142,7 +142,6 @@ public List<Pedido> getPedidos() {
 public void setPedidos(List<Pedido> pedidos) {
     this.pedidos = pedidos;
 }
-
 
 
 }
