@@ -2,10 +2,13 @@ package br.com.techtoy.techtoy.dto.Pedido;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import br.com.techtoy.techtoy.dto.pedidoItem.PedidoItemResponseDTO;
 import br.com.techtoy.techtoy.dto.usuario.UsuarioResponseDTO;
 
 public class PedidoResponseDTO extends PedidoBaseDTO {
+    @JsonBackReference
     private UsuarioResponseDTO usuario;
     private List<PedidoItemResponseDTO> pedidoItens;
 

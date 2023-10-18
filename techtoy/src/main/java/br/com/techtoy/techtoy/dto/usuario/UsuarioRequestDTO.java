@@ -9,7 +9,7 @@ public class UsuarioRequestDTO extends UsuarioBaseDTO {
 
     private List<LogRequestDTO> logs;
     private List<PedidoRequestDTO> pedidos;
-    protected String senha;
+    private String senha;
 
     public UsuarioRequestDTO() {
     }
