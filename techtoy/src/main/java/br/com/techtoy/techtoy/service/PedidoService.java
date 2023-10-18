@@ -44,14 +44,14 @@ public class PedidoService {
         pedidoModel = pedidoRepository.save(pedidoModel);
 
         //adicionar pedidoItens no pedido
-        List<PedidoItemResponseDTO> itens = adicionarItems(pedidoItemRequest, pedidoModel);
+        List<PedidoItemResponseDTO> itens = adicionarItens(pedidoItemRequest, pedidoModel);
         PedidoResponseDTO pedidoResponse = mapper.map(pedidoModel, PedidoResponseDTO.class); 
         pedidoResponse.setPedidoItens(itens);
         
         return pedidoResponse;
     }
 
-    private List<PedidoItemResponseDTO> adicionarItems(List<PedidoItemRequestDTO> pedidosRequest, Pedido pedidoModel){
+    private List<PedidoItemResponseDTO> adicionarItens(List<PedidoItemRequestDTO> pedidosRequest, Pedido pedidoModel){
         
         List<PedidoItemResponseDTO> adicionadas = new ArrayList<>();
 
