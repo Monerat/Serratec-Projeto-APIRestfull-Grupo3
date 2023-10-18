@@ -1,19 +1,20 @@
 package br.com.techtoy.techtoy.dto.log;
 
 import br.com.techtoy.techtoy.dto.usuario.UsuarioRequestDTO;
+import br.com.techtoy.techtoy.model.Enum.EnumLog;
 
 public class LogRequestDTO {
-    private String tipoAcao;
+    private EnumLog tipoAcao;
     private long valorOriginal;
     private long valorAtual;
     private UsuarioRequestDTO usuario; //verificar como vai ser a criação do Usuario ResponseDTO
 
     //não colocar id pois é gerado automaticamente e dataAcao vai ser gerado junto
 
-    public String getTipoAcao() {
+    public EnumLog getTipoAcao() {
         return tipoAcao;
     }
-    public void setTipoAcao(String tipoAcao) {
+    public void setTipoAcao(EnumLog tipoAcao) {
         this.tipoAcao = tipoAcao;
     }
     public long getValorOriginal() {
