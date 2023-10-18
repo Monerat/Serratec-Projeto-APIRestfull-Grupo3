@@ -20,6 +20,7 @@ public class PedidoItemService {
     @Autowired
     private PedidoItemRepository pedidoItemRepository;
 
+    @Autowired
     private ModelMapper mapper;
     //CRUD
 

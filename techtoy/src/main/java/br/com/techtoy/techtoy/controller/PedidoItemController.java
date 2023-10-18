@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-@RequestMapping("/api/pedidoItem")
+@RequestMapping("/api/pedidoItens")
 public class PedidoItemController {
     
     @Autowired
