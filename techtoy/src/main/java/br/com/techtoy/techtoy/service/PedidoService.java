@@ -1,5 +1,6 @@
 package br.com.techtoy.techtoy.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -7,10 +8,14 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.techtoy.techtoy.dto.Pedido.PedidoRequestDTO;
 import br.com.techtoy.techtoy.dto.Pedido.PedidoResponseDTO;
+import br.com.techtoy.techtoy.dto.pedidoItem.PedidoItemRequestDTO;
+import br.com.techtoy.techtoy.dto.pedidoItem.PedidoItemResponseDTO;
 import br.com.techtoy.techtoy.model.Pedido;
+import br.com.techtoy.techtoy.model.PedidoItem;
 import br.com.techtoy.techtoy.repository.PedidoRepository;
 
 @Service
@@ -19,6 +24,8 @@ public class PedidoService {
     @Autowired
     private PedidoRepository pedidoRepository;
 
+    @Autowired
+    private PedidoItemService pedidoItemService;
 
     @Autowired
     private ModelMapper mapper;
@@ -26,14 +33,38 @@ public class PedidoService {
     //CRUD
 
     //Create
+    @Transactional
     public PedidoResponseDTO adicionar(PedidoRequestDTO pedidoRequest){
         Pedido pedidoModel = mapper.map(pedidoRequest, Pedido.class);
 
+        //CRIAR NOVA VARIAVEL DE PEDIDOITEMREQUESTDTO
+        List<PedidoItemRequestDTO> pedidoItemRequest = pedidoRequest.getPedidoItens();
+
         pedidoModel.setId(0);
         pedidoModel = pedidoRepository.save(pedidoModel);
+
+        //adicionar pedidoItens no pedido
+        List<PedidoItemResponseDTO> itens = adicionarItems(pedidoItemRequest, pedidoModel);
+        PedidoResponseDTO pedidoResponse = mapper.map(pedidoModel, PedidoResponseDTO.class); 
+        pedidoResponse.setPedidoItens(itens);
         
-        return mapper.map(pedidoModel, PedidoResponseDTO.class);     
+        return pedidoResponse;
     }
+
+    private List<PedidoItemResponseDTO> adicionarItems(List<PedidoItemRequestDTO> pedidosRequest, Pedido pedidoModel){
+        
+        List<PedidoItemResponseDTO> adicionadas = new ArrayList<>();
+
+        for(PedidoItemRequestDTO pedidoItemRequest : pedidosRequest){
+            PedidoItem pedidoItem = mapper.map(pedidoItemRequest, PedidoItem.class);
+            pedidoItem.setPedido(pedidoModel);
+            //pedidoItem = pedidoItemService.adicionar(mapper.map(pedidoItem, PedidoItemRequestDTO.class));
+            adicionadas.add(pedidoItemService.adicionar(mapper.map(pedidoItem, PedidoItemRequestDTO.class)));
+        }
+
+        return adicionadas;
+
+    }  
 
     //Read
     public List<PedidoResponseDTO> obterTodos(){
