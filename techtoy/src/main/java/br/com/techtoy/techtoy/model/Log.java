@@ -13,6 +13,8 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import br.com.techtoy.techtoy.model.Enum.EnumLog;
+
 @Entity
 @Table(name = "log")
 public class Log {
@@ -24,7 +26,7 @@ public class Log {
 
     @Column(nullable = false)
     //verificar posteriormente se iremos utilizar enum
-    private String tipoAcao;
+    private EnumLog tipoAcao;
 
     @Column(nullable = false)
     private Date dataAcao;
@@ -41,7 +43,7 @@ public class Log {
     private Usuario usuario;
 
     
-    public Log(long id, String tipoAcao, long valorOriginal, long valorAtual) {
+    public Log(long id, EnumLog tipoAcao, long valorOriginal, long valorAtual) {
         this.id = id;
         this.tipoAcao = tipoAcao;
         this.dataAcao = new Date();
@@ -62,11 +64,11 @@ public class Log {
         this.id = id;
     }
 
-    public String getTipoAcao() {
+    public EnumLog getTipoAcao() {
         return tipoAcao;
     }
 
-    public void setTipoAcao(String tipoAcao) {
+    public void setTipoAcao(EnumLog tipoAcao) {
         this.tipoAcao = tipoAcao;
     }
 
