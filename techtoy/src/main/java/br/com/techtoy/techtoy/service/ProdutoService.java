@@ -26,6 +26,7 @@ public class ProdutoService {
     //CRUD
 
     //Create
+    @Transactional
     public ProdutoResponseDTO adicionar(ProdutoRequestDTO produtoRequest){
         Produto produtoModel = mapper.map(produtoRequest, Produto.class);
 

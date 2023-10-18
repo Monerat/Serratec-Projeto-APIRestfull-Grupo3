@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.techtoy.techtoy.dto.categoria.CategoriaRequestDTO;
 import br.com.techtoy.techtoy.dto.categoria.CategoriaResponseDTO;
@@ -25,6 +26,7 @@ public class CategoriaService {
     //CRUD
 
     //Create
+    @Transactional
     public CategoriaResponseDTO adicionar(CategoriaRequestDTO categoriaRequest){
         
         Categoria categoria = mapper.map(categoriaRequest, Categoria.class);
@@ -56,6 +58,7 @@ public class CategoriaService {
         return mapper.map(optCategoria.get(), CategoriaResponseDTO.class);
     }
     //Update
+    @Transactional
     public CategoriaResponseDTO atualizar(Long id, CategoriaRequestDTO categoriaRequest){
         
         obterPorId(id);

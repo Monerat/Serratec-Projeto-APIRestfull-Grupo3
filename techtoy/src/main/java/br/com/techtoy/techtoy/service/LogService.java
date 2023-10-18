@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.techtoy.techtoy.dto.log.LogRequestDTO;
 import br.com.techtoy.techtoy.dto.log.LogResponseDTO;
@@ -26,6 +27,7 @@ public class LogService {
     //CRUD
 
     //Create
+    @Transactional
     public LogResponseDTO adicionar(LogRequestDTO logRequestDTO){
         Log log = modelMapper.map(logRequestDTO, Log.class);
         
@@ -54,6 +56,7 @@ public class LogService {
     }
 
     //Update
+    @Transactional
     public LogResponseDTO atualizar(Long id, LogRequestDTO logRequestDTO){
         obterPorId(id);
         Log log = modelMapper.map(logRequestDTO, Log.class);

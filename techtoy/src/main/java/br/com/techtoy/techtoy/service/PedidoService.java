@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.techtoy.techtoy.dto.Pedido.PedidoRequestDTO;
 import br.com.techtoy.techtoy.dto.Pedido.PedidoResponseDTO;
@@ -26,6 +27,7 @@ public class PedidoService {
     //CRUD
 
     //Create
+    @Transactional
     public PedidoResponseDTO adicionar(PedidoRequestDTO pedidoRequest){
         Pedido pedidoModel = mapper.map(pedidoRequest, Pedido.class);
 
@@ -57,6 +59,7 @@ public class PedidoService {
     }
 
     //Update
+    @Transactional
     public PedidoResponseDTO atualizar(Long id, PedidoRequestDTO pedidoRequest){
         
         obterPorId(id);
