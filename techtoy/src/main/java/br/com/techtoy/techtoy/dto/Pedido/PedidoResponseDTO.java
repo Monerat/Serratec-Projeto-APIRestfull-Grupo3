@@ -11,7 +11,9 @@ import br.com.techtoy.techtoy.dto.usuario.UsuarioResponseDTO;
 public class PedidoResponseDTO extends PedidoBaseDTO {
     @JsonBackReference
     private UsuarioResponseDTO usuario;
+
     private Date dataPedido;
+    
     private List<PedidoItemResponseDTO> pedidoItens;
 
     public UsuarioResponseDTO getUsuario() {

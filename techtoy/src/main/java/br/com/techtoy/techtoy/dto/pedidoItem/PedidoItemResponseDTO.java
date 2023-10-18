@@ -7,7 +7,6 @@ import br.com.techtoy.techtoy.dto.produto.ProdutoResponseDTO;
 
 public class PedidoItemResponseDTO  extends PedidoItemBaseDTO{
     
-    @JsonBackReference
     private ProdutoResponseDTO produto;
     @JsonBackReference
     private PedidoResponseDTO pedido;

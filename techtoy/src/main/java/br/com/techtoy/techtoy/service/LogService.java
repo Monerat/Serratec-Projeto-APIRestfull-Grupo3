@@ -28,8 +28,10 @@ public class LogService {
     //Create
     public LogResponseDTO adicionar(LogRequestDTO logRequestDTO){
         Log log = modelMapper.map(logRequestDTO, Log.class);
+        
         log.setId(0);
         Log savedLog = logRepository.save(log);
+
         return modelMapper.map(savedLog, LogResponseDTO.class);
     }
     

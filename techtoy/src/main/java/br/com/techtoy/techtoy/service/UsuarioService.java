@@ -31,8 +31,10 @@ public class UsuarioService {
     @Transactional
     public UsuarioResponseDTO adicionar(UsuarioRequestDTO usuarioReq) {
         Usuario usuarioModel = mapper.map(usuarioReq, Usuario.class);
+        
         usuarioModel.setId(0);
         usuarioRepository.save(usuarioModel);
+
         return mapper.map(usuarioModel, UsuarioResponseDTO.class);
     }
 

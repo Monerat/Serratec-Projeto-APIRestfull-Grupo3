@@ -29,6 +29,7 @@ public class CategoriaService {
         
         Categoria categoria = mapper.map(categoriaRequest, Categoria.class);
 
+        categoria.setId(0);
         categoria = categoriaRepository.save(categoria);
         
         return mapper.map(categoria, CategoriaResponseDTO.class);

@@ -27,11 +27,11 @@ public class PedidoService {
 
     //Create
     public PedidoResponseDTO adicionar(PedidoRequestDTO pedidoRequest){
-        
         Pedido pedidoModel = mapper.map(pedidoRequest, Pedido.class);
-        
-        pedidoModel = pedidoRepository.save(pedidoModel);
 
+        pedidoModel.setId(0);
+        pedidoModel = pedidoRepository.save(pedidoModel);
+        
         return mapper.map(pedidoModel, PedidoResponseDTO.class);     
     }
 

@@ -27,9 +27,11 @@ public class ProdutoService {
 
     //Create
     public ProdutoResponseDTO adicionar(ProdutoRequestDTO produtoRequest){
-        
         Produto produtoModel = mapper.map(produtoRequest, Produto.class);
+
+        produtoModel.setId(0);
         produtoRepository.save(produtoModel);
+
         return mapper.map(produtoModel, ProdutoResponseDTO.class);
     }
 
