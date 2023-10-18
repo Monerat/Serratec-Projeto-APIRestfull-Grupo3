@@ -1,12 +1,14 @@
 package br.com.techtoy.techtoy.dto.usuario;
 
+import br.com.techtoy.techtoy.model.Enum.EnumTipoUsuario;
+
 public abstract class UsuarioBaseDTO {
 
     protected long id;
     protected String nome;
     protected String telefone;
     protected String email;
-    protected String perfil;
+    protected EnumTipoUsuario perfil;
 
     public String getNome() {
         return nome;
@@ -32,11 +34,11 @@ public abstract class UsuarioBaseDTO {
         this.email = email;
     }
 
-    public String getPerfil() {
+    public EnumTipoUsuario getPerfil() {
         return perfil;
     }
 
-    public void setPerfil(String perfil) {
+    public void setPerfil(EnumTipoUsuario perfil) {
         this.perfil = perfil;
     }
 

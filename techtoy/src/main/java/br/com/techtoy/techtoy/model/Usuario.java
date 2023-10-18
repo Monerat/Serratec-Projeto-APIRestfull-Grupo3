@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import br.com.techtoy.techtoy.model.Enum.EnumTipoUsuario;
+
 @Entity
 @Table(name = "usuario")
 public class Usuario {
@@ -39,7 +41,7 @@ private String email;
 private String senha;
 
 @Column(nullable = false)
-private String perfil;
+private EnumTipoUsuario perfil;
 
 @OneToMany(mappedBy = "usuario")
 private transient List<Log> logs;
@@ -47,7 +49,7 @@ private transient List<Log> logs;
 @OneToMany(mappedBy = "usuario")
 private transient List<Pedido> pedidos;
 
-public Usuario(long id, String nome, String dataCadastro, String telefone, String email, String senha, String perfil,
+public Usuario(long id, String nome, String dataCadastro, String telefone, String email, String senha, EnumTipoUsuario perfil,
         Log log, Pedido pedido) {
     this.id = id;
     this.nome = nome;
@@ -119,11 +121,11 @@ public void setSenha(String senha) {
     this.senha = senha;
 }
 
-public String getPerfil() {
+public EnumTipoUsuario getPerfil() {
     return perfil;
 }
 
-public void setPerfil(String perfil) {
+public void setPerfil(EnumTipoUsuario perfil) {
     this.perfil = perfil;
 }
 
