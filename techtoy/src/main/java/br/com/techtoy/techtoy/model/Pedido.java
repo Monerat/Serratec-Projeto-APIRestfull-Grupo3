@@ -17,6 +17,12 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import br.com.techtoy.techtoy.model.Enum.EnumFormaPagamento;
+
+
+
+
+
 @Entity
 @Table(name = "pedido")
 public class Pedido {
@@ -30,7 +36,7 @@ public class Pedido {
     private Date dataPedido;
 
     @Column(nullable = false)
-    private int formaPagamento;
+    private EnumFormaPagamento formaPagamento;
    
     private String observacao;
 
@@ -40,11 +46,11 @@ public class Pedido {
     private Usuario usuario;
 
     @OneToMany(mappedBy = "pedido")
-    private List<PedidoItem> pedidoItens;
+    private List<PedidoItem> pedidoItens; //Transient evita que o JASON spame o método.
 
     
     
-    public Pedido(long id, int formaPagamento, String observacao, Usuario usuario,
+    public Pedido(long id, EnumFormaPagamento formaPagamento, String observacao, Usuario usuario,
             PedidoItem pedidoItem) {
         this.id = id;
         this.dataPedido = new Date();
@@ -83,11 +89,11 @@ public class Pedido {
         this.dataPedido = dataPedido;
     }
 
-    public int getFormaPagamento() {
+    public EnumFormaPagamento getFormaPagamento() {
         return formaPagamento;
     }
 
-    public void setFormaPagamento(int formaPagamento) {
+    public void setFormaPagamento(EnumFormaPagamento formaPagamento) {
         this.formaPagamento = formaPagamento;
     }
 

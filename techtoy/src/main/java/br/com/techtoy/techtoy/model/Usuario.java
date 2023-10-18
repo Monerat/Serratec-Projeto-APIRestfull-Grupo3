@@ -42,10 +42,10 @@ private String senha;
 private String perfil;
 
 @OneToMany(mappedBy = "usuario")
-private List<Log> logs;
+private transient List<Log> logs;
 
 @OneToMany(mappedBy = "usuario")
-private List<Pedido> pedidos;
+private transient List<Pedido> pedidos;
 
 public Usuario(long id, String nome, String dataCadastro, String telefone, String email, String senha, String perfil,
         Log log, Pedido pedido) {

@@ -2,11 +2,13 @@ package br.com.techtoy.techtoy.dto.Pedido;
 
 import java.util.Date;
 
+import br.com.techtoy.techtoy.model.Enum.EnumFormaPagamento;
+
 public class PedidoBaseDTO {
     
     protected Long id;
     protected Date dataPedido;
-    protected int formaPagamento;
+    protected EnumFormaPagamento formaPagamento;
     protected String observacao;
 
     
@@ -22,10 +24,10 @@ public class PedidoBaseDTO {
     public void setDataPedido(Date dataPedido) {
         this.dataPedido = dataPedido;
     }
-    public int getFormaPagamento() {
+    public EnumFormaPagamento getFormaPagamento() {
         return formaPagamento;
     }
-    public void setFormaPagamento(int formaPagamento) {
+    public void setFormaPagamento(EnumFormaPagamento formaPagamento) {
         this.formaPagamento = formaPagamento;
     }
     public String getObservacao() {
@@ -34,5 +36,8 @@ public class PedidoBaseDTO {
     public void setObservacao(String observacao) {
         this.observacao = observacao;
     }
+
+    
+    
     
 }
