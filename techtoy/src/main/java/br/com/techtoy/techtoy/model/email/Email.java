@@ -9,10 +9,10 @@ public class Email {
     private String remetente;
     private List<String> destinatarios;
 
-    public Email(String assunto, String mensagem, String remetente, List<String> destinatarios) {
+    public Email(String assunto, String mensagem, List<String> destinatarios) {
         this.assunto = assunto;
         this.mensagem = mensagem;
-        this.remetente = remetente;
+        this.remetente = "grupo3.serratec.apirestful23.2@gmail.com";
         this.destinatarios = destinatarios;
     }
 

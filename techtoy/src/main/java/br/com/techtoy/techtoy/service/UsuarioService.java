@@ -25,16 +25,19 @@ public class UsuarioService {
     @Autowired
     private ModelMapper mapper;
 
+    @Autowired
+    EmailService emailService;
+
     // CRUD
 
     // Create
     @Transactional
     public UsuarioResponseDTO adicionar(UsuarioRequestDTO usuarioReq) {
         Usuario usuarioModel = mapper.map(usuarioReq, Usuario.class);
-        
+
         usuarioModel.setId(0);
         usuarioRepository.save(usuarioModel);
-
+        emailService.dispararEmail("Cadastro", usuarioModel.getEmail(), usuarioModel.getNome());
         return mapper.map(usuarioModel, UsuarioResponseDTO.class);
     }
 
@@ -61,8 +64,9 @@ public class UsuarioService {
     public UsuarioResponseDTO atualizar(Long id, UsuarioRequestDTO usuarioReq) {
         obterPorId(id);
         usuarioReq.setId(id);
-
         Usuario usuarioModel = mapper.map(usuarioReq, Usuario.class);
+        usuarioRepository.save(usuarioModel);
+        emailService.dispararEmail("Atualização", usuarioModel.getEmail(), usuarioModel.getNome());
         return mapper.map(usuarioModel, UsuarioResponseDTO.class);
     }
 
@@ -71,4 +75,5 @@ public class UsuarioService {
         obterPorId(id);
         usuarioRepository.deleteById(id);
     }
+
 }

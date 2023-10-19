@@ -1,5 +1,8 @@
 package br.com.techtoy.techtoy.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
@@ -12,11 +15,11 @@ import br.com.techtoy.techtoy.model.email.Email;
 
 @Service
 public class EmailService {
-    
+
     @Autowired
     private JavaMailSender javaMailSender;
 
-    public void enviar(Email email){
+    public void enviar(Email email) {
 
         try {
 
@@ -25,18 +28,30 @@ public class EmailService {
 
             helper.setFrom(email.getRemetente());
             helper.setSubject(email.getAssunto());
-            helper.setText(email.getMensagem(), true);  //true para html
+            helper.setText(email.getMensagem(), true); // true para html
             helper.setTo(email.getDestinatarios()
-                .toArray(new String[email.getDestinatarios().size()])
-            );
+                    .toArray(new String[email.getDestinatarios().size()]));
 
             javaMailSender.send(mimeMessage);
 
         } catch (MessagingException e) {
-            System.out.println("Deu ruim no envio de e-mail:");
+            System.out.println("Problemas ao enviar e-mail de confirmção de ação:");
             System.out.println(e.getMessage());
-        }     
+        }
 
     }
-}
 
+    public void dispararEmail(String tipoEmail, String destinatario, String nome) {
+
+        List<String> destinatarios = new ArrayList<>();
+        destinatarios.add(destinatario);
+
+        String mensagem = "Olá, " + nome + "!\n" + tipoEmail +
+                " realizado com sucesso utilizando o email: " + destinatario + "\n\n" +
+                "Tenha um excelente dia!\n\n Sincerely \nO grupo 3 da disciplina de API Restful do Serratec";
+
+        Email email = new Email(tipoEmail, mensagem, destinatarios);
+
+        enviar(email);
+    }
+}
