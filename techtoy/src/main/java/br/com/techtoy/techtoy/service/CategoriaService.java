@@ -61,12 +61,24 @@ public class CategoriaService {
     @Transactional
     public CategoriaResponseDTO atualizar(Long id, CategoriaRequestDTO categoriaRequest){
         
-        obterPorId(id);
+        Categoria categoriaBase = mapper.map(obterPorId(id), Categoria.class);
         
-        categoriaRequest.setId(id);
-        Categoria categoria = categoriaRepository.save(mapper.map(categoriaRequest, Categoria.class));
+        Categoria categoriaModel = mapper.map(categoriaRequest, Categoria.class);
 
-        return mapper.map(categoria, CategoriaResponseDTO.class);
+        categoriaModel.setId(id);
+        if(categoriaModel.getNome() == null){
+            categoriaModel.setNome(categoriaBase.getNome());
+        }
+        if(categoriaModel.getObservacao() == null){
+            categoriaModel.setObservacao(categoriaBase.getNome());
+        }
+        if(categoriaBase.isAtivo() != categoriaModel.isAtivo()){
+            categoriaModel.setAtivo(false);
+        }
+
+        categoriaModel = categoriaRepository.save(categoriaModel);
+        
+        return mapper.map(categoriaModel, CategoriaResponseDTO.class);
     }
     //Delete
     public void deletar(Long id){
