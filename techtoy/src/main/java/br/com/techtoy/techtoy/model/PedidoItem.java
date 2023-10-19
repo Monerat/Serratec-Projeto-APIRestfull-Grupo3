@@ -21,9 +21,8 @@ public class PedidoItem {
 
     @Column(nullable = false)
     private int quantidade;
-
     private double desconto;
-
+    private double subTotal;
     private double acrescimo;
 
     @ManyToOne
@@ -97,5 +96,11 @@ public class PedidoItem {
     }
 
     
-    
+    public double getSubTotal() {
+        return subTotal;
+    }
+
+    public void setSubTotal(double subTotal) {
+        this.subTotal = subTotal;
+    }  
 }
