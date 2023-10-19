@@ -3,6 +3,7 @@ package br.com.techtoy.techtoy.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.techtoy.techtoy.dto.produto.ProdutoRequestDTO;
 import br.com.techtoy.techtoy.dto.produto.ProdutoResponseDTO;
 import br.com.techtoy.techtoy.model.Produto;
+import br.com.techtoy.techtoy.model.exceptions.ResourceBadRequest;
 import br.com.techtoy.techtoy.model.exceptions.ResourceNotFound;
 import br.com.techtoy.techtoy.repository.ProdutoRepository;
 
@@ -37,14 +39,52 @@ public class ProdutoService {
     }
 
     //Read
-    public List<ProdutoResponseDTO> obterTodos(){
+
+    //Publico
+    public List<ProdutoResponseDTO> obterTodosPublic(){
         List<Produto> produtoModel = produtoRepository.findAll();
         List<ProdutoResponseDTO> produtoResponse = new ArrayList<>();
 
         for (Produto produto : produtoModel){
-            produtoResponse.add(mapper.map(produto, ProdutoResponseDTO.class));
+            //verifica se a Categoria está ativa.
+            if(produto.getCategoria().isAtivo()){
+                //verifica se o Produto está ativo.
+                if(produto.isAtivo()){
+                    produtoResponse.add(mapper.map(produto, ProdutoResponseDTO.class));
+                }
+            }            
         }
         return produtoResponse;
+    }
+
+    public ProdutoResponseDTO obterPorIdPublic(Long id){
+        Optional<Produto> produto = produtoRepository.findById(id);
+        ProdutoResponseDTO produtoResponse = new ProdutoResponseDTO();
+
+        if(produto.isEmpty()){
+            throw new ResourceNotFound("Produto não foi encontrado na base com o Id: "+id);
+        }
+        if(produto.get().getCategoria().isAtivo()){
+            if(produto.get().isAtivo()){
+                produtoResponse = mapper.map(produto.get(), ProdutoResponseDTO.class);
+            }else{
+                throw new ResourceBadRequest("O Produto com id "+id+" está inativo");
+            }
+        }else{
+            throw new ResourceBadRequest("A Categoria do Produto com id "+id+" está inativa");
+        }
+
+        return produtoResponse;
+    }
+    
+    //Privado
+    public List<ProdutoResponseDTO> obterTodos(){
+        List<Produto> produtos = produtoRepository.findAll();
+    
+        return produtos
+            .stream()
+            .map(produto -> mapper.map(produto, ProdutoResponseDTO.class))
+            .collect(Collectors.toList());
     }
 
     public ProdutoResponseDTO obterPorId(Long id){

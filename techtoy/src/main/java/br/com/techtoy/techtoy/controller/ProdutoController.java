@@ -33,6 +33,22 @@ public class ProdutoController {
     }
 
     //Read
+    //public
+     @GetMapping("/public")
+    public ResponseEntity<List<ProdutoResponseDTO>> obterTodosPublic(){
+        return ResponseEntity
+            .status(200)
+            .body(produtoService.obterTodosPublic());
+    }
+
+    @GetMapping("/public/{id}")
+    public ResponseEntity<ProdutoResponseDTO> obterPorIdPublic(@PathVariable Long id){
+        return ResponseEntity
+            .status(200)
+            .body(produtoService.obterPorIdPublic(id));
+    }
+
+    //privado
     @GetMapping
     public ResponseEntity<List<ProdutoResponseDTO>> obterTodos(){
         return ResponseEntity
