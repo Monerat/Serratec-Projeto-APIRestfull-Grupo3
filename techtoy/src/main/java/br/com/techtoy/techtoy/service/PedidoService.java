@@ -17,7 +17,6 @@ import br.com.techtoy.techtoy.dto.pedidoItem.PedidoItemResponseDTO;
 import br.com.techtoy.techtoy.model.Pedido;
 import br.com.techtoy.techtoy.model.PedidoItem;
 import br.com.techtoy.techtoy.repository.PedidoRepository;
-import br.com.techtoy.techtoy.service.pedidoItem;
 
 @Service
 public class PedidoService {
@@ -42,9 +41,7 @@ public class PedidoService {
         List<PedidoItemRequestDTO> pedidoItemRequest = pedidoRequest.getPedidoItens();
 
         pedidoModel.setId(0);
-
-        pedidoModel = pedidoRepository.save(calcularValorTotal(pedidoModel));
-
+        pedidoModel = pedidoRepository.save(calcularValoresTotais(pedidoModel));
 
         //adicionar pedidoItens no pedido
         List<PedidoItemResponseDTO> itens = adicionarItens(pedidoItemRequest, pedidoModel);
@@ -59,9 +56,9 @@ public class PedidoService {
         List<PedidoItemResponseDTO> adicionadas = new ArrayList<>();
 
         for(PedidoItemRequestDTO pedidoItemRequest : pedidosRequest){
+
             PedidoItem pedidoItem = mapper.map(pedidoItemRequest, PedidoItem.class);
             pedidoItem.setPedido(pedidoModel);
-            //pedidoItem = pedidoItemService.adicionar(mapper.map(pedidoItem, PedidoItemRequestDTO.class));
             adicionadas.add(pedidoItemService.adicionar(mapper.map(pedidoItem, PedidoItemRequestDTO.class)));
         }
 
@@ -95,15 +92,12 @@ public class PedidoService {
     public PedidoResponseDTO atualizar(Long id, PedidoRequestDTO pedidoRequest){
         
         obterPorId(id);
-        
         pedidoRequest.setId(id);
 
-        Pedido pedidoCalculado = pedidoRepository.save(calcularValorTotal(mapper.map(pedidoRequest, Pedido.class)));
+        Pedido pedidoCalculado = pedidoRepository.save(calcularValoresTotais(mapper.map(pedidoRequest, Pedido.class)));
 
         return mapper.map(pedidoCalculado, PedidoResponseDTO.class);    
-        
     }
-
 
     //Delete
     public void deletar(Long id){
@@ -111,20 +105,23 @@ public class PedidoService {
         pedidoRepository.deleteById(id);
     }
 
-    public Pedido calcularValorTotal (Pedido pedido){
+    public Pedido calcularValoresTotais (Pedido pedido){
         
-        double valorTotal = 0;
+        Double valorTotal = 0.0;
+        Double descontoTotal = 0.0;
+        Double acrescimoTotal = 0.0;
 
         for(PedidoItem pedidoItem: pedido.getPedidoItens()){
-            
+            acrescimoTotal += pedidoItem.getAcrescimo()*pedidoItem.getQuantidade();
+            descontoTotal += pedidoItem.getDesconto()*pedidoItem.getQuantidade();
             valorTotal += pedidoItem.getSubTotal();
         }
-              
+        
+        pedido.setAcrescimoTotal(acrescimoTotal);
+        pedido.setDescontoTotal(descontoTotal);
         pedido.setValorTotal(valorTotal);
 
         return pedido;
-        
     }
     
-   
 }

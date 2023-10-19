@@ -33,6 +33,7 @@ public class PedidoItemService {
     @Transactional
     public PedidoItemResponseDTO adicionar(PedidoItemRequestDTO pedidoItemRequest){
         PedidoItem pedidoItemModel = mapper.map(pedidoItemRequest, PedidoItem.class);
+        
         pedidoItemModel = calcularSubTotal(pedidoItemModel);
         pedidoItemModel.setId(0);
         pedidoItemRepository.save(pedidoItemModel);
