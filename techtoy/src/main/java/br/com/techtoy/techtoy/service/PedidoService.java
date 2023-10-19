@@ -17,6 +17,7 @@ import br.com.techtoy.techtoy.dto.pedidoItem.PedidoItemResponseDTO;
 import br.com.techtoy.techtoy.model.Pedido;
 import br.com.techtoy.techtoy.model.PedidoItem;
 import br.com.techtoy.techtoy.repository.PedidoRepository;
+import br.com.techtoy.techtoy.service.pedidoItem;
 
 @Service
 public class PedidoService {
@@ -41,7 +42,9 @@ public class PedidoService {
         List<PedidoItemRequestDTO> pedidoItemRequest = pedidoRequest.getPedidoItens();
 
         pedidoModel.setId(0);
-        pedidoModel = pedidoRepository.save(pedidoModel);
+
+        pedidoModel = pedidoRepository.save(calcularValorTotal(pedidoModel));
+
 
         //adicionar pedidoItens no pedido
         List<PedidoItemResponseDTO> itens = adicionarItens(pedidoItemRequest, pedidoModel);
@@ -95,9 +98,10 @@ public class PedidoService {
         
         pedidoRequest.setId(id);
 
-        Pedido pedidoModel = pedidoRepository.save(mapper.map(pedidoRequest, Pedido.class));
-       
-        return mapper.map(pedidoModel, PedidoResponseDTO.class);
+        Pedido pedidoCalculado = pedidoRepository.save(calcularValorTotal(mapper.map(pedidoRequest, Pedido.class)));
+
+        return mapper.map(pedidoCalculado, PedidoResponseDTO.class);    
+        
     }
 
 
@@ -106,4 +110,21 @@ public class PedidoService {
         obterPorId(id);
         pedidoRepository.deleteById(id);
     }
+
+    public Pedido calcularValorTotal (Pedido pedido){
+        
+        double valorTotal = 0;
+
+        for(PedidoItem pedidoItem: pedido.getPedidoItens()){
+            
+            valorTotal += pedidoItem.getSubTotal();
+        }
+              
+        pedido.setValorTotal(valorTotal);
+
+        return pedido;
+        
+    }
+    
+    
 }
