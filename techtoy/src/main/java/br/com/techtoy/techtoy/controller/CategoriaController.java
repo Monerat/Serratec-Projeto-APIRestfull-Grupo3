@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +27,7 @@ public class CategoriaController {
 
     //Create
     @PostMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<CategoriaResponseDTO> adicionar(@RequestBody CategoriaRequestDTO categoriaRequest){
         CategoriaResponseDTO categoriaAdicionado = categoriaService.adicionar(categoriaRequest);
 
@@ -48,16 +50,19 @@ public class CategoriaController {
     }
     //Read private
     @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<CategoriaResponseDTO>> obterTodos(){
         return ResponseEntity.ok(categoriaService.obterTodos());
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<CategoriaResponseDTO> obterPorId(@PathVariable Long id){
         return ResponseEntity.ok(categoriaService.obterPorId(id));
     }
     //Update
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<CategoriaResponseDTO> atualizar(@PathVariable Long id, @RequestBody CategoriaRequestDTO categoriaRequest){
         CategoriaResponseDTO categoriaAtualizado = categoriaService.atualizar(id, categoriaRequest);
         
@@ -67,6 +72,7 @@ public class CategoriaController {
     }
     //Delete
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> deletar(@PathVariable Long id){
         categoriaService.deletar(id);
       

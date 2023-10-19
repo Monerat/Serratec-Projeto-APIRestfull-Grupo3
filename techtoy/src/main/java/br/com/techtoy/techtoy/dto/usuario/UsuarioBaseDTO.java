@@ -4,7 +4,7 @@ import br.com.techtoy.techtoy.model.Enum.EnumTipoUsuario;
 
 public abstract class UsuarioBaseDTO {
 
-    protected long id;
+    protected Long id;
     protected String nome;
     protected String telefone;
     protected String email;
@@ -42,11 +42,11 @@ public abstract class UsuarioBaseDTO {
         this.perfil = perfil;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

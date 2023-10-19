@@ -38,7 +38,7 @@ public class LogService {
         Log log = modelMapper.map(logRequestDTO, Log.class);
         
         //Setar usuario fixo até pode usar autenticacao
-        Usuario usuario = new Usuario(1);
+        Usuario usuario = new Usuario(1l);
     
         //Setar valores que a gente puxou
         log.setId(0);
