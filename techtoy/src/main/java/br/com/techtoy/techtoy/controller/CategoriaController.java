@@ -33,7 +33,20 @@ public class CategoriaController {
             .status(201)
             .body(categoriaAdicionado);
     }
-    //Read
+    //Read public
+    @GetMapping("/public")
+    public ResponseEntity<List<CategoriaResponseDTO>> obterTodosPublic(){
+        return ResponseEntity
+            .status(200)
+            .body(categoriaService.obterTodosPublic());
+    }
+    @GetMapping("/public/{id}")
+    public ResponseEntity<CategoriaResponseDTO> obterPorIdPublic(@PathVariable Long id){
+        return ResponseEntity
+            .status(200)
+            .body(categoriaService.obterPorIdPublic(id));
+    }
+    //Read private
     @GetMapping
     public ResponseEntity<List<CategoriaResponseDTO>> obterTodos(){
         return ResponseEntity.ok(categoriaService.obterTodos());

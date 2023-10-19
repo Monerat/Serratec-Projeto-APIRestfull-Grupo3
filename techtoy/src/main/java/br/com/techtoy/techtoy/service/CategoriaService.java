@@ -11,7 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.techtoy.techtoy.dto.categoria.CategoriaRequestDTO;
 import br.com.techtoy.techtoy.dto.categoria.CategoriaResponseDTO;
+import br.com.techtoy.techtoy.dto.produto.ProdutoResponseDTO;
 import br.com.techtoy.techtoy.model.Categoria;
+import br.com.techtoy.techtoy.model.Produto;
+import br.com.techtoy.techtoy.model.exceptions.ResourceBadRequest;
 import br.com.techtoy.techtoy.model.exceptions.ResourceNotFound;
 import br.com.techtoy.techtoy.repository.CategoriaRepository;
 
@@ -36,7 +39,38 @@ public class CategoriaService {
         
         return mapper.map(categoria, CategoriaResponseDTO.class);
     }
-    //Read
+    //Read publico
+
+    public List<CategoriaResponseDTO> obterTodosPublic(){
+        List<Categoria> categoriasModel = categoriaRepository.findAll();
+        List<CategoriaResponseDTO> categoriaResponse = new ArrayList<>();
+
+        for(Categoria categoria : categoriasModel){            
+            //verifica se a Categoria está ativa.
+            if(categoria.isAtivo()){
+                categoriaResponse.add(mapper.map(categoria, CategoriaResponseDTO.class));                
+            }
+        }
+        return categoriaResponse;
+    }
+
+    public CategoriaResponseDTO obterPorIdPublic(Long id){
+        Optional<Categoria> categoria = categoriaRepository.findById(id);
+        CategoriaResponseDTO categoriaResponse = new CategoriaResponseDTO();
+
+        if(categoria.isEmpty()){
+            throw new ResourceNotFound("Produto não foi encontrado na base com o Id: "+id);
+        }
+        
+        if(categoria.get().isAtivo()){
+            categoriaResponse = mapper.map(categoria.get(), CategoriaResponseDTO.class);
+        }else{
+            throw new ResourceBadRequest("O Produto com id "+id+" está inativo");
+        }     
+        return categoriaResponse;
+    }
+
+    //Read private
     public List<CategoriaResponseDTO> obterTodos(){
         
         List<Categoria> categorias = categoriaRepository.findAll();
