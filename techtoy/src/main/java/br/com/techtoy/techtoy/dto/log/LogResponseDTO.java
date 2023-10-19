@@ -5,14 +5,17 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import br.com.techtoy.techtoy.dto.usuario.UsuarioResponseDTO;
+import br.com.techtoy.techtoy.model.Enum.EnumLog;
+import br.com.techtoy.techtoy.model.Enum.EnumTipoEntidade;
 
 public class LogResponseDTO {
     
     private long id;
-    private String tipoAcao;
+    private EnumLog tipoAcao;
+    private EnumTipoEntidade tipoEntidade;
     private Date dataAcao;
-    private long valorOriginal;
-    private long valorAtual;
+    private String valorOriginal;
+    private String valorAtual;
     @JsonBackReference
     private UsuarioResponseDTO usuario; //verificar como vai ser a criação do Usuario ResponseDTO
     
@@ -22,35 +25,42 @@ public class LogResponseDTO {
     public void setId(long id) {
         this.id = id;
     }
-    public String getTipoAcao() {
-        return tipoAcao;
-    }
-    public void setTipoAcao(String tipoAcao) {
-        this.tipoAcao = tipoAcao;
-    }
+
     public Date getDataAcao() {
         return dataAcao;
     }
     public void setDataAcao(Date dataAcao) {
         this.dataAcao = dataAcao;
     }
-    public long getValorOriginal() {
-        return valorOriginal;
-    }
-    public void setValorOriginal(long valorOriginal) {
-        this.valorOriginal = valorOriginal;
-    }
-    public long getValorAtual() {
-        return valorAtual;
-    }
-    public void setValorAtual(long valorAtual) {
-        this.valorAtual = valorAtual;
-    }
     public UsuarioResponseDTO getUsuario() {
         return usuario;
     }
     public void setUsuario(UsuarioResponseDTO usuario) {
         this.usuario = usuario;
+    }
+    public EnumLog getTipoAcao() {
+        return tipoAcao;
+    }
+    public void setTipoAcao(EnumLog tipoAcao) {
+        this.tipoAcao = tipoAcao;
+    }
+    public EnumTipoEntidade getTipoEntidade() {
+        return tipoEntidade;
+    }
+    public void setTipoEntidade(EnumTipoEntidade tipoEntidade) {
+        this.tipoEntidade = tipoEntidade;
+    }
+    public String getValorOriginal() {
+        return valorOriginal;
+    }
+    public void setValorOriginal(String valorOriginal) {
+        this.valorOriginal = valorOriginal;
+    }
+    public String getValorAtual() {
+        return valorAtual;
+    }
+    public void setValorAtual(String valorAtual) {
+        this.valorAtual = valorAtual;
     }
 
     

@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import br.com.techtoy.techtoy.model.Enum.EnumLog;
+import br.com.techtoy.techtoy.model.Enum.EnumTipoEntidade;
 
 @Entity
 @Table(name = "log")
@@ -29,13 +30,14 @@ public class Log {
     private EnumLog tipoAcao;
 
     @Column(nullable = false)
+    private EnumTipoEntidade tipoEntidade;
+
+    @Column(nullable = false)
     private Date dataAcao;
 
-    @Column(nullable = false)
-    private long valorOriginal;
+    private String valorOriginal;
 
-    @Column(nullable = false)
-    private long valorAtual;
+    private String valorAtual;
 
     @ManyToOne
     @JoinColumn(name = "idUsuario", nullable = false)
@@ -43,9 +45,10 @@ public class Log {
     private Usuario usuario;
 
     
-    public Log(long id, EnumLog tipoAcao, long valorOriginal, long valorAtual) {
+    public Log(long id, EnumLog tipoAcao, EnumTipoEntidade tipoEntidade, String valorOriginal, String valorAtual) {
         this.id = id;
         this.tipoAcao = tipoAcao;
+        this.tipoEntidade = tipoEntidade;
         this.dataAcao = new Date();
         this.valorOriginal = valorOriginal;
         this.valorAtual = valorAtual;
@@ -80,22 +83,7 @@ public class Log {
         this.dataAcao = dataAcao;
     }
 
-    public long getValorOriginal() {
-        return valorOriginal;
-    }
-
-    public void setValorOriginal(long valorOriginal) {
-        this.valorOriginal = valorOriginal;
-    }
-
-    public long getValorAtual() {
-        return valorAtual;
-    }
-
-    public void setValorAtual(long valorAtual) {
-        this.valorAtual = valorAtual;
-    }
-
+    
     public Usuario getUsuario() {
         return usuario;
     }
@@ -103,5 +91,30 @@ public class Log {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
+
+    public EnumTipoEntidade getTipoEntidade() {
+        return tipoEntidade;
+    }
+
+    public void setTipoEntidade(EnumTipoEntidade tipoEntidade) {
+        this.tipoEntidade = tipoEntidade;
+    }
+
+    public String getValorOriginal() {
+        return valorOriginal;
+    }
+
+    public void setValorOriginal(String valorOriginal) {
+        this.valorOriginal = valorOriginal;
+    }
+
+    public String getValorAtual() {
+        return valorAtual;
+    }
+
+    public void setValorAtual(String valorAtual) {
+        this.valorAtual = valorAtual;
+    }
+    
     
 }
