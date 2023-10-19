@@ -6,7 +6,14 @@ public class PedidoItemBaseDTO {
     private int quantidade;
     private double desconto;
     private double acrescimo;
+    private double subTotal;
     
+    public double getSubTotal() {
+        return subTotal;
+    }
+    public void setSubTotal(double subTotal) {
+        this.subTotal = subTotal;
+    }
     public long getId() {
         return id;
     }

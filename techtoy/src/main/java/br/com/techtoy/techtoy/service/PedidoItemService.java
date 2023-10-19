@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.techtoy.techtoy.dto.pedidoItem.PedidoItemRequestDTO;
 import br.com.techtoy.techtoy.dto.pedidoItem.PedidoItemResponseDTO;
+import br.com.techtoy.techtoy.dto.produto.ProdutoResponseDTO;
 import br.com.techtoy.techtoy.model.PedidoItem;
 import br.com.techtoy.techtoy.model.exceptions.ResourceNotFound;
 import br.com.techtoy.techtoy.repository.PedidoItemRepository;
@@ -22,6 +23,9 @@ public class PedidoItemService {
     private PedidoItemRepository pedidoItemRepository;
 
     @Autowired
+    private ProdutoService produtoService;
+
+    @Autowired
     private ModelMapper mapper;
     //CRUD
 
@@ -29,7 +33,7 @@ public class PedidoItemService {
     @Transactional
     public PedidoItemResponseDTO adicionar(PedidoItemRequestDTO pedidoItemRequest){
         PedidoItem pedidoItemModel = mapper.map(pedidoItemRequest, PedidoItem.class);
-
+        pedidoItemModel = calcularSubTotal(pedidoItemModel);
         pedidoItemModel.setId(0);
         pedidoItemRepository.save(pedidoItemModel);
         
@@ -63,7 +67,7 @@ public class PedidoItemService {
         obterPorId(id);
         
         PedidoItem pedidoItemModel = mapper.map(pedidoItemRequest, PedidoItem.class);
-
+        pedidoItemModel = calcularSubTotal(pedidoItemModel);
         pedidoItemModel.setId(id);
         pedidoItemModel = pedidoItemRepository.save(pedidoItemModel);
         
@@ -74,5 +78,15 @@ public class PedidoItemService {
     public void deletar(Long id){
         obterPorId(id);
         pedidoItemRepository.deleteById(id);
+    }
+
+    public PedidoItem calcularSubTotal(PedidoItem pedidoItemModel){
+
+        ProdutoResponseDTO produto = produtoService.obterPorId(pedidoItemModel.getProduto().getId());
+        double subTotal = (produto.getValorUn() - pedidoItemModel.getDesconto() + pedidoItemModel.getAcrescimo()) * pedidoItemModel.getQuantidade();
+        
+        pedidoItemModel.setSubTotal(subTotal);
+
+        return pedidoItemModel;
     }
 }
