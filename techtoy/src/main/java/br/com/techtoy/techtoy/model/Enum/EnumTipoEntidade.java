@@ -4,5 +4,6 @@ public enum EnumTipoEntidade {
     USUARIO,
     PEDIDO,
     PRODUTO,
-    CATEGORIA
+    CATEGORIA,
+    PEDIDOITEM,
 }

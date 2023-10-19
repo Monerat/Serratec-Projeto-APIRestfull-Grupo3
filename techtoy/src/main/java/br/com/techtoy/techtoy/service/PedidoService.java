@@ -12,10 +12,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.techtoy.techtoy.dto.Pedido.PedidoRequestDTO;
 import br.com.techtoy.techtoy.dto.Pedido.PedidoResponseDTO;
+import br.com.techtoy.techtoy.dto.log.LogRequestDTO;
 import br.com.techtoy.techtoy.dto.pedidoItem.PedidoItemRequestDTO;
 import br.com.techtoy.techtoy.dto.pedidoItem.PedidoItemResponseDTO;
 import br.com.techtoy.techtoy.model.Pedido;
 import br.com.techtoy.techtoy.model.PedidoItem;
+import br.com.techtoy.techtoy.model.Enum.EnumLog;
+import br.com.techtoy.techtoy.model.Enum.EnumTipoEntidade;
 import br.com.techtoy.techtoy.repository.PedidoRepository;
 
 @Service
@@ -26,6 +29,9 @@ public class PedidoService {
 
     @Autowired
     private PedidoItemService pedidoItemService;
+
+    @Autowired
+    private LogService logService;
 
     @Autowired
     private ModelMapper mapper;
@@ -47,6 +53,12 @@ public class PedidoService {
         List<PedidoItemResponseDTO> itens = adicionarItens(pedidoItemRequest, pedidoModel);
         PedidoResponseDTO pedidoResponse = mapper.map(pedidoModel, PedidoResponseDTO.class); 
         pedidoResponse.setPedidoItens(itens);
+
+        //Fazer Auditoria
+        LogRequestDTO logRequestDTO = new LogRequestDTO();
+        logService.adicionar(logRequestDTO, EnumLog.CREATE, EnumTipoEntidade.PEDIDO, "", 
+                    logService.mapearObjetoParaString(pedidoModel));
+
         
         return pedidoResponse;
     }
@@ -90,13 +102,36 @@ public class PedidoService {
     //Update
     @Transactional
     public PedidoResponseDTO atualizar(Long id, PedidoRequestDTO pedidoRequest){
+        Pedido pedidoBase = mapper.map(obterPorId(id),Pedido.class);
+        Pedido pedidoModel = mapper.map(pedidoRequest, Pedido.class);
+        //obterPorId(id);
         
-        obterPorId(id);
-        
-        pedidoRequest.setId(id);
+        pedidoModel.setId(id);
+        if (pedidoModel.getDataPedido()==null){
+            pedidoModel.setDataPedido(pedidoBase.getDataPedido());
+        }
+        if (pedidoModel.getFormaPagamento()==null){
+            pedidoModel.setFormaPagamento(pedidoBase.getFormaPagamento());
+        }
+        if (pedidoModel.getObservacao()==null){
+            pedidoModel.setObservacao(pedidoBase.getObservacao());
+        }
+        if (pedidoModel.getUsuario()==null){
+            pedidoModel.setUsuario(pedidoBase.getUsuario());
+        }
 
-        Pedido pedidoModel = pedidoRepository.save(mapper.map(pedidoRequest, Pedido.class));
+        pedidoModel = pedidoRepository.save(pedidoModel);
        
+        //Fazer Auditoria
+        LogRequestDTO logRequestDTO = new LogRequestDTO();
+
+        //Registrar Mudanças UPDATE na Auditoria
+        logService.adicionar(logRequestDTO, EnumLog.UPDATE, EnumTipoEntidade.PEDIDO, 
+                    logService.mapearObjetoParaString(pedidoBase),
+                    logService.mapearObjetoParaString(pedidoModel)
+                    );
+        
+
         return mapper.map(pedidoModel, PedidoResponseDTO.class);
     }
 
@@ -105,5 +140,10 @@ public class PedidoService {
     public void deletar(Long id){
         obterPorId(id);
         pedidoRepository.deleteById(id);
+        
+        //Fazer Auditoria
+        LogRequestDTO logRequestDTO = new LogRequestDTO();
+        logService.adicionar(logRequestDTO, EnumLog.DELETE, EnumTipoEntidade.PEDIDO, "", "");
+
     }
 }

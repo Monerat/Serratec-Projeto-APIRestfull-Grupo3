@@ -9,9 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.techtoy.techtoy.dto.log.LogRequestDTO;
 import br.com.techtoy.techtoy.dto.pedidoItem.PedidoItemRequestDTO;
 import br.com.techtoy.techtoy.dto.pedidoItem.PedidoItemResponseDTO;
 import br.com.techtoy.techtoy.model.PedidoItem;
+import br.com.techtoy.techtoy.model.Enum.EnumLog;
+import br.com.techtoy.techtoy.model.Enum.EnumTipoEntidade;
 import br.com.techtoy.techtoy.model.exceptions.ResourceNotFound;
 import br.com.techtoy.techtoy.repository.PedidoItemRepository;
 
@@ -20,6 +23,9 @@ public class PedidoItemService {
     
     @Autowired
     private PedidoItemRepository pedidoItemRepository;
+
+    @Autowired
+    private LogService logService;
 
     @Autowired
     private ModelMapper mapper;
@@ -32,6 +38,11 @@ public class PedidoItemService {
 
         pedidoItemModel.setId(0);
         pedidoItemRepository.save(pedidoItemModel);
+
+        //Fazer Auditoria
+        LogRequestDTO logRequestDTO = new LogRequestDTO();
+        logService.adicionar(logRequestDTO, EnumLog.CREATE, EnumTipoEntidade.PEDIDOITEM, "", 
+                    logService.mapearObjetoParaString(pedidoItemModel));
         
         return mapper.map(pedidoItemModel, PedidoItemResponseDTO.class);
     }
@@ -60,12 +71,37 @@ public class PedidoItemService {
     //update
     @Transactional
     public PedidoItemResponseDTO atualizar(Long id, PedidoItemRequestDTO pedidoItemRequest){
-        obterPorId(id);
+        PedidoItem pedidoItemBase = mapper.map(obterPorId(id), PedidoItem.class);
         
         PedidoItem pedidoItemModel = mapper.map(pedidoItemRequest, PedidoItem.class);
 
         pedidoItemModel.setId(id);
+        if (pedidoItemModel.getAcrescimo() == null){
+            pedidoItemModel.setAcrescimo(pedidoItemBase.getAcrescimo());
+        }
+        if (pedidoItemModel.getDesconto() == null){
+            pedidoItemModel.setDesconto(pedidoItemBase.getDesconto());
+        }
+        if (pedidoItemModel.getQuantidade() == null){
+            pedidoItemModel.setQuantidade(pedidoItemBase.getQuantidade());
+        }
+        if (pedidoItemModel.getProduto() == null){
+            pedidoItemModel.setProduto(pedidoItemBase.getProduto());
+        }
+        if (pedidoItemModel.getPedido() == null){
+            pedidoItemModel.setPedido(pedidoItemBase.getPedido());
+        }
+
         pedidoItemModel = pedidoItemRepository.save(pedidoItemModel);
+        
+        //Fazer Auditoria
+        LogRequestDTO logRequestDTO = new LogRequestDTO();
+
+        //Registrar Mudanças UPDATE na Auditoria
+        logService.adicionar(logRequestDTO, EnumLog.UPDATE, EnumTipoEntidade.PEDIDOITEM, 
+                    logService.mapearObjetoParaString(pedidoItemBase),
+                    logService.mapearObjetoParaString(pedidoItemModel)
+                    );
         
         return mapper.map(pedidoItemModel, PedidoItemResponseDTO.class);
     }
@@ -74,5 +110,10 @@ public class PedidoItemService {
     public void deletar(Long id){
         obterPorId(id);
         pedidoItemRepository.deleteById(id);
+
+        //Fazer Auditoria
+        LogRequestDTO logRequestDTO = new LogRequestDTO();
+        logService.adicionar(logRequestDTO, EnumLog.DELETE, EnumTipoEntidade.PEDIDOITEM, "", "");
+
     }
 }

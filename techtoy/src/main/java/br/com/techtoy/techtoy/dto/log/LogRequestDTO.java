@@ -22,6 +22,9 @@ public class LogRequestDTO {
         this.usuario = usuario;
     }
 
+    public LogRequestDTO() {
+    }
+    
     public EnumLog getTipoAcao() {
         return tipoAcao;
     }

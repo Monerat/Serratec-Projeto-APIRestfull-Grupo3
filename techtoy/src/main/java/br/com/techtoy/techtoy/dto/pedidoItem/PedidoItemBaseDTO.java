@@ -3,9 +3,9 @@ package br.com.techtoy.techtoy.dto.pedidoItem;
 public class PedidoItemBaseDTO {
     
     private long id;
-    private int quantidade;
-    private double desconto;
-    private double acrescimo;
+    private Integer quantidade;
+    private Double desconto;
+    private Double acrescimo;
     
     public long getId() {
         return id;
@@ -13,22 +13,22 @@ public class PedidoItemBaseDTO {
     public void setId(long id) {
         this.id = id;
     }
-    public int getQuantidade() {
+    public Integer getQuantidade() {
         return quantidade;
     }
-    public void setQuantidade(int quantidade) {
+    public void setQuantidade(Integer quantidade) {
         this.quantidade = quantidade;
     }
-    public double getDesconto() {
+    public Double getDesconto() {
         return desconto;
     }
-    public void setDesconto(double desconto) {
+    public void setDesconto(Double desconto) {
         this.desconto = desconto;
     }
-    public double getAcrescimo() {
+    public Double getAcrescimo() {
         return acrescimo;
     }
-    public void setAcrescimo(double acrescimo) {
+    public void setAcrescimo(Double acrescimo) {
         this.acrescimo = acrescimo;
     }
     
