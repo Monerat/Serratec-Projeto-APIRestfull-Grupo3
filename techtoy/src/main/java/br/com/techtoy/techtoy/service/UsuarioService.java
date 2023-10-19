@@ -66,10 +66,10 @@ public class UsuarioService {
         usuarioModel.setId(0l);
         usuarioRepository.save(usuarioModel);
 
-        // Fazer Auditoria
-        // LogRequestDTO logRequestDTO = new LogRequestDTO();
-        // logService.adicionar(logRequestDTO, EnumLog.CREATE, EnumTipoEntidade.USUARIO, "",
-        //         logService.mapearObjetoParaString(usuarioModel));
+        //Fazer Auditoria
+        LogRequestDTO logRequestDTO = new LogRequestDTO();
+        logService.adicionar(usuarioModel, logRequestDTO, EnumLog.CREATE, EnumTipoEntidade.USUARIO, "",
+                logService.mapearObjetoParaString(usuarioModel));
 
         emailService.dispararEmail("Cadastro", usuarioModel.getEmail(), usuarioModel.getNome());
         return mapper.map(usuarioModel, UsuarioResponseDTO.class);
@@ -129,7 +129,8 @@ public class UsuarioService {
         LogRequestDTO logRequestDTO = new LogRequestDTO();
 
         // Registrar Mudanças UPDATE na Auditoria
-        logService.adicionar(logRequestDTO, EnumLog.UPDATE, EnumTipoEntidade.USUARIO,
+        Usuario usuarioLogado = mapper.map(SecurityContextHolder.getContext().getAuthentication().getPrincipal(), Usuario.class);
+        logService.adicionar(usuarioLogado, logRequestDTO, EnumLog.UPDATE, EnumTipoEntidade.USUARIO,
                 logService.mapearObjetoParaString(usuarioBase),
                 logService.mapearObjetoParaString(usuarioModel));
 
@@ -143,7 +144,8 @@ public class UsuarioService {
 
         // Fazer Auditoria
         LogRequestDTO logRequestDTO = new LogRequestDTO();
-        logService.adicionar(logRequestDTO, EnumLog.DELETE, EnumTipoEntidade.USUARIO, "", "");
+        Usuario usuarioLogado = mapper.map(SecurityContextHolder.getContext().getAuthentication().getPrincipal(), Usuario.class);
+        logService.adicionar(usuarioLogado, logRequestDTO, EnumLog.DELETE, EnumTipoEntidade.USUARIO, "", "");
 
     }
 

@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +15,7 @@ import br.com.techtoy.techtoy.dto.log.LogRequestDTO;
 import br.com.techtoy.techtoy.dto.produto.ProdutoRequestDTO;
 import br.com.techtoy.techtoy.dto.produto.ProdutoResponseDTO;
 import br.com.techtoy.techtoy.model.Produto;
+import br.com.techtoy.techtoy.model.Usuario;
 import br.com.techtoy.techtoy.model.Enum.EnumLog;
 import br.com.techtoy.techtoy.model.Enum.EnumTipoEntidade;
 import br.com.techtoy.techtoy.model.exceptions.ResourceBadRequest;
@@ -43,7 +45,8 @@ public class ProdutoService {
 
         //Fazer Auditoria
         LogRequestDTO logRequestDTO = new LogRequestDTO();
-        logService.adicionar(logRequestDTO, EnumLog.CREATE, EnumTipoEntidade.PRODUTO, "", 
+        Usuario usuarioLogado = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        logService.adicionar(usuarioLogado, logRequestDTO, EnumLog.CREATE, EnumTipoEntidade.PRODUTO, "", 
                    logService.mapearObjetoParaString(produtoModel));
 
         return mapper.map(produtoModel, ProdutoResponseDTO.class);
@@ -58,9 +61,9 @@ public class ProdutoService {
 
         for (Produto produto : produtoModel){
             //verifica se a Categoria está ativa.
-            if(produto.getCategoria().isAtivo()){
+            if(produto.getCategoria().getAtivo()){
                 //verifica se o Produto está ativo.
-                if(produto.isAtivo()){
+                if(produto.getAtivo()){
                     produtoResponse.add(mapper.map(produto, ProdutoResponseDTO.class));
                 }
             }            
@@ -75,8 +78,8 @@ public class ProdutoService {
         if(produto.isEmpty()){
             throw new ResourceNotFound("Produto não foi encontrado na base com o Id: "+id);
         }
-        if(produto.get().getCategoria().isAtivo()){
-            if(produto.get().isAtivo()){
+        if(produto.get().getCategoria().getAtivo()){
+            if(produto.get().getAtivo()){
                 produtoResponse = mapper.map(produto.get(), ProdutoResponseDTO.class);
             }else{
                 throw new ResourceBadRequest("O Produto com id "+id+" está inativo");
@@ -124,8 +127,8 @@ public class ProdutoService {
         if (produtoModel.getValorUn()==null){
             produtoModel.setValorUn(produtoBase.getValorUn());
         }
-        if (produtoModel.isAtivo()==null){
-            produtoModel.setAtivo(produtoBase.isAtivo());//entrou aqui nao alterou
+        if (produtoModel.getAtivo()==null){
+            produtoModel.setAtivo(produtoBase.getAtivo());//entrou aqui nao alterou
         }
         if(produtoModel.getCategoria()==null){
             produtoModel.setCategoria(produtoBase.getCategoria());
@@ -137,17 +140,19 @@ public class ProdutoService {
         LogRequestDTO logRequestDTO = new LogRequestDTO();
 
         //Verificar se o Produto foi ativado
-        if (produtoBase.isAtivo() != produtoModel.isAtivo()){
+        if (produtoBase.getAtivo() != produtoModel.getAtivo()){
             // Usando a porra do ternario aqui, se ativo for true ele ACTIVOU, cc ele DESACTIVOU :D
-            EnumLog logStatus = produtoModel.isAtivo() ? EnumLog.ACTIVATE : EnumLog.DEACTIVATE;
-            logService.adicionar(logRequestDTO, logStatus, EnumTipoEntidade.PRODUTO, 
+            EnumLog logStatus = produtoModel.getAtivo() ? EnumLog.ACTIVATE : EnumLog.DEACTIVATE;
+            Usuario usuarioLogado = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            logService.adicionar(usuarioLogado, logRequestDTO, logStatus, EnumTipoEntidade.PRODUTO, 
                     logService.mapearObjetoParaString(produtoBase),
                     logService.mapearObjetoParaString(produtoModel)
                     );
         }
 
         //Registrar Mudanças UPDATE na Auditoria
-        logService.adicionar(logRequestDTO, EnumLog.UPDATE, EnumTipoEntidade.PRODUTO, 
+        Usuario usuarioLogado = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        logService.adicionar(usuarioLogado, logRequestDTO, EnumLog.UPDATE, EnumTipoEntidade.PRODUTO, 
                     logService.mapearObjetoParaString(produtoBase),
                     logService.mapearObjetoParaString(produtoModel)
                     );
@@ -162,7 +167,8 @@ public class ProdutoService {
 
         //Fazer Auditoria
         LogRequestDTO logRequestDTO = new LogRequestDTO();
-        logService.adicionar(logRequestDTO, EnumLog.DELETE, EnumTipoEntidade.PRODUTO, "", "");
+        Usuario usuarioLogado = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        logService.adicionar(usuarioLogado, logRequestDTO, EnumLog.DELETE, EnumTipoEntidade.PRODUTO, "", "");
 
     }
 }

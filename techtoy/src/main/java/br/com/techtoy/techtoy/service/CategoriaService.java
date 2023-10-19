@@ -6,13 +6,16 @@ import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.techtoy.techtoy.dto.categoria.CategoriaRequestDTO;
 import br.com.techtoy.techtoy.dto.categoria.CategoriaResponseDTO;
 import br.com.techtoy.techtoy.dto.log.LogRequestDTO;
+import br.com.techtoy.techtoy.dto.usuario.UsuarioRequestDTO;
 import br.com.techtoy.techtoy.model.Categoria;
+import br.com.techtoy.techtoy.model.Usuario;
 import br.com.techtoy.techtoy.model.exceptions.ResourceBadRequest;
 import br.com.techtoy.techtoy.model.Enum.EnumLog;
 import br.com.techtoy.techtoy.model.Enum.EnumTipoEntidade;
@@ -43,7 +46,8 @@ public class CategoriaService {
         
         //Fazer Auditoria
         LogRequestDTO logRequestDTO = new LogRequestDTO();
-        logService.adicionar(logRequestDTO, EnumLog.CREATE, EnumTipoEntidade.CATEGORIA, "", 
+        Usuario usuarioLogado = mapper.map(SecurityContextHolder.getContext().getAuthentication().getPrincipal(), Usuario.class);
+        logService.adicionar(usuarioLogado, logRequestDTO, EnumLog.CREATE, EnumTipoEntidade.CATEGORIA, "", 
                    logService.mapearObjetoParaString(categoria));
 
         return mapper.map(categoria, CategoriaResponseDTO.class);
@@ -56,7 +60,7 @@ public class CategoriaService {
 
         for(Categoria categoria : categoriasModel){            
             //verifica se a Categoria está ativa.
-            if(categoria.isAtivo()){
+            if(categoria.getAtivo()){
                 categoriaResponse.add(mapper.map(categoria, CategoriaResponseDTO.class));                
             }
         }
@@ -71,7 +75,7 @@ public class CategoriaService {
             throw new ResourceNotFound("Produto não foi encontrado na base com o Id: "+id);
         }
         
-        if(categoria.get().isAtivo()){
+        if(categoria.get().getAtivo()){
             categoriaResponse = mapper.map(categoria.get(), CategoriaResponseDTO.class);
         }else{
             throw new ResourceBadRequest("O Produto com id "+id+" está inativo");
@@ -115,8 +119,8 @@ public class CategoriaService {
         if(categoriaModel.getObservacao() == null){
             categoriaModel.setObservacao(categoriaBase.getNome());
         }
-        if(categoriaBase.isAtivo() != categoriaModel.isAtivo()){
-            categoriaModel.setAtivo(false);
+        if(categoriaBase.getAtivo() == null){
+            categoriaModel.setAtivo(categoriaBase.getAtivo());
         }
 
         categoriaModel = categoriaRepository.save(categoriaModel);
@@ -125,17 +129,19 @@ public class CategoriaService {
         LogRequestDTO logRequestDTO = new LogRequestDTO();
 
         //Verificar se o Produto foi ativado
-        if (categoriaBase.isAtivo() != categoriaModel.isAtivo()){
+        if (categoriaBase.getAtivo() != categoriaModel.getAtivo()){
             // Usando a porra do ternario aqui, se ativo for true ele ACTIVOU, cc ele DESACTIVOU :D
-            EnumLog logStatus = categoriaModel.isAtivo() ? EnumLog.ACTIVATE : EnumLog.DEACTIVATE;
-            logService.adicionar(logRequestDTO, logStatus, EnumTipoEntidade.CATEGORIA, 
+            EnumLog logStatus = categoriaModel.getAtivo() ? EnumLog.ACTIVATE : EnumLog.DEACTIVATE;
+            Usuario usuarioLogado = mapper.map(SecurityContextHolder.getContext().getAuthentication().getPrincipal(), Usuario.class);
+            logService.adicionar(usuarioLogado, logRequestDTO, logStatus, EnumTipoEntidade.CATEGORIA, 
                     logService.mapearObjetoParaString(categoriaBase),
                     logService.mapearObjetoParaString(categoriaModel)
                     );
         }
 
         //Registrar Mudanças UPDATE na Auditoria
-        logService.adicionar(logRequestDTO, EnumLog.UPDATE, EnumTipoEntidade.CATEGORIA, 
+        Usuario usuarioLogado = mapper.map(SecurityContextHolder.getContext().getAuthentication().getPrincipal(), Usuario.class);
+        logService.adicionar(usuarioLogado, logRequestDTO, EnumLog.UPDATE, EnumTipoEntidade.CATEGORIA, 
                     logService.mapearObjetoParaString(categoriaBase),
                     logService.mapearObjetoParaString(categoriaModel)
                     );
@@ -150,7 +156,8 @@ public class CategoriaService {
 
     //Fazer Auditoria
     LogRequestDTO logRequestDTO = new LogRequestDTO();
-    logService.adicionar(logRequestDTO, EnumLog.DELETE, EnumTipoEntidade.CATEGORIA, "", "");
+    Usuario usuarioLogado = mapper.map(SecurityContextHolder.getContext().getAuthentication().getPrincipal(), Usuario.class);
+    logService.adicionar(usuarioLogado, logRequestDTO, EnumLog.DELETE, EnumTipoEntidade.CATEGORIA, "", "");
         
     }
 }

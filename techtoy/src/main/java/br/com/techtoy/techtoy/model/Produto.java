@@ -131,7 +131,7 @@ public class Produto {
         this.valorUn = valorUn;
     }
 
-    public Boolean isAtivo() {
+    public Boolean getAtivo() {
         return ativo;
     }
 

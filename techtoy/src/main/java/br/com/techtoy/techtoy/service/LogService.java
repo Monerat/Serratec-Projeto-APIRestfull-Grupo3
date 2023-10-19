@@ -33,13 +33,10 @@ public class LogService {
 
     //Create
     @Transactional
-    public LogResponseDTO adicionar(LogRequestDTO logRequestDTO, EnumLog tipoAcao, EnumTipoEntidade tipoEntidade,
+    public LogResponseDTO adicionar(Usuario usuario, LogRequestDTO logRequestDTO, EnumLog tipoAcao, EnumTipoEntidade tipoEntidade,
                                     String valorOriginal, String valorAtual){
         Log log = modelMapper.map(logRequestDTO, Log.class);
-        
-        //Setar usuario fixo até pode usar autenticacao
-        Usuario usuario = new Usuario(1l);
-    
+            
         //Setar valores que a gente puxou
         log.setId(0);
         log.setTipoAcao(tipoAcao);
