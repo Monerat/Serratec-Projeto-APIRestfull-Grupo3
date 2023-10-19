@@ -11,9 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.techtoy.techtoy.dto.categoria.CategoriaRequestDTO;
 import br.com.techtoy.techtoy.dto.categoria.CategoriaResponseDTO;
-import br.com.techtoy.techtoy.dto.produto.ProdutoResponseDTO;
 import br.com.techtoy.techtoy.model.Categoria;
-import br.com.techtoy.techtoy.model.Produto;
 import br.com.techtoy.techtoy.model.exceptions.ResourceBadRequest;
 import br.com.techtoy.techtoy.model.exceptions.ResourceNotFound;
 import br.com.techtoy.techtoy.repository.CategoriaRepository;
