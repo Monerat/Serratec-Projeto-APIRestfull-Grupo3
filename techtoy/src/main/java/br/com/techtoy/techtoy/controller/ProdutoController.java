@@ -34,7 +34,7 @@ public class ProdutoController {
 
     //Read
     //public
-     @GetMapping("/public")
+    @GetMapping("/public")
     public ResponseEntity<List<ProdutoResponseDTO>> obterTodosPublic(){
         return ResponseEntity
             .status(200)
