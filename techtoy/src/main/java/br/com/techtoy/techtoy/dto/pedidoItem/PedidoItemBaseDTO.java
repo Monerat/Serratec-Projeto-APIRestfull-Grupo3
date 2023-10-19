@@ -1,42 +1,50 @@
 package br.com.techtoy.techtoy.dto.pedidoItem;
 
 public class PedidoItemBaseDTO {
-    
+
     private long id;
-    private int quantidade;
-    private double desconto;
-    private double acrescimo;
-    private double subTotal;
-    
-    public double getSubTotal() {
-        return subTotal;
-    }
-    public void setSubTotal(double subTotal) {
-        this.subTotal = subTotal;
-    }
+    private Integer quantidade;
+    private Double desconto;
+    private Double acrescimo;
+    private Double subTotal;
+
     public long getId() {
         return id;
     }
+
     public void setId(long id) {
         this.id = id;
     }
-    public int getQuantidade() {
+
+    public Integer getQuantidade() {
         return quantidade;
     }
-    public void setQuantidade(int quantidade) {
+
+    public void setQuantidade(Integer quantidade) {
         this.quantidade = quantidade;
     }
-    public double getDesconto() {
+
+    public Double getDesconto() {
         return desconto;
     }
-    public void setDesconto(double desconto) {
+
+    public void setDesconto(Double desconto) {
         this.desconto = desconto;
     }
-    public double getAcrescimo() {
+
+    public Double getAcrescimo() {
         return acrescimo;
     }
-    public void setAcrescimo(double acrescimo) {
+
+    public void setAcrescimo(Double acrescimo) {
         this.acrescimo = acrescimo;
     }
-    
+
+    public Double getSubTotal() {
+        return subTotal;
+    }
+
+    public void setSubTotal(Double subTotal) {
+        this.subTotal = subTotal;
+    }
 }

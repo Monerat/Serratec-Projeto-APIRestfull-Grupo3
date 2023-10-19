@@ -10,9 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.techtoy.techtoy.dto.log.LogRequestDTO;
 import br.com.techtoy.techtoy.dto.produto.ProdutoRequestDTO;
 import br.com.techtoy.techtoy.dto.produto.ProdutoResponseDTO;
 import br.com.techtoy.techtoy.model.Produto;
+import br.com.techtoy.techtoy.model.Enum.EnumLog;
+import br.com.techtoy.techtoy.model.Enum.EnumTipoEntidade;
 import br.com.techtoy.techtoy.model.exceptions.ResourceBadRequest;
 import br.com.techtoy.techtoy.model.exceptions.ResourceNotFound;
 import br.com.techtoy.techtoy.repository.ProdutoRepository;
@@ -22,6 +25,9 @@ public class ProdutoService {
     
     @Autowired
     private ProdutoRepository produtoRepository;
+
+    @Autowired
+    private LogService logService;
 
     @Autowired
     private ModelMapper mapper;
@@ -34,6 +40,11 @@ public class ProdutoService {
 
         produtoModel.setId(0);
         produtoRepository.save(produtoModel);
+
+        //Fazer Auditoria
+        LogRequestDTO logRequestDTO = new LogRequestDTO();
+        logService.adicionar(logRequestDTO, EnumLog.CREATE, EnumTipoEntidade.PRODUTO, "", 
+                   logService.mapearObjetoParaString(produtoModel));
 
         return mapper.map(produtoModel, ProdutoResponseDTO.class);
     }
@@ -122,6 +133,25 @@ public class ProdutoService {
 
         produtoModel = produtoRepository.save(produtoModel);
         
+        //Fazer Auditoria
+        LogRequestDTO logRequestDTO = new LogRequestDTO();
+
+        //Verificar se o Produto foi ativado
+        if (produtoBase.isAtivo() != produtoModel.isAtivo()){
+            // Usando a porra do ternario aqui, se ativo for true ele ACTIVOU, cc ele DESACTIVOU :D
+            EnumLog logStatus = produtoModel.isAtivo() ? EnumLog.ACTIVATE : EnumLog.DEACTIVATE;
+            logService.adicionar(logRequestDTO, logStatus, EnumTipoEntidade.PRODUTO, 
+                    logService.mapearObjetoParaString(produtoBase),
+                    logService.mapearObjetoParaString(produtoModel)
+                    );
+        }
+
+        //Registrar Mudanças UPDATE na Auditoria
+        logService.adicionar(logRequestDTO, EnumLog.UPDATE, EnumTipoEntidade.PRODUTO, 
+                    logService.mapearObjetoParaString(produtoBase),
+                    logService.mapearObjetoParaString(produtoModel)
+                    );
+        
         return mapper.map(produtoModel, ProdutoResponseDTO.class);
     }
 
@@ -129,5 +159,10 @@ public class ProdutoService {
     public void deletar(Long id){
         obterPorId(id);
         produtoRepository.deleteById(id);
+
+        //Fazer Auditoria
+        LogRequestDTO logRequestDTO = new LogRequestDTO();
+        logService.adicionar(logRequestDTO, EnumLog.DELETE, EnumTipoEntidade.PRODUTO, "", "");
+
     }
 }

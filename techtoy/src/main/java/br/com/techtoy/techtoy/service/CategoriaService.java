@@ -11,8 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.techtoy.techtoy.dto.categoria.CategoriaRequestDTO;
 import br.com.techtoy.techtoy.dto.categoria.CategoriaResponseDTO;
+import br.com.techtoy.techtoy.dto.log.LogRequestDTO;
 import br.com.techtoy.techtoy.model.Categoria;
 import br.com.techtoy.techtoy.model.exceptions.ResourceBadRequest;
+import br.com.techtoy.techtoy.model.Enum.EnumLog;
+import br.com.techtoy.techtoy.model.Enum.EnumTipoEntidade;
 import br.com.techtoy.techtoy.model.exceptions.ResourceNotFound;
 import br.com.techtoy.techtoy.repository.CategoriaRepository;
 
@@ -21,6 +24,9 @@ public class CategoriaService {
     
     @Autowired
     private CategoriaRepository categoriaRepository;
+
+    @Autowired
+    private LogService logService;
 
     @Autowired
     private ModelMapper mapper;
@@ -35,6 +41,11 @@ public class CategoriaService {
         categoria.setId(0);
         categoria = categoriaRepository.save(categoria);
         
+        //Fazer Auditoria
+        LogRequestDTO logRequestDTO = new LogRequestDTO();
+        logService.adicionar(logRequestDTO, EnumLog.CREATE, EnumTipoEntidade.CATEGORIA, "", 
+                   logService.mapearObjetoParaString(categoria));
+
         return mapper.map(categoria, CategoriaResponseDTO.class);
     }
     //Read publico
@@ -110,12 +121,37 @@ public class CategoriaService {
 
         categoriaModel = categoriaRepository.save(categoriaModel);
         
+        //Fazer Auditoria
+        LogRequestDTO logRequestDTO = new LogRequestDTO();
+
+        //Verificar se o Produto foi ativado
+        if (categoriaBase.isAtivo() != categoriaModel.isAtivo()){
+            // Usando a porra do ternario aqui, se ativo for true ele ACTIVOU, cc ele DESACTIVOU :D
+            EnumLog logStatus = categoriaModel.isAtivo() ? EnumLog.ACTIVATE : EnumLog.DEACTIVATE;
+            logService.adicionar(logRequestDTO, logStatus, EnumTipoEntidade.CATEGORIA, 
+                    logService.mapearObjetoParaString(categoriaBase),
+                    logService.mapearObjetoParaString(categoriaModel)
+                    );
+        }
+
+        //Registrar Mudanças UPDATE na Auditoria
+        logService.adicionar(logRequestDTO, EnumLog.UPDATE, EnumTipoEntidade.CATEGORIA, 
+                    logService.mapearObjetoParaString(categoriaBase),
+                    logService.mapearObjetoParaString(categoriaModel)
+                    );
+        
+
         return mapper.map(categoriaModel, CategoriaResponseDTO.class);
     }
     //Delete
     public void deletar(Long id){
         obterPorId(id);
         categoriaRepository.deleteById(id);
+
+    //Fazer Auditoria
+    LogRequestDTO logRequestDTO = new LogRequestDTO();
+    logService.adicionar(logRequestDTO, EnumLog.DELETE, EnumTipoEntidade.CATEGORIA, "", "");
+        
     }
 }
 

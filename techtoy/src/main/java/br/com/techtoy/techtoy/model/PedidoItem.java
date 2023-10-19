@@ -20,10 +20,14 @@ public class PedidoItem {
     private long id;
 
     @Column(nullable = false)
-    private int quantidade;
-    private double desconto;
-    private double subTotal;
-    private double acrescimo;
+    private Integer quantidade;
+
+    private Double desconto;
+
+    private Double subTotal;
+
+    private Double acrescimo;
+
 
     @ManyToOne
     @JoinColumn(name = "idPedido", nullable = false) // Aqui vai gerar no banco uma coluna na tabela contaBancaria com o id_titular
@@ -55,27 +59,35 @@ public class PedidoItem {
         this.id = id;
     }
 
-    public int getQuantidade() {
+    public Integer getQuantidade() {
         return quantidade;
     }
 
-    public void setQuantidade(int quantidade) {
+    public void setQuantidade(Integer quantidade) {
         this.quantidade = quantidade;
     }
 
-    public double getDesconto() {
+    public Double getDesconto() {
         return desconto;
     }
 
-    public void setDesconto(double desconto) {
+    public void setDesconto(Double desconto) {
         this.desconto = desconto;
     }
 
-    public double getAcrescimo() {
+    public Double getSubTotal() {
+        return subTotal;
+    }
+
+    public void setSubTotal(Double subTotal) {
+        this.subTotal = subTotal;
+    }
+
+    public Double getAcrescimo() {
         return acrescimo;
     }
 
-    public void setAcrescimo(double acrescimo) {
+    public void setAcrescimo(Double acrescimo) {
         this.acrescimo = acrescimo;
     }
 
@@ -95,12 +107,5 @@ public class PedidoItem {
         this.produto = produto;
     }
 
-    
-    public double getSubTotal() {
-        return subTotal;
-    }
 
-    public void setSubTotal(double subTotal) {
-        this.subTotal = subTotal;
-    }  
 }
