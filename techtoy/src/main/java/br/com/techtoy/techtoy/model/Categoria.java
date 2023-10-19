@@ -1,3 +1,7 @@
+/**
+ * A classe Categoria representa uma categoria de produtos no sistema, com informações como nome, observação, estado de ativação
+ * e a lista de produtos associados a essa categoria.
+ */
 package br.com.techtoy.techtoy.model;
 
 import java.util.ArrayList;
@@ -15,6 +19,8 @@ import javax.persistence.Table;
 @Table(name = "categoria")
 public class Categoria {
     
+    // Atributos
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idCategoria")
@@ -31,7 +37,15 @@ public class Categoria {
     @OneToMany(mappedBy = "categoria")
     private List<Produto> produtos;
 
-    
+    /**
+     * Construtor que inicializa um objeto de Categoria com os parâmetros fornecidos.
+     *
+     * @param id          O ID da categoria.
+     * @param nome        O nome da categoria.
+     * @param observacao  Uma observação sobre a categoria.
+     * @param ativo       O estado de ativação da categoria.
+     * @param produto     O produto associado à categoria.
+     */
     public Categoria(long id, String nome, String observacao, boolean ativo, Produto produto) {
         this.id = id;
         this.nome = nome;
@@ -41,12 +55,22 @@ public class Categoria {
         this.produtos.add(produto);
     }
 
+    /**
+     * Construtor que inicializa um objeto de Categoria com um ID específico.
+     *
+     * @param id O ID da categoria.
+     */
     public Categoria(long id) {
         this.id = id;
     }
 
+    /**
+     * Construtor que inicializa um objeto de Categoria com valores padrão.
+     */
     public Categoria() {
     }
+
+    // Getters e Setters
 
     public long getId() {
         return id;
@@ -87,6 +111,4 @@ public class Categoria {
     public void setProdutos(List<Produto> produtos) {
         this.produtos = produtos;
     }
-
-   
 }
