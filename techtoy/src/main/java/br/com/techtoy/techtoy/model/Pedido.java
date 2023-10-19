@@ -38,6 +38,12 @@ public class Pedido {
     @Column(nullable = false)
     private EnumFormaPagamento formaPagamento;
    
+    private double valorTotal;
+
+    private double acrescimoTotal;
+
+    private double descontoTotal;
+
     private String observacao;
 
     @ManyToOne
@@ -50,76 +56,139 @@ public class Pedido {
 
     
     
-    public Pedido(long id, EnumFormaPagamento formaPagamento, String observacao, Usuario usuario,
-            PedidoItem pedidoItem) {
-        this.id = id;
-        this.dataPedido = new Date();
-        this.formaPagamento = formaPagamento;
-        this.observacao = observacao;
-        this.usuario = usuario;
-        this.pedidoItens = new ArrayList<>();
-        this.pedidoItens.add(pedidoItem);
-    } 
-    
-    
-    public Pedido(long id) {
-        this.id = id;
-        this.dataPedido = new Date();
-    }
-
 
     public Pedido() {
         this.dataPedido = new Date();
     }
+
+    public Pedido(long id, EnumFormaPagamento formaPagamento, double valorTotal, double acrescimoTotal,
+            double descontoTotal, String observacao, Usuario usuario, PedidoItem pedidoItem) {
+        this.id = id;
+        this.dataPedido = new Date();
+        this.formaPagamento = formaPagamento;
+        this.valorTotal = valorTotal;
+        this.acrescimoTotal = acrescimoTotal;
+        this.descontoTotal = descontoTotal;
+        this.observacao = observacao;
+        this.usuario = usuario;       
+        this.pedidoItens = new ArrayList<>();
+        this.pedidoItens.add(pedidoItem);
+    }
+
+
+
+
+
 
 
     public long getId() {
         return id;
     }
 
+
+
     public void setId(long id) {
         this.id = id;
     }
+
+
 
     public Date getDataPedido() {
         return dataPedido;
     }
 
+
+
     public void setDataPedido(Date dataPedido) {
         this.dataPedido = dataPedido;
     }
+
+
 
     public EnumFormaPagamento getFormaPagamento() {
         return formaPagamento;
     }
 
+
+
     public void setFormaPagamento(EnumFormaPagamento formaPagamento) {
         this.formaPagamento = formaPagamento;
     }
+
+
+
+    public double getValorTotal() {
+        return valorTotal;
+    }
+
+
+
+    public void setValorTotal(double valorTotal) {
+        this.valorTotal = valorTotal;
+    }
+
+
+
+    public double getAcrescimoTotal() {
+        return acrescimoTotal;
+    }
+
+
+
+    public void setAcrescimoTotal(double acrescimoTotal) {
+        this.acrescimoTotal = acrescimoTotal;
+    }
+
+
+
+    public double getDescontoTotal() {
+        return descontoTotal;
+    }
+
+
+
+    public void setDescontoTotal(double descontoTotal) {
+        this.descontoTotal = descontoTotal;
+    }
+
+
 
     public String getObservacao() {
         return observacao;
     }
 
+
+
     public void setObservacao(String observacao) {
         this.observacao = observacao;
     }
+
+
 
     public Usuario getUsuario() {
         return usuario;
     }
 
+
+
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
+
+
 
     public List<PedidoItem> getPedidoItens() {
         return pedidoItens;
     }
 
-    public void setPedidoItens(List<PedidoItem> pedidoItem) {
-        this.pedidoItens = pedidoItem;
-    }
+
+
+    public void setPedidoItens(List<PedidoItem> pedidoItens) {
+        this.pedidoItens = pedidoItens;
+    } 
+    
+    
+   
 
 
 
