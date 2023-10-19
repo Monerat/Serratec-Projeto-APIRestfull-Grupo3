@@ -1,3 +1,7 @@
+/**
+ * A classe Produto representa um item disponível para compra no sistema, com informações como nome, observação, estoque,
+ * valor unitário, estado de ativação e relação com a categoria de produtos.
+ */
 package br.com.techtoy.techtoy.model;
 
 import java.util.ArrayList;
@@ -18,6 +22,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @Entity
 @Table(name = "produto")
 public class Produto {
+
+    // Atributos
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,10 +52,18 @@ public class Produto {
     @OneToMany(mappedBy = "produto")
     private List<PedidoItem> pedidoItens;
 
-    
-
-    public Produto(long id, String nome, String observacao, int estoque, Double valorUn, boolean ativo,
-            PedidoItem pedidoItem) {
+    /**
+     * Construtor que inicializa um objeto de Produto com os parâmetros fornecidos.
+     *
+     * @param id           O ID do produto.
+     * @param nome         O nome do produto.
+     * @param observacao   Uma observação sobre o produto.
+     * @param estoque      A quantidade em estoque do produto.
+     * @param valorUn      O valor unitário do produto.
+     * @param ativo        O estado de ativação do produto.
+     * @param pedidoItem   O item de pedido associado ao produto.
+     */
+    public Produto(long id, String nome, String observacao, int estoque, Double valorUn, Boolean ativo, PedidoItem pedidoItem) {
         this.id = id;
         this.nome = nome;
         this.observacao = observacao;
@@ -60,12 +74,22 @@ public class Produto {
         this.pedidoItens.add(pedidoItem);
     }
 
+    /**
+     * Construtor que inicializa um objeto de Produto com um ID específico.
+     *
+     * @param id O ID do produto.
+     */
     public Produto(long id) {
         this.id = id;
     }
 
+    /**
+     * Construtor que inicializa um objeto de Produto com valores padrão.
+     */
     public Produto() {
     }
+
+    // Getters e Setters
 
     public long getId() {
         return id;
@@ -130,7 +154,4 @@ public class Produto {
     public void setPedidoItens(List<PedidoItem> pedidoItens) {
         this.pedidoItens = pedidoItens;
     }
-    
-    
-   
 }

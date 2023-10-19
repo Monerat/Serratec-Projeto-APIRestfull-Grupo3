@@ -49,6 +49,20 @@ private transient List<Log> logs;
 @OneToMany(mappedBy = "usuario")
 private transient List<Pedido> pedidos;
 
+/**
+     * Construtor que inicializa um objeto de usuário com os parâmetros fornecidos.
+     *
+     * @param id      O ID do usuário.
+     * @param nome    O nome do usuário.
+     * @param dataCadastro A data de cadastro do usuário.
+     * @param telefone O número de telefone do usuário.
+     * @param email   O endereço de e-mail do usuário.
+     * @param senha   A senha do usuário.
+     * @param perfil  O perfil de usuário.
+     * @param log     O registro de Log associado ao usuário.
+     * @param pedido  O registro de Pedido associado ao usuário.
+     */
+
 public Usuario(long id, String nome, String dataCadastro, String telefone, String email, String senha, EnumTipoUsuario perfil,
         Log log, Pedido pedido) {
     this.id = id;
@@ -64,14 +78,25 @@ public Usuario(long id, String nome, String dataCadastro, String telefone, Strin
     this.pedidos.add(pedido);
 }
 
+/**
+     * Construtor que inicializa um objeto de usuário com um ID específico.
+     *
+     */
+
 public Usuario(long id) {
     this.dataCadastro = new Date();
     this.id = id;
 }
 
+/**
+     * Construtor que inicializa um objeto de usuário com valores padrão.
+     */
+
 public Usuario() {
     this.dataCadastro = new Date();
 }
+
+ // Getters e Setters
 
 public long getId() {
     return id;
