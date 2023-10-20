@@ -48,7 +48,7 @@ O seu grupo foi convidado a desenvolver uma API para um novo sistema de E Commer
 - Tem que ter tratamento de erro com retorno correto dos statuscode. ~
 
 ### Extras:
-- Criar documentação no swagger.
+- Criar documentação no swagger.✔️
 - Adicionar foto ao produto.✔️
 
 ### DER:
