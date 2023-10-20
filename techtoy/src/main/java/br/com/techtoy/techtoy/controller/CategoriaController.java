@@ -48,6 +48,14 @@ public class CategoriaController {
             .status(200)
             .body(categoriaService.obterPorIdPublic(id));
     }
+
+    @GetMapping("/public/nome/{nome}")
+    public ResponseEntity<CategoriaResponseDTO> obterPorIdPublic(@PathVariable String nome){
+        return ResponseEntity
+            .status(200)
+            .body(categoriaService.obterPorNomePublic(nome));
+    }
+
     //Read private
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")

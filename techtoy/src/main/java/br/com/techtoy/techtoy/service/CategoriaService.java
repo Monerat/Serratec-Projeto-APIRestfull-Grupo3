@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.techtoy.techtoy.dto.categoria.CategoriaRequestDTO;
 import br.com.techtoy.techtoy.dto.categoria.CategoriaResponseDTO;
 import br.com.techtoy.techtoy.dto.log.LogRequestDTO;
-import br.com.techtoy.techtoy.dto.usuario.UsuarioRequestDTO;
 import br.com.techtoy.techtoy.model.Categoria;
 import br.com.techtoy.techtoy.model.Usuario;
 import br.com.techtoy.techtoy.model.exceptions.ResourceBadRequest;
@@ -52,8 +51,8 @@ public class CategoriaService {
 
         return mapper.map(categoria, CategoriaResponseDTO.class);
     }
-    //Read publico
 
+    //Read publico
     public List<CategoriaResponseDTO> obterTodosPublic(){
         List<Categoria> categoriasModel = categoriaRepository.findAll();
         List<CategoriaResponseDTO> categoriaResponse = new ArrayList<>();
@@ -64,6 +63,22 @@ public class CategoriaService {
                 categoriaResponse.add(mapper.map(categoria, CategoriaResponseDTO.class));                
             }
         }
+        return categoriaResponse;
+    }
+
+    public CategoriaResponseDTO obterPorNomePublic(String Nome){
+        Optional<Categoria> categoria = categoriaRepository.findByNome(Nome);
+        CategoriaResponseDTO categoriaResponse = new CategoriaResponseDTO();
+
+        if(categoria.isEmpty()){
+            throw new ResourceNotFound("Categoria não foi encontrada na base com o Nome: "+Nome);
+        }
+        
+        if(categoria.get().getAtivo()){
+            categoriaResponse = mapper.map(categoria.get(), CategoriaResponseDTO.class);
+        }else{
+            throw new ResourceBadRequest("A Categoria com id "+Nome+" está inativa");
+        }     
         return categoriaResponse;
     }
 

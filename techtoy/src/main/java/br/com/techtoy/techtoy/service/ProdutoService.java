@@ -114,7 +114,6 @@ public class ProdutoService {
     @Transactional
     public ProdutoResponseDTO atualizar(Long id, ProdutoRequestDTO produtoRequest){
         Produto produtoBase = mapper.map(obterPorId(id), Produto.class);
-
         Produto produtoModel = mapper.map(produtoRequest, Produto.class);
 
         produtoModel.setId(id);

@@ -27,7 +27,6 @@ public class PedidoController {
 
     //Create
     @PostMapping
-    @PreAuthorize("hasAuthority('CLIENTE','ADMIN')")
     public ResponseEntity<PedidoResponseDTO> adicionar(@RequestBody PedidoRequestDTO pedido) {
                
         return ResponseEntity
@@ -54,7 +53,6 @@ public class PedidoController {
 
     //Update
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('CLIENTE','ADMIN')")
     public ResponseEntity<PedidoResponseDTO> atualizar(@PathVariable Long id, @RequestBody PedidoRequestDTO pedido){
         
         return ResponseEntity
