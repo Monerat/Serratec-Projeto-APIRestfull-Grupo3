@@ -47,19 +47,23 @@ public class PedidoService {
         List<PedidoItemRequestDTO> pedidoItemRequest = pedidoRequest.getPedidoItens();
 
         pedidoModel.setId(0);
-        pedidoModel = pedidoRepository.save(calcularValoresTotais(pedidoModel));
+        pedidoModel = pedidoRepository.save(pedidoModel);
 
         //adicionar pedidoItens no pedido
         List<PedidoItemResponseDTO> itens = adicionarItens(pedidoItemRequest, pedidoModel);
         PedidoResponseDTO pedidoResponse = mapper.map(pedidoModel, PedidoResponseDTO.class); 
         pedidoResponse.setPedidoItens(itens);
+        pedidoModel = mapper.map(pedidoResponse, Pedido.class);
+
+        pedidoModel = pedidoRepository.save(calcularValoresTotais(pedidoModel));
 
         //Fazer Auditoria
         LogRequestDTO logRequestDTO = new LogRequestDTO();
         logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, EnumLog.CREATE, EnumTipoEntidade.PEDIDO, "", 
                     logService.mapearObjetoParaString(pedidoModel));
 
-        
+        pedidoResponse = mapper.map(pedidoModel, PedidoResponseDTO.class);
+
         return pedidoResponse;
     }
 
