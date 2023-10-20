@@ -20,16 +20,6 @@ public class LogController {
     @Autowired
     private LogService logService;
 
-    // verificar necessidade do create log
-
-    // //Create
-    // @PostMapping
-    // public ResponseEntity<LogResponseDTO> adicionar(@RequestBody LogRequestDTO logRequestDTO) {
-    //     LogResponseDTO logResponseDTO = logService.adicionar(logRequestDTO);
-    //     return ResponseEntity.ok(logResponseDTO);
-    // }
-
-    
     //Read
     @GetMapping
     public ResponseEntity<List<LogResponseDTO>> obterTodos() {
@@ -37,26 +27,11 @@ public class LogController {
         return ResponseEntity.ok(logs);
     }
 
+    //Read by ID
     @GetMapping("/{id}")
     public ResponseEntity<LogResponseDTO> obterPorId(@PathVariable Long id) {
         LogResponseDTO log = logService.obterPorId(id);
         return ResponseEntity.ok(log);
     }
-
-    // verificar necessidade do metodo PUT em log
-
-    // @PutMapping("/{id}")
-    // public ResponseEntity<LogResponseDTO> atualizar(@PathVariable Long id, @RequestBody LogRequestDTO logRequestDTO) {
-    //     LogResponseDTO updatedLog = logService.atualizar(id, logRequestDTO);
-    //     return ResponseEntity.ok(updatedLog);
-    // }
-
-
-    // //Delete
-    // @DeleteMapping("/{id}")
-    // public ResponseEntity<Void> deletar(@PathVariable Long id) {
-    //     logService.deletar(id);
-    //     return ResponseEntity.noContent().build();
-    // }
 
 }

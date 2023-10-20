@@ -68,22 +68,6 @@ public class LogService {
         return modelMapper.map(log.get(), LogResponseDTO.class);
     }
 
-    // //Update
-    // @Transactional
-    // public LogResponseDTO atualizar(Long id, LogRequestDTO logRequestDTO){
-    //     obterPorId(id);
-    //     Log log = modelMapper.map(logRequestDTO, Log.class);
-    //     log.setId(id);
-    //     Log updatedLog = logRepository.save(log);
-    //     return modelMapper.map(updatedLog, LogResponseDTO.class);
-    // }
-
-    // //Delete
-    // public void deletar(Long id){
-    //     obterPorId(id);
-    //     logRepository.deleteById(id);
-    // }
-
     //Fazer o Mapper
     public String mapearObjetoParaString(Object object){
         ObjectMapper objectMapper = new ObjectMapper();
