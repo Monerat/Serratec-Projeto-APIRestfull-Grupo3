@@ -194,7 +194,7 @@ public class ProdutoService {
         if (file.exists()) {
             return file.getAbsolutePath();
         }
-        throw new ResourceNotFound("Arquivo não encontrado na base com o nome: " + fileName);
+        throw new ResourceNotFound("Imagem não encontrada na base com o nome: " + fileName);
     }
 
     // transformar a imagem em base64

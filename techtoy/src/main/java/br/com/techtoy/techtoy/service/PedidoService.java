@@ -52,15 +52,20 @@ public class PedidoService {
         List<PedidoItemRequestDTO> pedidoItemRequest = pedidoRequest.getPedidoItens();
 
         pedidoModel.setId(0);
+
         Usuario usuarioLogado = logService.verificarUsuarioLogado();
 
         pedidoModel.setUsuario(usuarioLogado);
         pedidoModel = pedidoRepository.save(calcularValoresTotais(pedidoModel));
 
+
         //adicionar pedidoItens no pedido
         List<PedidoItemResponseDTO> itens = adicionarItens(pedidoItemRequest, pedidoModel);
         PedidoResponseDTO pedidoResponse = mapper.map(pedidoModel, PedidoResponseDTO.class); 
         pedidoResponse.setPedidoItens(itens);
+        pedidoModel = mapper.map(pedidoResponse, Pedido.class);
+
+        pedidoModel = pedidoRepository.save(calcularValoresTotais(pedidoModel));
 
         //Fazer Auditoria
         LogRequestDTO logRequestDTO = new LogRequestDTO();
@@ -72,6 +77,8 @@ public class PedidoService {
 
         // emailService.dispararEmailPedido(usuarioLogado.getEmail(), usuarioLogado.getNome(), pedidoModel);
         
+        pedidoResponse = mapper.map(pedidoModel, PedidoResponseDTO.class);
+
         return pedidoResponse;
     }
 
