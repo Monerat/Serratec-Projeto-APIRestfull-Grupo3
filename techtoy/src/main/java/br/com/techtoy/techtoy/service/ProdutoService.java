@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.techtoy.techtoy.common.ChecaValores;
 import br.com.techtoy.techtoy.dto.log.LogRequestDTO;
 import br.com.techtoy.techtoy.dto.produto.ProdutoRequestDTO;
 import br.com.techtoy.techtoy.dto.produto.ProdutoResponseDTO;
@@ -43,6 +44,27 @@ public class ProdutoService {
     @Transactional
     public ProdutoResponseDTO adicionar(ProdutoRequestDTO produtoRequest) {
         Produto produtoModel = mapper.map(produtoRequest, Produto.class);
+        
+        ChecaValores.verificaValorDouble(produtoModel.getValorUn());
+        ChecaValores.verificaValorInt(produtoModel.getEstoque());
+
+        if (produtoModel.getNome() == null) {
+            throw new ResourceBadRequest("Você não inseriu o nome do produto, que é um campo que não pode ser nulo");
+        }
+
+        if (produtoModel.getEstoque() == null) {
+            throw new ResourceBadRequest("Você não inseriu o estoque do produto, que é um campo que não pode ser nulo");
+        }
+
+        if (produtoModel.getValorUn() == null) {
+            throw new ResourceBadRequest(
+                    "Você não inseriu o valor unitário do produto, que é um campo que não pode ser nulo");
+        }
+
+        if (produtoModel.getAtivo() == null) {
+            throw new ResourceBadRequest(
+                    "Você não inseriu se o produto está ativo ou não, que é um campo que não pode ser nulo");
+        }
 
         produtoModel.setId(0);
 
@@ -126,6 +148,9 @@ public class ProdutoService {
         Produto produtoBase = mapper.map(obterPorId(id), Produto.class);
         Produto produtoModel = mapper.map(produtoRequest, Produto.class);
 
+        ChecaValores.verificaValorDouble(produtoModel.getValorUn());
+        ChecaValores.verificaValorInt(produtoModel.getEstoque());
+
         produtoModel.setId(id);
         if (produtoModel.getNome() == null) {
             produtoModel.setNome(produtoBase.getNome());
@@ -200,7 +225,7 @@ public class ProdutoService {
     // transformar a imagem em base64
     public ProdutoResponseDTO transformarImgToBase(ProdutoResponseDTO produto) {
         String imagePath = produto.getImagem();
-        
+
         try {
             byte[] fileContent = Files.readAllBytes(Paths.get(imagePath));
             String encodedString = Base64.getEncoder().encodeToString(fileContent);
@@ -212,4 +237,6 @@ public class ProdutoService {
 
         return produto;
     }
+
+   
 }

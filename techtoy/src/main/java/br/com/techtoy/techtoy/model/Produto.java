@@ -36,7 +36,7 @@ public class Produto {
     private String observacao;
 
     @Column(nullable = false)
-    private int estoque;
+    private Integer estoque;
 
     @Column(nullable = false)
     private Double valorUn;
@@ -92,8 +92,6 @@ public class Produto {
     public Produto() {
     }
 
-    // Getters e Setters
-
     public long getId() {
         return id;
     }
@@ -118,11 +116,11 @@ public class Produto {
         this.observacao = observacao;
     }
 
-    public int getEstoque() {
+    public Integer getEstoque() {
         return estoque;
     }
 
-    public void setEstoque(int estoque) {
+    public void setEstoque(Integer estoque) {
         this.estoque = estoque;
     }
 
@@ -142,6 +140,14 @@ public class Produto {
         this.ativo = ativo;
     }
 
+    public String getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
+    }
+
     public Categoria getCategoria() {
         return categoria;
     }
@@ -150,14 +156,6 @@ public class Produto {
         this.categoria = categoria;
     }
 
-    public String getImagem() {
-        return imagem;
-    }
-
-    public void setImagem(String imagem) {
-        this.imagem = imagem;
-    }
-    
     public List<PedidoItem> getPedidoItens() {
         return pedidoItens;
     }
@@ -165,5 +163,9 @@ public class Produto {
     public void setPedidoItens(List<PedidoItem> pedidoItens) {
         this.pedidoItens = pedidoItens;
     }
+
+    // Getters e Setters
+
+    
 
 }
