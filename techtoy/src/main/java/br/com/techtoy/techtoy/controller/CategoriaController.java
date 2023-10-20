@@ -38,7 +38,7 @@ public class CategoriaController {
 
     // Obtém todas as categorias públicas.
     @GetMapping("/public")
-    public ResponseEntity<List<CategoriaResponseDTO> obterTodosPublic(){
+    public ResponseEntity<List<CategoriaResponseDTO>> obterTodosPublic(){
         return ResponseEntity
             .status(200)
             .body(categoriaService.obterTodosPublic());
@@ -63,7 +63,7 @@ public class CategoriaController {
     // Obtém todas as categorias (restrito a administradores).
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<List<CategoriaResponseDTO> obterTodos(){
+    public ResponseEntity<List<CategoriaResponseDTO>> obterTodos(){
         return ResponseEntity.ok(categoriaService.obterTodos());
     }
 

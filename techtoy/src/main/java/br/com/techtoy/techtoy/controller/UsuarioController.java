@@ -52,7 +52,7 @@ public class UsuarioController {
      */
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<List<UsuarioResponseDTO> obterTodos() {
+    public ResponseEntity<List<UsuarioResponseDTO>> obterTodos() {
         return ResponseEntity
             .status(200)
             .body(usuarioService.obterTodos());
