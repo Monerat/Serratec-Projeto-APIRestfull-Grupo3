@@ -1,10 +1,12 @@
 package br.com.techtoy.techtoy.service;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.persistence.Column;
 import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
@@ -24,6 +26,8 @@ import br.com.techtoy.techtoy.dto.usuario.UsuarioResponseDTO;
 import br.com.techtoy.techtoy.model.Usuario;
 import br.com.techtoy.techtoy.model.Enum.EnumLog;
 import br.com.techtoy.techtoy.model.Enum.EnumTipoEntidade;
+import br.com.techtoy.techtoy.model.Enum.EnumTipoUsuario;
+import br.com.techtoy.techtoy.model.exceptions.ResourceBadRequest;
 import br.com.techtoy.techtoy.model.exceptions.ResourceNotFound;
 import br.com.techtoy.techtoy.repository.UsuarioRepository;
 import br.com.techtoy.techtoy.security.JWTService;
@@ -60,7 +64,36 @@ public class UsuarioService {
     @Transactional
     public UsuarioResponseDTO adicionar(UsuarioRequestDTO usuarioReq) {
         Usuario usuarioModel = mapper.map(usuarioReq, Usuario.class);
-        String senha =  passwordEncoder.encode(usuarioModel.getSenha());
+
+        if (usuarioModel.getNome() == null) {
+            throw new ResourceBadRequest("Você não inseriu o nome do usuário, que é um campo que não pode ser nulo");
+        }
+
+        if (usuarioModel.getTelefone() == null) {
+            throw new ResourceBadRequest(
+                    "Você não inseriu o telefone do usuário, que é um campo que não pode ser nulo");
+        }
+
+        if (usuarioModel.getEmail() == null) {
+            throw new ResourceBadRequest(
+                    "Você não inseriu o email do usuário, que é um campo que não pode ser nulo");
+        }
+
+        if (usuarioModel.getSenha() == null) {
+            throw new ResourceBadRequest(
+                    "Você não inseriu a senha do usuário, que é um campo que não pode ser nulo");
+        }
+
+        if (usuarioModel.getPerfil() == null) {
+            throw new ResourceBadRequest(
+                    "Você não inseriu o tipo do perfil do usuário, que é um campo que não pode ser nulo");
+        }
+
+        if (usuarioRepository.findByEmail(usuarioModel.getEmail()).isPresent()) {
+            throw new ResourceBadRequest("O email informado já está cadastrado no sistema.");
+        }
+
+        String senha = passwordEncoder.encode(usuarioModel.getSenha());
 
         usuarioModel.setSenha(senha);
         usuarioModel.setId(0l);
@@ -73,7 +106,8 @@ public class UsuarioService {
         logService.adicionar(usuarioCadastrado, logRequestDTO, EnumLog.CREATE, EnumTipoEntidade.USUARIO, "",
                 logService.mapearObjetoParaString(usuarioCadastrado));
 
-        // emailService.dispararEmail("Cadastro", usuarioModel.getEmail(), usuarioModel.getNome());
+        // emailService.dispararEmail("Cadastro", usuarioModel.getEmail(),
+        // usuarioModel.getNome());
         return mapper.map(usuarioModel, UsuarioResponseDTO.class);
     }
 
@@ -102,7 +136,6 @@ public class UsuarioService {
 
         Usuario usuarioModel = mapper.map(usuarioRequest, Usuario.class);
 
-        
         if (usuarioModel.getNome() == null) {
             usuarioModel.setNome(usuarioBase.getNome());
         }
@@ -119,7 +152,7 @@ public class UsuarioService {
             usuarioModel.setPerfil(usuarioBase.getPerfil());
         }
 
-        String senha =  passwordEncoder.encode(usuarioModel.getSenha());
+        String senha = passwordEncoder.encode(usuarioModel.getSenha());
         usuarioModel.setId(id);
         usuarioModel.setSenha(senha);
         usuarioModel = usuarioRepository.save(usuarioModel);
@@ -131,7 +164,8 @@ public class UsuarioService {
         LogRequestDTO logRequestDTO = new LogRequestDTO();
 
         // Registrar Mudanças UPDATE na Auditoria
-        logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, EnumLog.UPDATE, EnumTipoEntidade.USUARIO,
+        logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, EnumLog.UPDATE,
+                EnumTipoEntidade.USUARIO,
                 logService.mapearObjetoParaString(usuarioBase),
                 logService.mapearObjetoParaString(usuarioModel));
 
@@ -145,14 +179,15 @@ public class UsuarioService {
 
         // Fazer Auditoria
         LogRequestDTO logRequestDTO = new LogRequestDTO();
-        logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, EnumLog.DELETE, EnumTipoEntidade.USUARIO, "", "");
+        logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, EnumLog.DELETE,
+                EnumTipoEntidade.USUARIO, "", "");
 
     }
 
-    public UsuarioResponseDTO obterPorEmail(String email){
-        Optional<Usuario> optUsuario =  usuarioRepository.findByEmail(email);
+    public UsuarioResponseDTO obterPorEmail(String email) {
+        Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
 
-        return mapper.map(optUsuario.get(),UsuarioResponseDTO.class);
+        return mapper.map(optUsuario.get(), UsuarioResponseDTO.class);
     }
 
     // Logar
