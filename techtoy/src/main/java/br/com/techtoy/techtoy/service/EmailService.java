@@ -12,13 +12,18 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import br.com.techtoy.techtoy.model.Pedido;
+import br.com.techtoy.techtoy.model.PedidoItem;
 import br.com.techtoy.techtoy.model.email.Email;
+import br.com.techtoy.techtoy.repository.ProdutoRepository;
 
 @Service
 public class EmailService {
 
     @Autowired
     private JavaMailSender javaMailSender;
+
+    @Autowired
+    private ProdutoRepository produtoRepository;
 
     public void enviar(Email email) {
 
@@ -47,9 +52,9 @@ public class EmailService {
         List<String> destinatarios = new ArrayList<>();
         destinatarios.add(destinatario);
 
-        String mensagem = "Olá, " + nome + "!\n" + tipoEmail +
-                " realizado com sucesso utilizando o email: " + destinatario + "\n\n" +
-                "Tenha um excelente dia!\n\n Sincerely \nO grupo 3 da disciplina de API Restful do Serratec";
+        String mensagem = "Olá, " + nome + "!<br>" + tipoEmail +
+                " realizado com sucesso utilizando o email: " + destinatario + "<br><br>" +
+                "Tenha um excelente dia!<br><br> Sincerely <br>O grupo 3 da disciplina de API Restful do Serratec";
 
         Email email = new Email(tipoEmail, mensagem, destinatarios);
 
@@ -60,10 +65,31 @@ public class EmailService {
 
         List<String> destinatarios = new ArrayList<>();
         destinatarios.add(destinatario);
+        
+        Double subtotal = 0.0;
+        String produtos = "";
+        Integer produtoQuantidade = 0;
 
-        String mensagem = "Olá!\n" +
-                "Cadastro de pedido realizado com sucesso para o usuario: " + nome + "\n\n" +
-                "Tenha um excelente dia!\n\n Sincerely \nO grupo 3 da disciplina de API Restful do Serratec";
+        
+
+        for (PedidoItem pedidoItem : pedido.getPedidoItens()) {
+            subtotal += pedidoItem.getSubTotal();
+            pedidoItem.setProduto(produtoRepository.findById(pedidoItem.getProduto().getId()).get());
+            produtos += pedidoItem.getProduto().getNome() + " ,";
+            produtoQuantidade += pedidoItem.getQuantidade();
+        }
+        
+        String mensagem = "Olá!<br>" +
+                "Cadastro de pedido realizado com sucesso para o usuario: " + nome + "<br><br>" +
+                "Número do pedido: " + pedido.getId() + "<br>" +
+                "Data do pedido: " + pedido.getDataPedido() + "<br><br>" +
+
+                "Produto: " + produtos + "<br>" +
+                "Quantidade: " + produtoQuantidade + "<br>" +
+                "Subtotal: " + subtotal + "<br>" +
+
+                "Valor total do pedido: R$" + pedido.getValorTotal() + "<br><br>" +
+                "Tenha um excelente dia!<br><br> Sincerely <br>O grupo 3 da disciplina de API Restful do Serratec";
 
         Email email = new Email("Cadastro de Pedido", mensagem, destinatarios);
 

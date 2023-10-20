@@ -56,9 +56,8 @@ public class PedidoService {
         Usuario usuarioLogado = logService.verificarUsuarioLogado();
 
         pedidoModel.setUsuario(usuarioLogado);
-        pedidoModel = pedidoRepository.save(calcularValoresTotais(pedidoModel));
-
-
+        pedidoModel = pedidoRepository.save(pedidoModel);
+        
         //adicionar pedidoItens no pedido
         List<PedidoItemResponseDTO> itens = adicionarItens(pedidoItemRequest, pedidoModel);
         PedidoResponseDTO pedidoResponse = mapper.map(pedidoModel, PedidoResponseDTO.class); 
@@ -75,7 +74,7 @@ public class PedidoService {
         logService.adicionar(usuarioLogado, logRequestDTO, EnumLog.CREATE, EnumTipoEntidade.PEDIDO, "", 
                     logService.mapearObjetoParaString(pedidoModel));
 
-        // emailService.dispararEmailPedido(usuarioLogado.getEmail(), usuarioLogado.getNome(), pedidoModel);
+        emailService.dispararEmailPedido(usuarioLogado.getEmail(), usuarioLogado.getNome(), pedidoModel);
         
         pedidoResponse = mapper.map(pedidoModel, PedidoResponseDTO.class);
 
