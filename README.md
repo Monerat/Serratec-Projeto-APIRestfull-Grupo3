@@ -16,7 +16,7 @@ Este projeto tem como objetivo exercitar a criação de uma APIRestful.
 O seu grupo foi convidado a desenvolver uma API para um novo sistema de E Commerce  onde o usuário do tipo cliente poderá executar os seguintes ações:
 
 - Consultar uma lista de produtos. (Autenticado = false) ✔️
-- Consultar uma lista de produtos vinculada a uma categoria. (Autenticado = false) ~
+- Consultar uma lista de produtos vinculada a uma categoria. (Autenticado = false)✔️
 - Consultar um produto pelo seu id. (Autenticado = false) ✔️
 - Consultar uma lista de categorias. (Autenticado = false) ✔️
 - Consultar uma categoria pelo id. (Autenticado = false) ✔️
@@ -49,7 +49,7 @@ O seu grupo foi convidado a desenvolver uma API para um novo sistema de E Commer
 
 ### Extras:
 - Criar documentação no swagger.
-- Adicionar foto ao produto.
+- Adicionar foto ao produto.✔️
 
 ### DER:
 ![DER](Trabalho%20Grupo%203%20-%20API%20Restful.png)
