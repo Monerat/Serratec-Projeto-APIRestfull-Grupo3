@@ -20,33 +20,61 @@ import br.com.techtoy.techtoy.model.Enum.EnumTipoEntidade;
 @Table(name = "log")
 public class Log {
     
+    /**
+     * ID único do log.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idLog")
     private long id;
 
+    /**
+     * Tipo de ação realizada, como criar, atualizar ou excluir (usando EnumLog).
+     */
     @Column(nullable = false)
-    //verificar posteriormente se iremos utilizar enum
     private EnumLog tipoAcao;
 
+    /**
+     * Tipo de entidade afetada pela ação (usando EnumTipoEntidade).
+     */
     @Column(nullable = false)
     private EnumTipoEntidade tipoEntidade;
 
+    /**
+     * Data e hora em que o log foi criado.
+     */
     @Column(nullable = false)
     private Date dataAcao;
 
+    /**
+     * Valor original associado à ação .
+     */
     @Column(columnDefinition="text")
     private String valorOriginal;
 
+    /**
+     * Valor atual associado à ação .
+     */
     @Column(columnDefinition="text")
     private String valorAtual;
 
+    /**
+     * Usuário relacionado ao log.
+     */
     @ManyToOne
     @JoinColumn(name = "idUsuario", nullable = false)
     @JsonBackReference
     private Usuario usuario;
 
-    
+    /**
+     * Construtor para criar um novo log com atributos específicos.
+     * 
+     * @param id            ID único do log.
+     * @param tipoAcao      Tipo de ação realizada.
+     * @param tipoEntidade  Tipo de entidade afetada pela ação.
+     * @param valorOriginal Valor original associado à ação.
+     * @param valorAtual    Valor atual associado à ação.
+     */
     public Log(long id, EnumLog tipoAcao, EnumTipoEntidade tipoEntidade, String valorOriginal, String valorAtual) {
         this.id = id;
         this.tipoAcao = tipoAcao;
@@ -56,11 +84,15 @@ public class Log {
         this.valorAtual = valorAtual;
     }
 
+    /**
+     * Construtor padrão para criar um novo log com valores padrão e data atual.
+     */
     public Log() {
         this.dataAcao = new Date();
     }
 
-    // GETTERS AND SETTERS
+    // GETTERS E SETTERS
+
     public long getId() {
         return id;
     }
@@ -85,7 +117,6 @@ public class Log {
         this.dataAcao = dataAcao;
     }
 
-    
     public Usuario getUsuario() {
         return usuario;
     }
@@ -117,6 +148,5 @@ public class Log {
     public void setValorAtual(String valorAtual) {
         this.valorAtual = valorAtual;
     }
-    
-    
 }
+
