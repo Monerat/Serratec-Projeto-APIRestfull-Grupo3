@@ -14,33 +14,59 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @Entity
 @Table(name = "pedidoItem")
 public class PedidoItem {
+    /**
+     * ID único do item de pedido.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idPedidoItem")
     private long id;
 
+    /**
+     * Quantidade do produto no item de pedido.
+     */
     @Column(nullable = false)
     private Integer quantidade;
 
+    /**
+     * Valor do desconto aplicado ao item de pedido.
+     */
     private Double desconto;
 
+    /**
+     * Subtotal do item de pedido (calculado automaticamente).
+     */
     private Double subTotal;
 
+    /**
+     * Valor do acréscimo aplicado ao item de pedido.
+     */
     private Double acrescimo;
 
-
+    /**
+     * Pedido ao qual este item de pedido está associado.
+     */
     @ManyToOne
-    @JoinColumn(name = "idPedido", nullable = false) // Aqui vai gerar no banco uma coluna na tabela contaBancaria com o id_titular
+    @JoinColumn(name = "idPedido", nullable = false)
     @JsonBackReference
     private Pedido pedido;
 
+    /**
+     * Produto associado a este item de pedido.
+     */
     @ManyToOne
-    @JoinColumn(name = "idProduto", nullable = false) // Aqui vai gerar no banco uma coluna na tabela contaBancaria com o id_titular
+    @JoinColumn(name = "idProduto", nullable = false)
     @JsonBackReference
     private Produto produto;
 
-
-    
+    /**
+     * Construtor para criar um novo item de pedido com atributos específicos.
+     * 
+     * @param id         ID único do item de pedido.
+     * @param quantidade Quantidade do produto no item de pedido.
+     * @param desconto   Valor do desconto aplicado ao item de pedido.
+     * @param acrescimo  Valor do acréscimo aplicado ao item de pedido.
+     */
     public PedidoItem(long id, int quantidade, double desconto, double acrescimo) {
         this.id = id;
         this.quantidade = quantidade;
@@ -48,8 +74,13 @@ public class PedidoItem {
         this.acrescimo = acrescimo;
     }
     
+    /**
+     * Construtor padrão para criar um novo item de pedido.
+     */
     public PedidoItem() {
     }
+
+    // GETTERS E SETTERS
 
     public long getId() {
         return id;
@@ -106,6 +137,5 @@ public class PedidoItem {
     public void setProduto(Produto produto) {
         this.produto = produto;
     }
-
-
 }
+

@@ -25,7 +25,7 @@ public class CategoriaController {
     @Autowired
     private CategoriaService categoriaService;
 
-    //Create
+    // Criação de uma nova categoria.
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<CategoriaResponseDTO> adicionar(@RequestBody CategoriaRequestDTO categoriaRequest){
@@ -35,13 +35,16 @@ public class CategoriaController {
             .status(201)
             .body(categoriaAdicionado);
     }
-    //Read public
+
+    // Obtém todas as categorias públicas.
     @GetMapping("/public")
-    public ResponseEntity<List<CategoriaResponseDTO>> obterTodosPublic(){
+    public ResponseEntity<List<CategoriaResponseDTO> obterTodosPublic(){
         return ResponseEntity
             .status(200)
             .body(categoriaService.obterTodosPublic());
     }
+
+    // Obtém uma categoria pública por ID.
     @GetMapping("/public/{id}")
     public ResponseEntity<CategoriaResponseDTO> obterPorIdPublic(@PathVariable Long id){
         return ResponseEntity
@@ -49,6 +52,7 @@ public class CategoriaController {
             .body(categoriaService.obterPorIdPublic(id));
     }
 
+    // Obtém uma categoria pública por nome.
     @GetMapping("/public/nome/{nome}")
     public ResponseEntity<CategoriaResponseDTO> obterPorIdPublic(@PathVariable String nome){
         return ResponseEntity
@@ -56,19 +60,22 @@ public class CategoriaController {
             .body(categoriaService.obterPorNomePublic(nome));
     }
 
-    //Read private
+    // Obtém todas as categorias (restrito a administradores).
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<List<CategoriaResponseDTO>> obterTodos(){
+    public ResponseEntity<List<CategoriaResponseDTO> obterTodos(){
         return ResponseEntity.ok(categoriaService.obterTodos());
     }
 
+    // Obtém uma categoria por ID (restrito a administradores).
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<CategoriaResponseDTO> obterPorId(@PathVariable Long id){
         return ResponseEntity.ok(categoriaService.obterPorId(id));
     }
-    //Update
+
+    // Atualização de categoria (restrito a administradores)
+
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<CategoriaResponseDTO> atualizar(@PathVariable Long id, @RequestBody CategoriaRequestDTO categoriaRequest){
@@ -78,7 +85,9 @@ public class CategoriaController {
             .status(200)
             .body(categoriaAtualizado);
     }
-    //Delete
+
+    // Exclusão de categoria (restrito a administradores)
+
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> deletar(@PathVariable Long id){
@@ -89,4 +98,5 @@ public class CategoriaController {
             .build();
     }
 }
+
 

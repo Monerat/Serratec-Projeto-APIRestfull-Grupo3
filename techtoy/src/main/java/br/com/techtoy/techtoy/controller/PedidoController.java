@@ -25,16 +25,15 @@ public class PedidoController {
     @Autowired
     private PedidoService pedidoService;
 
-    //Create
+    // Criação de um novo pedido.
     @PostMapping
     public ResponseEntity<PedidoResponseDTO> adicionar(@RequestBody PedidoRequestDTO pedido) {
-               
         return ResponseEntity
             .status(201)
             .body(pedidoService.adicionar(pedido));
     }
     
-    //Read
+    // Obtém todos os pedidos (restrito a administradores).
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<PedidoResponseDTO>> obterTodos(){
@@ -43,6 +42,7 @@ public class PedidoController {
             .body(pedidoService.obterTodos());
     }
 
+    // Obtém um pedido por ID (restrito a administradores).
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<PedidoResponseDTO> obterPorId(@PathVariable Long id){
@@ -51,16 +51,17 @@ public class PedidoController {
             .body(pedidoService.obterPorId(id));
     }
 
-    //Update
+    // Atualiza um pedido por ID.
     @PutMapping("/{id}")
     public ResponseEntity<PedidoResponseDTO> atualizar(@PathVariable Long id, @RequestBody PedidoRequestDTO pedido){
-        
         return ResponseEntity
             .status(200)
             .body(pedidoService.atualizar(id, pedido)); 
     }
 
-    //Delete
+    // Exclusão de pedido (Restrito a administradores)
+
+    // Deleta um pedido por ID (restrito a administradores).
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> deletar(@PathVariable Long id){
@@ -70,3 +71,4 @@ public class PedidoController {
             .build();
     }
 }
+
