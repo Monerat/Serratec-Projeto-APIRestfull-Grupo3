@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,13 +34,10 @@ public class LogService {
 
     //Create
     @Transactional
-    public LogResponseDTO adicionar(LogRequestDTO logRequestDTO, EnumLog tipoAcao, EnumTipoEntidade tipoEntidade,
+    public LogResponseDTO adicionar(Usuario usuario, LogRequestDTO logRequestDTO, EnumLog tipoAcao, EnumTipoEntidade tipoEntidade,
                                     String valorOriginal, String valorAtual){
         Log log = modelMapper.map(logRequestDTO, Log.class);
-        
-        //Setar usuario fixo até pode usar autenticacao
-        Usuario usuario = new Usuario(1);
-    
+            
         //Setar valores que a gente puxou
         log.setId(0);
         log.setTipoAcao(tipoAcao);
@@ -98,6 +96,10 @@ public class LogService {
         }
 
         return objectString;
+    }
+
+    public Usuario verificarUsuarioLogado() {
+        return (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
 }

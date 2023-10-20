@@ -35,8 +35,10 @@ public class Log {
     @Column(nullable = false)
     private Date dataAcao;
 
+    @Column(columnDefinition="text")
     private String valorOriginal;
 
+    @Column(columnDefinition="text")
     private String valorAtual;
 
     @ManyToOne

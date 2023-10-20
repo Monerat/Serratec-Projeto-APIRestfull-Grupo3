@@ -1,5 +1,6 @@
 package br.com.techtoy.techtoy.service;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -39,14 +40,31 @@ public class ProdutoService {
         Produto produtoModel = mapper.map(produtoRequest, Produto.class);
 
         produtoModel.setId(0);
+        
+        produtoModel = produtoRepository.save(produtoModel);
+        produtoModel.setImagem(verificaImagem(produtoModel.getId()));
         produtoRepository.save(produtoModel);
 
         //Fazer Auditoria
         LogRequestDTO logRequestDTO = new LogRequestDTO();
-        logService.adicionar(logRequestDTO, EnumLog.CREATE, EnumTipoEntidade.PRODUTO, "", 
+        logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, EnumLog.CREATE, EnumTipoEntidade.PRODUTO, "", 
                    logService.mapearObjetoParaString(produtoModel));
 
+
         return mapper.map(produtoModel, ProdutoResponseDTO.class);
+    }
+
+    //imagem
+    public String verificaImagem(Long id) {
+        String folderPath = "src/main/resources/img/produtos/";
+        String fileName = String.valueOf(id);
+
+        File file = new File(folderPath + fileName + ".png");
+        
+        if (file.exists()) {
+            return file.getAbsolutePath();
+        } throw new ResourceNotFound("Arquivo não encontrado na base com o nome: "+ fileName);
+    
     }
 
     //Read
@@ -58,13 +76,17 @@ public class ProdutoService {
 
         for (Produto produto : produtoModel){
             //verifica se a Categoria está ativa.
-            if(produto.getCategoria().isAtivo()){
+            if(produto.getCategoria().getAtivo()){
                 //verifica se o Produto está ativo.
-                if(produto.isAtivo()){
+                if(produto.getAtivo()){
                     produtoResponse.add(mapper.map(produto, ProdutoResponseDTO.class));
                 }
             }            
         }
+        //pegar o arquiivo pelo path em imagem.
+        //transformar para base 64.
+        //setar no atributo image esse valor.
+        
         return produtoResponse;
     }
 
@@ -75,8 +97,8 @@ public class ProdutoService {
         if(produto.isEmpty()){
             throw new ResourceNotFound("Produto não foi encontrado na base com o Id: "+id);
         }
-        if(produto.get().getCategoria().isAtivo()){
-            if(produto.get().isAtivo()){
+        if(produto.get().getCategoria().getAtivo()){
+            if(produto.get().getAtivo()){
                 produtoResponse = mapper.map(produto.get(), ProdutoResponseDTO.class);
             }else{
                 throw new ResourceBadRequest("O Produto com id "+id+" está inativo");
@@ -111,7 +133,6 @@ public class ProdutoService {
     @Transactional
     public ProdutoResponseDTO atualizar(Long id, ProdutoRequestDTO produtoRequest){
         Produto produtoBase = mapper.map(obterPorId(id), Produto.class);
-
         Produto produtoModel = mapper.map(produtoRequest, Produto.class);
 
         produtoModel.setId(id);
@@ -124,30 +145,34 @@ public class ProdutoService {
         if (produtoModel.getValorUn()==null){
             produtoModel.setValorUn(produtoBase.getValorUn());
         }
-        if (produtoModel.isAtivo()==null){
-            produtoModel.setAtivo(produtoBase.isAtivo());//entrou aqui nao alterou
+        if (produtoModel.getAtivo()==null){
+            produtoModel.setAtivo(produtoBase.getAtivo());//entrou aqui nao alterou
+        }
+        if(produtoModel.getImagem()==null){
+            produtoModel.setCategoria(produtoBase.getCategoria());
         }
         if(produtoModel.getCategoria()==null){
             produtoModel.setCategoria(produtoBase.getCategoria());
         }
 
+        produtoModel.setImagem(verificaImagem(produtoModel.getId()));
         produtoModel = produtoRepository.save(produtoModel);
         
         //Fazer Auditoria
         LogRequestDTO logRequestDTO = new LogRequestDTO();
 
         //Verificar se o Produto foi ativado
-        if (produtoBase.isAtivo() != produtoModel.isAtivo()){
+        if (produtoBase.getAtivo() != produtoModel.getAtivo()){
             // Usando a porra do ternario aqui, se ativo for true ele ACTIVOU, cc ele DESACTIVOU :D
-            EnumLog logStatus = produtoModel.isAtivo() ? EnumLog.ACTIVATE : EnumLog.DEACTIVATE;
-            logService.adicionar(logRequestDTO, logStatus, EnumTipoEntidade.PRODUTO, 
+            EnumLog logStatus = produtoModel.getAtivo() ? EnumLog.ACTIVATE : EnumLog.DEACTIVATE;
+            logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, logStatus, EnumTipoEntidade.PRODUTO, 
                     logService.mapearObjetoParaString(produtoBase),
                     logService.mapearObjetoParaString(produtoModel)
                     );
         }
 
         //Registrar Mudanças UPDATE na Auditoria
-        logService.adicionar(logRequestDTO, EnumLog.UPDATE, EnumTipoEntidade.PRODUTO, 
+        logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, EnumLog.UPDATE, EnumTipoEntidade.PRODUTO, 
                     logService.mapearObjetoParaString(produtoBase),
                     logService.mapearObjetoParaString(produtoModel)
                     );
@@ -162,7 +187,7 @@ public class ProdutoService {
 
         //Fazer Auditoria
         LogRequestDTO logRequestDTO = new LogRequestDTO();
-        logService.adicionar(logRequestDTO, EnumLog.DELETE, EnumTipoEntidade.PRODUTO, "", "");
+        logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, EnumLog.DELETE, EnumTipoEntidade.PRODUTO, "", "");
 
     }
 }

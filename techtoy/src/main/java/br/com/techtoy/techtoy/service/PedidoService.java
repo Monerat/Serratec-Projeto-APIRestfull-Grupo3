@@ -56,7 +56,7 @@ public class PedidoService {
 
         //Fazer Auditoria
         LogRequestDTO logRequestDTO = new LogRequestDTO();
-        logService.adicionar(logRequestDTO, EnumLog.CREATE, EnumTipoEntidade.PEDIDO, "", 
+        logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, EnumLog.CREATE, EnumTipoEntidade.PEDIDO, "", 
                     logService.mapearObjetoParaString(pedidoModel));
 
         
@@ -127,7 +127,7 @@ public class PedidoService {
         LogRequestDTO logRequestDTO = new LogRequestDTO();
 
         //Registrar Mudanças UPDATE na Auditoria
-        logService.adicionar(logRequestDTO, EnumLog.UPDATE, EnumTipoEntidade.PEDIDO, 
+        logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, EnumLog.UPDATE, EnumTipoEntidade.PEDIDO, 
                     logService.mapearObjetoParaString(pedidoBase),
                     logService.mapearObjetoParaString(pedidoModel)
                     );
@@ -143,17 +143,19 @@ public class PedidoService {
         
         //Fazer Auditoria
         LogRequestDTO logRequestDTO = new LogRequestDTO();
-        logService.adicionar(logRequestDTO, EnumLog.DELETE, EnumTipoEntidade.PEDIDO, "", "");
+        logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, EnumLog.DELETE, EnumTipoEntidade.PEDIDO, "", "");
 
     }
 
     public Pedido calcularValoresTotais (Pedido pedido){
-        
+
+        List<PedidoItem> pedidosItens = pedido.getPedidoItens();
+
         Double valorTotal = 0.0;
         Double descontoTotal = 0.0;
         Double acrescimoTotal = 0.0;
 
-        for(PedidoItem pedidoItem: pedido.getPedidoItens()){
+        for(PedidoItem pedidoItem:pedidosItens){
             acrescimoTotal += pedidoItem.getAcrescimo()*pedidoItem.getQuantidade();
             descontoTotal += pedidoItem.getDesconto()*pedidoItem.getQuantidade();
             valorTotal += pedidoItem.getSubTotal();

@@ -43,23 +43,39 @@ public class CategoriaService {
         
         //Fazer Auditoria
         LogRequestDTO logRequestDTO = new LogRequestDTO();
-        logService.adicionar(logRequestDTO, EnumLog.CREATE, EnumTipoEntidade.CATEGORIA, "", 
+        logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, EnumLog.CREATE, EnumTipoEntidade.CATEGORIA, "", 
                    logService.mapearObjetoParaString(categoria));
 
         return mapper.map(categoria, CategoriaResponseDTO.class);
     }
-    //Read publico
 
+    //Read publico
     public List<CategoriaResponseDTO> obterTodosPublic(){
         List<Categoria> categoriasModel = categoriaRepository.findAll();
         List<CategoriaResponseDTO> categoriaResponse = new ArrayList<>();
 
         for(Categoria categoria : categoriasModel){            
             //verifica se a Categoria está ativa.
-            if(categoria.isAtivo()){
+            if(categoria.getAtivo()){
                 categoriaResponse.add(mapper.map(categoria, CategoriaResponseDTO.class));                
             }
         }
+        return categoriaResponse;
+    }
+
+    public CategoriaResponseDTO obterPorNomePublic(String Nome){
+        Optional<Categoria> categoria = categoriaRepository.findByNome(Nome);
+        CategoriaResponseDTO categoriaResponse = new CategoriaResponseDTO();
+
+        if(categoria.isEmpty()){
+            throw new ResourceNotFound("Categoria não foi encontrada na base com o Nome: "+Nome);
+        }
+        
+        if(categoria.get().getAtivo()){
+            categoriaResponse = mapper.map(categoria.get(), CategoriaResponseDTO.class);
+        }else{
+            throw new ResourceBadRequest("A Categoria com id "+Nome+" está inativa");
+        }     
         return categoriaResponse;
     }
 
@@ -71,7 +87,7 @@ public class CategoriaService {
             throw new ResourceNotFound("Produto não foi encontrado na base com o Id: "+id);
         }
         
-        if(categoria.get().isAtivo()){
+        if(categoria.get().getAtivo()){
             categoriaResponse = mapper.map(categoria.get(), CategoriaResponseDTO.class);
         }else{
             throw new ResourceBadRequest("O Produto com id "+id+" está inativo");
@@ -115,8 +131,8 @@ public class CategoriaService {
         if(categoriaModel.getObservacao() == null){
             categoriaModel.setObservacao(categoriaBase.getNome());
         }
-        if(categoriaBase.isAtivo() != categoriaModel.isAtivo()){
-            categoriaModel.setAtivo(false);
+        if(categoriaBase.getAtivo() == null){
+            categoriaModel.setAtivo(categoriaBase.getAtivo());
         }
 
         categoriaModel = categoriaRepository.save(categoriaModel);
@@ -125,17 +141,17 @@ public class CategoriaService {
         LogRequestDTO logRequestDTO = new LogRequestDTO();
 
         //Verificar se o Produto foi ativado
-        if (categoriaBase.isAtivo() != categoriaModel.isAtivo()){
+        if (categoriaBase.getAtivo() != categoriaModel.getAtivo()){
             // Usando a porra do ternario aqui, se ativo for true ele ACTIVOU, cc ele DESACTIVOU :D
-            EnumLog logStatus = categoriaModel.isAtivo() ? EnumLog.ACTIVATE : EnumLog.DEACTIVATE;
-            logService.adicionar(logRequestDTO, logStatus, EnumTipoEntidade.CATEGORIA, 
+            EnumLog logStatus = categoriaModel.getAtivo() ? EnumLog.ACTIVATE : EnumLog.DEACTIVATE;
+            logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, logStatus, EnumTipoEntidade.CATEGORIA, 
                     logService.mapearObjetoParaString(categoriaBase),
                     logService.mapearObjetoParaString(categoriaModel)
                     );
         }
 
         //Registrar Mudanças UPDATE na Auditoria
-        logService.adicionar(logRequestDTO, EnumLog.UPDATE, EnumTipoEntidade.CATEGORIA, 
+        logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, EnumLog.UPDATE, EnumTipoEntidade.CATEGORIA, 
                     logService.mapearObjetoParaString(categoriaBase),
                     logService.mapearObjetoParaString(categoriaModel)
                     );
@@ -150,7 +166,7 @@ public class CategoriaService {
 
     //Fazer Auditoria
     LogRequestDTO logRequestDTO = new LogRequestDTO();
-    logService.adicionar(logRequestDTO, EnumLog.DELETE, EnumTipoEntidade.CATEGORIA, "", "");
+    logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, EnumLog.DELETE, EnumTipoEntidade.CATEGORIA, "", "");
         
     }
 }

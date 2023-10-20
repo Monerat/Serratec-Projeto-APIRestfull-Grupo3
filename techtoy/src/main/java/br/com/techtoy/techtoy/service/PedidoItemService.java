@@ -46,7 +46,7 @@ public class PedidoItemService {
 
         //Fazer Auditoria
         LogRequestDTO logRequestDTO = new LogRequestDTO();
-        logService.adicionar(logRequestDTO, EnumLog.CREATE, EnumTipoEntidade.PEDIDOITEM, "", 
+        logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, EnumLog.CREATE, EnumTipoEntidade.PEDIDOITEM, "", 
                     logService.mapearObjetoParaString(pedidoItemModel));
         
         return mapper.map(pedidoItemModel, PedidoItemResponseDTO.class);
@@ -104,7 +104,7 @@ public class PedidoItemService {
         LogRequestDTO logRequestDTO = new LogRequestDTO();
 
         //Registrar Mudanças UPDATE na Auditoria
-        logService.adicionar(logRequestDTO, EnumLog.UPDATE, EnumTipoEntidade.PEDIDOITEM, 
+        logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, EnumLog.UPDATE, EnumTipoEntidade.PEDIDOITEM, 
                     logService.mapearObjetoParaString(pedidoItemBase),
                     logService.mapearObjetoParaString(pedidoItemModel)
                     );
@@ -119,7 +119,7 @@ public class PedidoItemService {
 
         //Fazer Auditoria
         LogRequestDTO logRequestDTO = new LogRequestDTO();
-        logService.adicionar(logRequestDTO, EnumLog.DELETE, EnumTipoEntidade.PEDIDOITEM, "", "");
+        logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, EnumLog.DELETE, EnumTipoEntidade.PEDIDOITEM, "", "");
 
     }
 

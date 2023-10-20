@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,6 +36,7 @@ public class PedidoController {
     
     //Read
     @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<PedidoResponseDTO>> obterTodos(){
         return ResponseEntity
             .status(200)
@@ -42,6 +44,7 @@ public class PedidoController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<PedidoResponseDTO> obterPorId(@PathVariable Long id){
         return ResponseEntity
             .status(200)
@@ -59,6 +62,7 @@ public class PedidoController {
 
     //Delete
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> deletar(@PathVariable Long id){
         pedidoService.deletar(id);
         return ResponseEntity

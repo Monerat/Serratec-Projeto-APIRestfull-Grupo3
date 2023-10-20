@@ -32,7 +32,7 @@ public class Categoria {
     private String observacao;
 
     @Column(nullable = false)
-    private boolean ativo;
+    private Boolean ativo;
 
     @OneToMany(mappedBy = "categoria")
     private List<Produto> produtos;
@@ -67,10 +67,10 @@ public class Categoria {
     /**
      * Construtor que inicializa um objeto de Categoria com valores padrão.
      */
-    public Categoria() {
-    }
 
     // Getters e Setters
+    public Categoria() {
+    }
 
     public long getId() {
         return id;
@@ -96,11 +96,11 @@ public class Categoria {
         this.observacao = observacao;
     }
 
-    public boolean isAtivo() {
+    public Boolean getAtivo() {
         return ativo;
     }
 
-    public void setAtivo(boolean ativo) {
+    public void setAtivo(Boolean ativo) {
         this.ativo = ativo;
     }
 
@@ -111,4 +111,8 @@ public class Categoria {
     public void setProdutos(List<Produto> produtos) {
         this.produtos = produtos;
     }
+
+
+    
+
 }

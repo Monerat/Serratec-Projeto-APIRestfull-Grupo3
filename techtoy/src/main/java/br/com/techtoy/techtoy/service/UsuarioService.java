@@ -1,5 +1,6 @@
 package br.com.techtoy.techtoy.service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -8,9 +9,16 @@ import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.techtoy.techtoy.dto.log.LogRequestDTO;
+import br.com.techtoy.techtoy.dto.usuario.UsuarioLoginResponseDTO;
 import br.com.techtoy.techtoy.dto.usuario.UsuarioRequestDTO;
 import br.com.techtoy.techtoy.dto.usuario.UsuarioResponseDTO;
 import br.com.techtoy.techtoy.model.Usuario;
@@ -18,9 +26,12 @@ import br.com.techtoy.techtoy.model.Enum.EnumLog;
 import br.com.techtoy.techtoy.model.Enum.EnumTipoEntidade;
 import br.com.techtoy.techtoy.model.exceptions.ResourceNotFound;
 import br.com.techtoy.techtoy.repository.UsuarioRepository;
+import br.com.techtoy.techtoy.security.JWTService;
 
 @Service
 public class UsuarioService {
+
+    private static final String BEARER = "Bearer ";
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -32,6 +43,15 @@ public class UsuarioService {
     private ModelMapper mapper;
 
     @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JWTService jwtService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
     EmailService emailService;
 
     // CRUD
@@ -40,17 +60,20 @@ public class UsuarioService {
     @Transactional
     public UsuarioResponseDTO adicionar(UsuarioRequestDTO usuarioReq) {
         Usuario usuarioModel = mapper.map(usuarioReq, Usuario.class);
+        String senha =  passwordEncoder.encode(usuarioModel.getSenha());
 
-        usuarioModel.setId(0);
+        usuarioModel.setSenha(senha);
+        usuarioModel.setId(0l);
         usuarioRepository.save(usuarioModel);
 
-        //Fazer Auditoria
+        // //Fazer Auditoria
         LogRequestDTO logRequestDTO = new LogRequestDTO();
-        logService.adicionar(logRequestDTO, EnumLog.CREATE, EnumTipoEntidade.USUARIO, "", 
-                    logService.mapearObjetoParaString(usuarioModel));
-        
+        Usuario usuarioCadastrado = mapper.map(obterPorEmail(usuarioReq.getEmail()), Usuario.class);
 
-        emailService.dispararEmail("Cadastro", usuarioModel.getEmail(), usuarioModel.getNome());
+        logService.adicionar(usuarioCadastrado, logRequestDTO, EnumLog.CREATE, EnumTipoEntidade.USUARIO, "",
+                logService.mapearObjetoParaString(usuarioCadastrado));
+
+        // emailService.dispararEmail("Cadastro", usuarioModel.getEmail(), usuarioModel.getNome());
         return mapper.map(usuarioModel, UsuarioResponseDTO.class);
     }
 
@@ -79,38 +102,39 @@ public class UsuarioService {
 
         Usuario usuarioModel = mapper.map(usuarioRequest, Usuario.class);
 
-        usuarioRequest.setId(id);
-        if (usuarioModel.getNome()==null){
+        
+        if (usuarioModel.getNome() == null) {
             usuarioModel.setNome(usuarioBase.getNome());
         }
-        if (usuarioModel.getEmail()==null){
+        if (usuarioModel.getEmail() == null) {
             usuarioModel.setEmail(usuarioBase.getEmail());
         }
-        if (usuarioModel.getSenha()==null){
+        if (usuarioModel.getSenha() == null) {
             usuarioModel.setSenha(usuarioBase.getSenha());
         }
-        if (usuarioModel.getTelefone()==null){
+        if (usuarioModel.getTelefone() == null) {
             usuarioModel.setTelefone(usuarioBase.getTelefone());
         }
-        if (usuarioModel.getPerfil()==null){
+        if (usuarioModel.getPerfil() == null) {
             usuarioModel.setPerfil(usuarioBase.getPerfil());
         }
 
+        String senha =  passwordEncoder.encode(usuarioModel.getSenha());
+        usuarioModel.setId(id);
+        usuarioModel.setSenha(senha);
         usuarioModel = usuarioRepository.save(usuarioModel);
 
-        //serviço de disparar email
+        // serviço de disparar email
         emailService.dispararEmail("Atualização", usuarioModel.getEmail(), usuarioModel.getNome());
-        
-        //Fazer Auditoria
+
+        // Fazer Auditoria
         LogRequestDTO logRequestDTO = new LogRequestDTO();
 
-        //Registrar Mudanças UPDATE na Auditoria
-        logService.adicionar(logRequestDTO, EnumLog.UPDATE, EnumTipoEntidade.USUARIO, 
-                    logService.mapearObjetoParaString(usuarioBase),
-                    logService.mapearObjetoParaString(usuarioModel)
-                    );
-        
-        
+        // Registrar Mudanças UPDATE na Auditoria
+        logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, EnumLog.UPDATE, EnumTipoEntidade.USUARIO,
+                logService.mapearObjetoParaString(usuarioBase),
+                logService.mapearObjetoParaString(usuarioModel));
+
         return mapper.map(usuarioModel, UsuarioResponseDTO.class);
     }
 
@@ -119,10 +143,41 @@ public class UsuarioService {
         obterPorId(id);
         usuarioRepository.deleteById(id);
 
-        //Fazer Auditoria
+        // Fazer Auditoria
         LogRequestDTO logRequestDTO = new LogRequestDTO();
-        logService.adicionar(logRequestDTO, EnumLog.DELETE, EnumTipoEntidade.USUARIO, "", "");
-        
+        logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, EnumLog.DELETE, EnumTipoEntidade.USUARIO, "", "");
+
     }
 
+    public UsuarioResponseDTO obterPorEmail(String email){
+        Optional<Usuario> optUsuario =  usuarioRepository.findByEmail(email);
+
+        return mapper.map(optUsuario.get(),UsuarioResponseDTO.class);
+    }
+
+    // Logar
+    public UsuarioLoginResponseDTO logar(String email, String senha) {
+        // Aqui que a autenticação acontece dentro do spring automagicamente.
+
+        Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
+
+        if (optUsuario.isEmpty()) {
+            throw new BadCredentialsException("Usuário ou senha invalidos");
+        }
+
+        Authentication autenticacao = authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(email, senha, Collections.emptyList()));
+
+        // Aqui eu passo a nova autenticação para o springSecurity cuidar pra mim.
+        SecurityContextHolder.getContext().setAuthentication(autenticacao);
+
+        // Crio o token JWT
+        String token = BEARER + jwtService.gerarToken(autenticacao);
+
+        // Pego o usuario dono do token
+        UsuarioResponseDTO usuarioResponse = obterPorEmail(email);
+
+        // Crio e devolvo o DTO esperado.
+        return new UsuarioLoginResponseDTO(token, usuarioResponse);
+    }
 }
