@@ -21,64 +21,76 @@ import br.com.techtoy.techtoy.service.CategoriaService;
 @RestController
 @RequestMapping("/api/categorias")
 public class CategoriaController {
-    
+
     @Autowired
     private CategoriaService categoriaService;
 
-    //Create
+    // Create
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<CategoriaResponseDTO> adicionar(@RequestBody CategoriaRequestDTO categoriaRequest){
+    public ResponseEntity<CategoriaResponseDTO> adicionar(@RequestBody CategoriaRequestDTO categoriaRequest) {
         CategoriaResponseDTO categoriaAdicionado = categoriaService.adicionar(categoriaRequest);
 
         return ResponseEntity
-            .status(201)
-            .body(categoriaAdicionado);
+                .status(201)
+                .body(categoriaAdicionado);
     }
-    //Read public
+
+    // Read public
     @GetMapping("/public")
-    public ResponseEntity<List<CategoriaResponseDTO>> obterTodosPublic(){
+    public ResponseEntity<List<CategoriaResponseDTO>> obterTodosPublic() {
+        return ResponseEntity
+                .status(200)
+                .body(categoriaService.obterTodosPublic());
+    }
+
+    @GetMapping("/public/nome/{nome}")
+    public ResponseEntity<CategoriaResponseDTO> obterPorNomePublic(@PathVariable String nome){
         return ResponseEntity
             .status(200)
-            .body(categoriaService.obterTodosPublic());
+            .body(categoriaService.obterPorNomePublic(nome));
     }
-    @GetMapping("/public/{id}")
-    public ResponseEntity<CategoriaResponseDTO> obterPorIdPublic(@PathVariable Long id){
+
+    @GetMapping("/public/id/{id}")
+    public ResponseEntity<CategoriaResponseDTO> obterPorIdPublic(@PathVariable Long id) {
         return ResponseEntity
-            .status(200)
-            .body(categoriaService.obterPorIdPublic(id));
+                .status(200)
+                .body(categoriaService.obterPorIdPublic(id));
     }
-    //Read private
+
+    // Read private
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<List<CategoriaResponseDTO>> obterTodos(){
+    public ResponseEntity<List<CategoriaResponseDTO>> obterTodos() {
         return ResponseEntity.ok(categoriaService.obterTodos());
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<CategoriaResponseDTO> obterPorId(@PathVariable Long id){
+    public ResponseEntity<CategoriaResponseDTO> obterPorId(@PathVariable Long id) {
         return ResponseEntity.ok(categoriaService.obterPorId(id));
     }
-    //Update
+
+    // Update
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<CategoriaResponseDTO> atualizar(@PathVariable Long id, @RequestBody CategoriaRequestDTO categoriaRequest){
+    public ResponseEntity<CategoriaResponseDTO> atualizar(@PathVariable Long id,
+            @RequestBody CategoriaRequestDTO categoriaRequest) {
         CategoriaResponseDTO categoriaAtualizado = categoriaService.atualizar(id, categoriaRequest);
-        
+
         return ResponseEntity
-            .status(200)
-            .body(categoriaAtualizado);
+                .status(200)
+                .body(categoriaAtualizado);
     }
-    //Delete
+
+    // Delete
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> deletar(@PathVariable Long id){
+    public ResponseEntity<?> deletar(@PathVariable Long id) {
         categoriaService.deletar(id);
-      
+
         return ResponseEntity
-            .status(204)
-            .build();
+                .status(204)
+                .build();
     }
 }
-

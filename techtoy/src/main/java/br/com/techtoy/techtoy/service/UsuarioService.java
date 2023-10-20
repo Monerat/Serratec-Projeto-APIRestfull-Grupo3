@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import br.com.techtoy.techtoy.dto.log.LogRequestDTO;
 import br.com.techtoy.techtoy.dto.usuario.UsuarioLoginResponseDTO;
 import br.com.techtoy.techtoy.dto.usuario.UsuarioRequestDTO;
+import br.com.techtoy.techtoy.dto.usuario.UsuarioResponseCreateDTO;
 import br.com.techtoy.techtoy.dto.usuario.UsuarioResponseDTO;
 import br.com.techtoy.techtoy.model.Usuario;
 import br.com.techtoy.techtoy.model.Enum.EnumLog;
@@ -58,7 +59,7 @@ public class UsuarioService {
 
     // Create
     @Transactional
-    public UsuarioResponseDTO adicionar(UsuarioRequestDTO usuarioReq) {
+    public UsuarioResponseCreateDTO adicionar(UsuarioRequestDTO usuarioReq) {
         Usuario usuarioModel = mapper.map(usuarioReq, Usuario.class);
         String senha =  passwordEncoder.encode(usuarioModel.getSenha());
 
@@ -67,12 +68,12 @@ public class UsuarioService {
         usuarioRepository.save(usuarioModel);
 
         //Fazer Auditoria
-        LogRequestDTO logRequestDTO = new LogRequestDTO();
-        logService.adicionar(usuarioModel, logRequestDTO, EnumLog.CREATE, EnumTipoEntidade.USUARIO, "",
-                logService.mapearObjetoParaString(usuarioModel));
+        // LogRequestDTO logRequestDTO = new LogRequestDTO();
+        // logService.adicionar(usuarioModel, logRequestDTO, EnumLog.CREATE, EnumTipoEntidade.USUARIO, "",
+        //         logService.mapearObjetoParaString(usuarioModel));
 
-        emailService.dispararEmail("Cadastro", usuarioModel.getEmail(), usuarioModel.getNome());
-        return mapper.map(usuarioModel, UsuarioResponseDTO.class);
+        // emailService.dispararEmail("Cadastro", usuarioModel.getEmail(), usuarioModel.getNome());
+        return mapper.map(usuarioModel, UsuarioResponseCreateDTO.class);
     }
 
     // Read

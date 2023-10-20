@@ -83,6 +83,22 @@ public class CategoriaService {
         return categoriaResponse;
     }
 
+    public CategoriaResponseDTO obterPorNomePublic(String nome){
+        Optional<Categoria> categoria = categoriaRepository.findByNome(nome);
+        CategoriaResponseDTO categoriaResponse = new CategoriaResponseDTO();
+
+        if(categoria.isEmpty()){
+            throw new ResourceNotFound("Categoria não foi encontrada na base com o nome: "+nome);
+        }
+        
+        if(categoria.get().getAtivo()){
+            categoriaResponse = mapper.map(categoria.get(), CategoriaResponseDTO.class);
+        }else{
+            throw new ResourceBadRequest("A Categoria "+nome+" está inativa");
+        }     
+        return categoriaResponse;
+    }
+
     //Read private
     public List<CategoriaResponseDTO> obterTodos(){
         

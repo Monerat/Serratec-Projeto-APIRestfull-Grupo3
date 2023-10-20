@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.techtoy.techtoy.dto.usuario.UsuarioLoginRequestDTO;
 import br.com.techtoy.techtoy.dto.usuario.UsuarioLoginResponseDTO;
 import br.com.techtoy.techtoy.dto.usuario.UsuarioRequestDTO;
+import br.com.techtoy.techtoy.dto.usuario.UsuarioResponseCreateDTO;
 import br.com.techtoy.techtoy.dto.usuario.UsuarioResponseDTO;
 import br.com.techtoy.techtoy.service.UsuarioService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,7 +32,7 @@ public class UsuarioController {
 
     //Create
     @PostMapping
-    public ResponseEntity<UsuarioResponseDTO> adicionar(@RequestBody UsuarioRequestDTO usuario) {
+    public ResponseEntity<UsuarioResponseCreateDTO> adicionar(@RequestBody UsuarioRequestDTO usuario) {
         return ResponseEntity
             .status(201)
             .body(usuarioService.adicionar(usuario));
