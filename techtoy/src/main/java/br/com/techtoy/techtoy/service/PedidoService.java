@@ -17,8 +17,10 @@ import br.com.techtoy.techtoy.dto.pedidoItem.PedidoItemRequestDTO;
 import br.com.techtoy.techtoy.dto.pedidoItem.PedidoItemResponseDTO;
 import br.com.techtoy.techtoy.model.Pedido;
 import br.com.techtoy.techtoy.model.PedidoItem;
+import br.com.techtoy.techtoy.model.Usuario;
 import br.com.techtoy.techtoy.model.Enum.EnumLog;
 import br.com.techtoy.techtoy.model.Enum.EnumTipoEntidade;
+import br.com.techtoy.techtoy.model.email.Email;
 import br.com.techtoy.techtoy.repository.PedidoRepository;
 
 @Service
@@ -34,6 +36,9 @@ public class PedidoService {
     private LogService logService;
 
     @Autowired
+    private EmailService emailService;
+
+    @Autowired
     private ModelMapper mapper;
 
     //CRUD
@@ -47,6 +52,9 @@ public class PedidoService {
         List<PedidoItemRequestDTO> pedidoItemRequest = pedidoRequest.getPedidoItens();
 
         pedidoModel.setId(0);
+        Usuario usuarioLogado = logService.verificarUsuarioLogado();
+
+        pedidoModel.setUsuario(usuarioLogado);
         pedidoModel = pedidoRepository.save(calcularValoresTotais(pedidoModel));
 
         //adicionar pedidoItens no pedido
@@ -56,9 +64,13 @@ public class PedidoService {
 
         //Fazer Auditoria
         LogRequestDTO logRequestDTO = new LogRequestDTO();
-        logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, EnumLog.CREATE, EnumTipoEntidade.PEDIDO, "", 
+
+        
+
+        logService.adicionar(usuarioLogado, logRequestDTO, EnumLog.CREATE, EnumTipoEntidade.PEDIDO, "", 
                     logService.mapearObjetoParaString(pedidoModel));
 
+        // emailService.dispararEmailPedido(usuarioLogado.getEmail(), usuarioLogado.getNome(), pedidoModel);
         
         return pedidoResponse;
     }

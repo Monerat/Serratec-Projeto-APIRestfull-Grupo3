@@ -11,6 +11,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import br.com.techtoy.techtoy.model.Pedido;
 import br.com.techtoy.techtoy.model.email.Email;
 
 @Service
@@ -51,6 +52,20 @@ public class EmailService {
                 "Tenha um excelente dia!\n\n Sincerely \nO grupo 3 da disciplina de API Restful do Serratec";
 
         Email email = new Email(tipoEmail, mensagem, destinatarios);
+
+        enviar(email);
+    }
+
+    public void dispararEmailPedido(String destinatario, String nome, Pedido pedido) {
+
+        List<String> destinatarios = new ArrayList<>();
+        destinatarios.add(destinatario);
+
+        String mensagem = "Olá!\n" +
+                "Cadastro de pedido realizado com sucesso para o usuario: " + nome + "\n\n" +
+                "Tenha um excelente dia!\n\n Sincerely \nO grupo 3 da disciplina de API Restful do Serratec";
+
+        Email email = new Email("Cadastro de Pedido", mensagem, destinatarios);
 
         enviar(email);
     }
