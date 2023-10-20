@@ -26,30 +26,30 @@ O seu grupo foi convidado a desenvolver uma API para um novo sistema de E Commer
 
 
 - Poder criar um pedido (Autenticado = true)
-	- Todo pedido deve ter: Número ✔️, Cliente ✔️, Data do pedido ✔️, valor total, desconto total, acréscimo total e observação✔️.
-	- Cada pedido poderá ter muitos itens.✔️
-	- Cada item poderá ter (quantidade✔️, valor unitário✔️,  desconto✔️, acréscimo✔️ e valorTotal)
-	- Cálculo do valor do item (valor unitário - desconto + acréscimo) * quantidade
+	- Todo pedido deve ter: Número, Cliente, Data do pedido, valor total, desconto total, acréscimo total e observação. ✔️
+	- Cada pedido poderá ter muitos itens. ✔️
+	- Cada item poderá ter (quantidade, valor unitário,  desconto, acréscimo e valorTotal) ✔️
+	- Cálculo do valor do item (valor unitário - desconto + acréscimo) * quantidade ✔️
 	- Forma de pagamento ✔️
 	- Quando o pedido for cadastrado, deve enviar um email automaticamente para o cliente informando os dados do pedido. Nesse e-mail envie um layout bonitinho do tipo HTML. ~
 	
-- Deve existir um usuário do tipo Admin
-- Todo usuário admin, pode fazer tudo na API.
+- Deve existir um usuário do tipo Admin ✔️
+- Todo usuário admin, pode fazer tudo na API. ✔️
 - Com o usuário admin, deve ser possível executar as seguintes ações:
-	- Cadastrar uma Categoria
-	- Atualizar uma Categoria
-	- Cadastrar um produto
+	- Cadastrar uma Categoria ✔️
+	- Atualizar uma Categoria ✔️
+	- Cadastrar um produto ✔️
 		- Todo produto deve ter (id, nome, valor, quantidade, observação)
-	- Atualizar um produto
-	- Inativar produto
-	- Inativar uma categoria
-- Tabela de log das alterações e inclusões feitas em produtos e categorias. ~
+	- Atualizar um produto ✔️
+	- Inativar produto ✔️
+	- Inativar uma categoria ✔️
+- Tabela de log das alterações e inclusões feitas em produtos e categorias. ✔️
 	- (id, tipo, data, valorOriginal, valorAtual, idUsuario)
 - Tem que ter tratamento de erro com retorno correto dos statuscode. ~
 
 ### Extras:
 - Criar documentação no swagger.
-- Adicionar foto ao produto
+- Adicionar foto ao produto.
 
 ### DER:
 ![DER](Trabalho%20Grupo%203%20-%20API%20Restful.png)
