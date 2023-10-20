@@ -52,11 +52,11 @@ public class LogController {
     // }
 
 
-    //Delete
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id) {
-        logService.deletar(id);
-        return ResponseEntity.noContent().build();
-    }
+    // //Delete
+    // @DeleteMapping("/{id}")
+    // public ResponseEntity<Void> deletar(@PathVariable Long id) {
+    //     logService.deletar(id);
+    //     return ResponseEntity.noContent().build();
+    // }
 
 }
