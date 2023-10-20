@@ -67,11 +67,13 @@ public class UsuarioService {
         usuarioRepository.save(usuarioModel);
 
         // //Fazer Auditoria
-        // LogRequestDTO logRequestDTO = new LogRequestDTO();
-        // logService.adicionar(usuarioModel, logRequestDTO, EnumLog.CREATE, EnumTipoEntidade.USUARIO, "",
-        //         logService.mapearObjetoParaString(usuarioModel));
+        LogRequestDTO logRequestDTO = new LogRequestDTO();
+        Usuario usuarioCadastrado = mapper.map(obterPorEmail(usuarioReq.getEmail()), Usuario.class);
 
-        emailService.dispararEmail("Cadastro", usuarioModel.getEmail(), usuarioModel.getNome());
+        logService.adicionar(usuarioCadastrado, logRequestDTO, EnumLog.CREATE, EnumTipoEntidade.USUARIO, "",
+                logService.mapearObjetoParaString(usuarioCadastrado));
+
+        // emailService.dispararEmail("Cadastro", usuarioModel.getEmail(), usuarioModel.getNome());
         return mapper.map(usuarioModel, UsuarioResponseDTO.class);
     }
 
