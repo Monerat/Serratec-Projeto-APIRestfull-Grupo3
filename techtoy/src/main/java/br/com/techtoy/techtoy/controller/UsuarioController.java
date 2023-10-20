@@ -21,6 +21,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+
+
+
 @RestController
 @RequestMapping("/api/usuarios")
 @CrossOrigin("*")
@@ -29,7 +32,12 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
-    //Create
+    /**
+     * Cria um novo usuário.
+     *
+     * @param usuario O objeto UsuarioRequestDTO contendo os detalhes do usuário.
+     * @return Um ResponseEntity contendo o UsuarioResponseDTO recém-criado.
+     */
     @PostMapping
     public ResponseEntity<UsuarioResponseDTO> adicionar(@RequestBody UsuarioRequestDTO usuario) {
         return ResponseEntity
@@ -37,45 +45,71 @@ public class UsuarioController {
             .body(usuarioService.adicionar(usuario));
     }
 
-    //Read
+    /**
+     * Obtém todos os usuários (requer autorização ADMIN).
+     *
+     * @return Um ResponseEntity contendo uma lista de UsuarioResponseDTO.
+     */
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<List<UsuarioResponseDTO>> obterTodos(){
+    public ResponseEntity<List<UsuarioResponseDTO> obterTodos() {
         return ResponseEntity
             .status(200)
             .body(usuarioService.obterTodos());
     }
 
+    /**
+     * Obtém um usuário por ID (requer autorização ADMIN).
+     *
+     * @param id O ID do usuário.
+     * @return Um ResponseEntity contendo o UsuarioResponseDTO correspondente.
+     */
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<UsuarioResponseDTO> obterPorId(@PathVariable Long id){
+    public ResponseEntity<UsuarioResponseDTO> obterPorId(@PathVariable Long id) {
         return ResponseEntity
             .status(200)
             .body(usuarioService.obterPorId(id));
     }
 
-    //Update
+    /**
+     * Atualiza um usuário por ID (requer autorização ADMIN).
+     *
+     * @param id      O ID do usuário a ser atualizado.
+     * @param usuario O objeto UsuarioRequestDTO contendo os novos detalhes do usuário.
+     * @return Um ResponseEntity contendo o UsuarioResponseDTO atualizado.
+     */
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<UsuarioResponseDTO> atualizar(@PathVariable Long id, @RequestBody UsuarioRequestDTO usuario){
+    public ResponseEntity<UsuarioResponseDTO> atualizar(@PathVariable Long id, @RequestBody UsuarioRequestDTO usuario) {
         return ResponseEntity
             .status(200)
             .body(usuarioService.atualizar(id, usuario)); 
     }
 
-    //Delete
+    /**
+     * Deleta um usuário por ID (requer autorização ADMIN).
+     *
+     * @param id O ID do usuário a ser excluído.
+     * @return Um ResponseEntity indicando o sucesso da operação.
+     */
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> deletar(@PathVariable Long id){
+    public ResponseEntity<?> deletar(@PathVariable Long id) {
         usuarioService.deletar(id);
         return ResponseEntity
             .status(204)
             .build();
     }
 
-    //login
+    /**
+     * Realiza o login de um usuário.
+     *
+     * @param usuariologinRequest O objeto UsuarioLoginRequestDTO contendo as credenciais de login.
+     * @return Um ResponseEntity contendo o UsuarioLoginResponseDTO com as informações do usuário logado.
+     */
     @PostMapping("/login")
-    public ResponseEntity<UsuarioLoginResponseDTO> logar(@RequestBody UsuarioLoginRequestDTO usuariologinRequest){
+    public ResponseEntity<UsuarioLoginResponseDTO> logar(@RequestBody UsuarioLoginRequestDTO usuariologinRequest) {
 
         UsuarioLoginResponseDTO usuarioLogado = usuarioService.logar(usuariologinRequest.getEmail(), usuariologinRequest.getSenha());
 
@@ -84,3 +118,4 @@ public class UsuarioController {
             .body(usuarioLogado);
     }
 }
+

@@ -25,7 +25,7 @@ public class PedidoItemController {
     @Autowired
     private PedidoItemService pedidoItemService;
 
-    //Create
+    // Criação de um novo item de pedido.
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<PedidoItemResponseDTO> adicionar(@RequestBody PedidoItemRequestDTO pedidoItem) {
@@ -33,8 +33,9 @@ public class PedidoItemController {
             .status(201)
             .body(pedidoItemService.adicionar(pedidoItem));
     }
+    
 
-    //Read
+    // Obtém todos os itens de pedido (restrito a administradores).
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<PedidoItemResponseDTO>> obterTodos(){
@@ -43,6 +44,7 @@ public class PedidoItemController {
             .body(pedidoItemService.obterTodos());
     }
 
+    // Obtém um item de pedido por ID (restrito a administradores).
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<PedidoItemResponseDTO> obterPorId(@PathVariable Long id){
@@ -51,23 +53,27 @@ public class PedidoItemController {
             .body(pedidoItemService.obterPorId(id));
     }
 
-      //Update
-      @PutMapping("/{id}")
-      @PreAuthorize("hasAuthority('ADMIN')")
-      public ResponseEntity<PedidoItemResponseDTO> atualizar(@PathVariable Long id, @RequestBody PedidoItemRequestDTO pedidoItem){
-          return ResponseEntity
-              .status(200)
-              .body(pedidoItemService.atualizar(id, pedidoItem)); 
-      }
-  
-      //Delete
-      @DeleteMapping("/{id}")
-      @PreAuthorize("hasAuthority('ADMIN')")
-      public ResponseEntity<?> deletar(@PathVariable Long id){
-          pedidoItemService.deletar(id);
-          return ResponseEntity
-              .status(204)
-              .build();
-      }
+    // Atualização de item de pedido
 
+    // Atualiza um item de pedido por ID.
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<PedidoItemResponseDTO> atualizar(@PathVariable Long id, @RequestBody PedidoItemRequestDTO pedidoItem){
+        return ResponseEntity
+            .status(200)
+            .body(pedidoItemService.atualizar(id, pedidoItem)); 
+    }
+
+    // Exclusão de item de pedido (Restrito a administradores)
+
+    // Deleta um item de pedido por ID (restrito a administradores).
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> deletar(@PathVariable Long id){
+        pedidoItemService.deletar(id);
+        return ResponseEntity
+            .status(204)
+            .build();
+    }
 }
+

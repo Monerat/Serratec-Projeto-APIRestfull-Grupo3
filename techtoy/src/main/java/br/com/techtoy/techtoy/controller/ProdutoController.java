@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+
 @RestController
 @RequestMapping("/api/produtos")
 public class ProdutoController {
@@ -31,7 +32,12 @@ public class ProdutoController {
     @Autowired
     private ProdutoService produtoService;
 
-    //Create
+    /**
+     * Cria um novo produto.
+     *
+     * @param produto O objeto ProdutoRequestDTO contendo os detalhes do produto.
+     * @return Um ResponseEntity contendo o ProdutoResponseDTO recém-criado.
+     */
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ProdutoResponseDTO> adicionar(@RequestBody ProdutoRequestDTO produto) {
@@ -40,7 +46,12 @@ public class ProdutoController {
             .body(produtoService.adicionar(produto));
     }
 
-    //Imagens
+    /**
+     * Salva um arquivo de imagem para um produto.
+     *
+     * @param image O arquivo de imagem a ser salvo.
+     * @return Um ResponseEntity com uma mensagem indicando o resultado da operação.
+     */
     @PostMapping("/imagem")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> salvarArquivo(@RequestParam("imagem") MultipartFile image){
@@ -49,14 +60,17 @@ public class ProdutoController {
 
         try{
             Files.copy(image.getInputStream(), Path.of(caminho), StandardCopyOption.REPLACE_EXISTING);
-            return new ResponseEntity<>("{ \"mensagem\": \"Arquivo carregado com successo!\"}",HttpStatus.OK);
+            return new ResponseEntity<>("{ \"mensagem\": \"Arquivo carregado com sucesso!\"}", HttpStatus.OK);
         } catch(Exception e){
-            return new ResponseEntity<>("{ \"mensagem\": \"Erro ao carregar o arquivo!\"}",HttpStatus.OK);
+            return new ResponseEntity<>("{ \"mensagem\": \"Erro ao carregar o arquivo!\"}", HttpStatus.OK);
         }
     }
 
-    //Read
-    //public
+    /**
+     * Obtém todos os produtos públicos.
+     *
+     * @return Um ResponseEntity contendo uma lista de ProdutoResponseDTO.
+     */
     @GetMapping("/public")
     public ResponseEntity<List<ProdutoResponseDTO>> obterTodosPublic(){
         return ResponseEntity
@@ -64,6 +78,12 @@ public class ProdutoController {
             .body(produtoService.obterTodosPublic());
     }
 
+    /**
+     * Obtém um produto público por ID.
+     *
+     * @param id O ID do produto.
+     * @return Um ResponseEntity contendo o ProdutoResponseDTO correspondente.
+     */
     @GetMapping("/public/{id}")
     public ResponseEntity<ProdutoResponseDTO> obterPorIdPublic(@PathVariable Long id){
         return ResponseEntity
@@ -71,7 +91,11 @@ public class ProdutoController {
             .body(produtoService.obterPorIdPublic(id));
     }
 
-    //privado
+    /**
+     * Obtém todos os produtos (requer autorização ADMIN).
+     *
+     * @return Um ResponseEntity contendo uma lista de ProdutoResponseDTO.
+     */
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<ProdutoResponseDTO>> obterTodos(){
@@ -80,6 +104,12 @@ public class ProdutoController {
             .body(produtoService.obterTodos());
     }
 
+    /**
+     * Obtém um produto por ID (requer autorização ADMIN).
+     *
+     * @param id O ID do produto.
+     * @return Um ResponseEntity contendo o ProdutoResponseDTO correspondente.
+     */
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ProdutoResponseDTO> obterPorId(@PathVariable Long id){
@@ -88,7 +118,13 @@ public class ProdutoController {
             .body(produtoService.obterPorId(id));
     }
 
-    //Update
+    /**
+     * Atualiza um produto por ID (requer autorização ADMIN).
+     *
+     * @param id      O ID do produto a ser atualizado.
+     * @param produto O objeto ProdutoRequestDTO contendo os novos detalhes do produto.
+     * @return Um ResponseEntity contendo o ProdutoResponseDTO atualizado.
+     */
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ProdutoResponseDTO> atualizar(@PathVariable Long id, @RequestBody ProdutoRequestDTO produto){
@@ -97,7 +133,12 @@ public class ProdutoController {
             .body(produtoService.atualizar(id, produto)); 
     }
 
-    //Delete
+    /**
+     * Deleta um produto por ID (requer autorização ADMIN).
+     *
+     * @param id O ID do produto a ser excluído.
+     * @return Um ResponseEntity indicando o sucesso da operação.
+     */
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> deletar(@PathVariable Long id){
@@ -107,3 +148,4 @@ public class ProdutoController {
             .build();
     }
 }
+
