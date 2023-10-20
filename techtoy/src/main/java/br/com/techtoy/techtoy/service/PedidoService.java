@@ -124,7 +124,7 @@ public class PedidoService {
         }
         
         pedidoModel.setId(id);
-        pedidoModel = calcularValoresTotais(pedidoModel);
+        //pedidoModel = calcularValoresTotais(pedidoModel);
         pedidoModel = pedidoRepository.save(pedidoModel);
        
         //Fazer Auditoria
