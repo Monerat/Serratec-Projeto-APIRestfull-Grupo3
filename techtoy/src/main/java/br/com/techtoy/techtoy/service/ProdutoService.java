@@ -1,13 +1,18 @@
 package br.com.techtoy.techtoy.service;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -79,16 +84,22 @@ public class ProdutoService {
             if(produto.getCategoria().getAtivo()){
                 //verifica se o Produto está ativo.
                 if(produto.getAtivo()){
-                    produtoResponse.add(mapper.map(produto, ProdutoResponseDTO.class));
+                    ProdutoResponseDTO produtoResponseDTO = mapper.map(produto, ProdutoResponseDTO.class);
+                    String imagePath = verificaImagem(produto.getId());
+                    try {
+                        byte[] fileContent = Files.readAllBytes(Paths.get(imagePath));
+                        String encodedString = Base64.getEncoder().encodeToString(fileContent);
+                        produtoResponseDTO.setImagem(encodedString);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    produtoResponse.add(produtoResponseDTO);
                 }
             }            
         }
-        //pegar o arquiivo pelo path em imagem.
-        //transformar para base 64.
-        //setar no atributo image esse valor.
-        
         return produtoResponse;
     }
+
 
     public ProdutoResponseDTO obterPorIdPublic(Long id){
         Optional<Produto> produto = produtoRepository.findById(id);
