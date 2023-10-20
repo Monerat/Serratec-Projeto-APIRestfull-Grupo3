@@ -1,5 +1,6 @@
 package br.com.techtoy.techtoy.service;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -41,15 +42,31 @@ public class ProdutoService {
         Produto produtoModel = mapper.map(produtoRequest, Produto.class);
 
         produtoModel.setId(0);
+        
+        produtoModel = produtoRepository.save(produtoModel);
+        produtoModel.setImagem(verificaImagem(produtoModel.getId()));
         produtoRepository.save(produtoModel);
 
         //Fazer Auditoria
-        LogRequestDTO logRequestDTO = new LogRequestDTO();
-        Usuario usuarioLogado = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        logService.adicionar(usuarioLogado, logRequestDTO, EnumLog.CREATE, EnumTipoEntidade.PRODUTO, "", 
-                   logService.mapearObjetoParaString(produtoModel));
+        // LogRequestDTO logRequestDTO = new LogRequestDTO();
+        // Usuario usuarioLogado = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        // logService.adicionar(usuarioLogado, logRequestDTO, EnumLog.CREATE, EnumTipoEntidade.PRODUTO, "", 
+        //            logService.mapearObjetoParaString(produtoModel));
 
         return mapper.map(produtoModel, ProdutoResponseDTO.class);
+    }
+
+    //imagem
+    public String verificaImagem(Long id) {
+        String folderPath = "src/main/resources/img/produtos/";
+        String fileName = String.valueOf(id);
+
+        File file = new File(folderPath + fileName + ".png");
+        
+        if (file.exists()) {
+            return file.getAbsolutePath();
+        } throw new ResourceNotFound("Arquivo não encontrado na base com o nome: "+ fileName);
+    
     }
 
     //Read
@@ -68,6 +85,10 @@ public class ProdutoService {
                 }
             }            
         }
+        //pegar o arquiivo pelo path em imagem.
+        //transformar para base 64.
+        //setar no atributo image esse valor.
+        
         return produtoResponse;
     }
 
@@ -129,10 +150,14 @@ public class ProdutoService {
         if (produtoModel.getAtivo()==null){
             produtoModel.setAtivo(produtoBase.getAtivo());//entrou aqui nao alterou
         }
+        if(produtoModel.getImagem()==null){
+            produtoModel.setCategoria(produtoBase.getCategoria());
+        }
         if(produtoModel.getCategoria()==null){
             produtoModel.setCategoria(produtoBase.getCategoria());
         }
 
+        produtoModel.setImagem(verificaImagem(produtoModel.getId()));
         produtoModel = produtoRepository.save(produtoModel);
         
         //Fazer Auditoria

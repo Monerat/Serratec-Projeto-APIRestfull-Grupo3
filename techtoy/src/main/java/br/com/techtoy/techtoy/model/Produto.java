@@ -44,6 +44,8 @@ public class Produto {
     @Column(nullable = false)
     private Boolean ativo;
 
+    private String imagem;
+
     @ManyToOne
     @JoinColumn(name = "idCategoria", nullable = false)
     @JsonBackReference
@@ -63,13 +65,14 @@ public class Produto {
      * @param ativo        O estado de ativação do produto.
      * @param pedidoItem   O item de pedido associado ao produto.
      */
-    public Produto(long id, String nome, String observacao, int estoque, Double valorUn, Boolean ativo, PedidoItem pedidoItem) {
+    public Produto(long id, String nome, String observacao, int estoque, Double valorUn, Boolean ativo,String imagem, PedidoItem pedidoItem) {
         this.id = id;
         this.nome = nome;
         this.observacao = observacao;
         this.estoque = estoque;
         this.valorUn = valorUn;
         this.ativo = ativo;
+        this.imagem = imagem;
         this.pedidoItens = new ArrayList<>();
         this.pedidoItens.add(pedidoItem);
     }
@@ -147,6 +150,14 @@ public class Produto {
         this.categoria = categoria;
     }
 
+    public String getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
+    }
+    
     public List<PedidoItem> getPedidoItens() {
         return pedidoItens;
     }
@@ -154,4 +165,5 @@ public class Produto {
     public void setPedidoItens(List<PedidoItem> pedidoItens) {
         this.pedidoItens = pedidoItens;
     }
+
 }

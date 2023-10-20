@@ -1,14 +1,14 @@
 package br.com.techtoy.techtoy.dto.produto;
 
-
 public abstract class ProdutoBaseDTO {
 
     protected Long id;
     protected String nome;
     protected String observacao;
-    protected int estoque;
+    protected Integer estoque;
     protected Double valorUn;
-    protected boolean ativo;
+    protected Boolean ativo;
+    protected String imagem;
 
     public Long getId() {
         return id;
@@ -34,11 +34,11 @@ public abstract class ProdutoBaseDTO {
         this.observacao = observacao;
     }
 
-    public int getEstoque() {
+    public Integer getEstoque() {
         return estoque;
     }
 
-    public void setEstoque(int estoque) {
+    public void setEstoque(Integer estoque) {
         this.estoque = estoque;
     }
 
@@ -50,14 +50,20 @@ public abstract class ProdutoBaseDTO {
         this.valorUn = valorUn;
     }
 
-    public boolean isAtivo() {
+    public Boolean getAtivo() {
         return ativo;
     }
 
-    public void setAtivo(boolean ativo) {
+    public void setAtivo(Boolean ativo) {
         this.ativo = ativo;
     }
 
-    
-        
+    public String getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
+    }
+
 }
