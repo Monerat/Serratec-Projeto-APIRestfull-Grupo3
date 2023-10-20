@@ -44,7 +44,7 @@ public class ProdutoService {
     @Transactional
     public ProdutoResponseDTO adicionar(ProdutoRequestDTO produtoRequest) {
         Produto produtoModel = mapper.map(produtoRequest, Produto.class);
-        
+
         ChecaValores.verificaValorDouble(produtoModel.getValorUn());
         ChecaValores.verificaValorInt(produtoModel.getEstoque());
 
@@ -179,8 +179,6 @@ public class ProdutoService {
 
         // Verificar se o Produto foi ativado
         if (produtoBase.getAtivo() != produtoModel.getAtivo()) {
-            // Usando a porra do ternario aqui, se ativo for true ele ACTIVOU, cc ele
-            // DESACTIVOU :D
             EnumLog logStatus = produtoModel.getAtivo() ? EnumLog.ACTIVATE : EnumLog.DEACTIVATE;
             logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, logStatus,
                     EnumTipoEntidade.PRODUTO,
@@ -209,7 +207,7 @@ public class ProdutoService {
 
     }
 
-    // verificar imagem
+    // Verificar a Imagem
     public String verificaImagem(Long id) {
         String folderPath = "src/main/resources/img/produtos/";
         String fileName = String.valueOf(id);
@@ -222,7 +220,7 @@ public class ProdutoService {
         throw new ResourceNotFound("Imagem não encontrada na base com o nome: " + fileName);
     }
 
-    // transformar a imagem em base64
+    // Transformar a imagem em base64
     public ProdutoResponseDTO transformarImgToBase(ProdutoResponseDTO produto) {
         String imagePath = produto.getImagem();
 
@@ -238,5 +236,4 @@ public class ProdutoService {
         return produto;
     }
 
-   
 }
