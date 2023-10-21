@@ -26,7 +26,7 @@ public class Categoria {
     @Column(name = "idCategoria")
     private long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String nome;
 
     private String observacao;

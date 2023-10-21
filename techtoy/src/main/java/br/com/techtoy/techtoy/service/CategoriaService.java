@@ -84,13 +84,13 @@ public class CategoriaService {
         CategoriaResponseDTO categoriaResponse = new CategoriaResponseDTO();
 
         if(categoria.isEmpty()){
-            throw new ResourceNotFound("Produto não foi encontrado na base com o Id: "+id);
+            throw new ResourceNotFound("Categoria não foi encontrada na base com o Id: "+id);
         }
         
         if(categoria.get().getAtivo()){
             categoriaResponse = mapper.map(categoria.get(), CategoriaResponseDTO.class);
         }else{
-            throw new ResourceBadRequest("O Produto com id "+id+" está inativo");
+            throw new ResourceBadRequest("A Categoria com id "+id+" está inativa");
         }     
         return categoriaResponse;
     }
