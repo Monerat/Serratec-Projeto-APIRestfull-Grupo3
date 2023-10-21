@@ -116,6 +116,7 @@ public class ProdutoService {
             } else {
                 throw new ResourceBadRequest("O Produto com id " + id + " está inativo");
             }
+
         } else {
             throw new ResourceBadRequest("A Categoria do Produto com id " + id + " está inativa");
         }
@@ -139,6 +140,7 @@ public class ProdutoService {
         if (produto.isEmpty()) {
             throw new ResourceNotFound("Produto não foi encontrado na base com o Id: " + id);
         }
+
         return mapper.map(produto.get(), ProdutoResponseDTO.class);
     }
 
@@ -155,18 +157,23 @@ public class ProdutoService {
         if (produtoModel.getNome() == null) {
             produtoModel.setNome(produtoBase.getNome());
         }
+
         if (produtoModel.getObservacao() == null) {
             produtoModel.setObservacao(produtoBase.getObservacao());
         }
+
         if (produtoModel.getValorUn() == null) {
             produtoModel.setValorUn(produtoBase.getValorUn());
         }
+
         if (produtoModel.getAtivo() == null) {
             produtoModel.setAtivo(produtoBase.getAtivo());// entrou aqui nao alterou
         }
+
         if (produtoModel.getImagem() == null) {
             produtoModel.setCategoria(produtoBase.getCategoria());
         }
+
         if (produtoModel.getCategoria() == null) {
             produtoModel.setCategoria(produtoBase.getCategoria());
         }
@@ -217,6 +224,7 @@ public class ProdutoService {
         if (file.exists()) {
             return file.getAbsolutePath();
         }
+        
         throw new ResourceNotFound("Imagem não encontrada na base com o nome: " + fileName);
     }
 

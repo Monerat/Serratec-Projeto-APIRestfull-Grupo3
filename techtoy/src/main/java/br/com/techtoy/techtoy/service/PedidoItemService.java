@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.techtoy.techtoy.common.ChecaValores;
 import br.com.techtoy.techtoy.dto.log.LogRequestDTO;
 import br.com.techtoy.techtoy.dto.pedidoItem.PedidoItemRequestDTO;
 import br.com.techtoy.techtoy.dto.pedidoItem.PedidoItemResponseDTO;
@@ -16,6 +17,7 @@ import br.com.techtoy.techtoy.dto.produto.ProdutoResponseDTO;
 import br.com.techtoy.techtoy.model.PedidoItem;
 import br.com.techtoy.techtoy.model.Enum.EnumLog;
 import br.com.techtoy.techtoy.model.Enum.EnumTipoEntidade;
+import br.com.techtoy.techtoy.model.exceptions.ResourceBadRequest;
 import br.com.techtoy.techtoy.model.exceptions.ResourceNotFound;
 import br.com.techtoy.techtoy.repository.PedidoItemRepository;
 
@@ -40,6 +42,23 @@ public class PedidoItemService {
     public PedidoItemResponseDTO adicionar(PedidoItemRequestDTO pedidoItemRequest){
         PedidoItem pedidoItemModel = mapper.map(pedidoItemRequest, PedidoItem.class);
         
+        if(pedidoItemModel.getAcrescimo()==null){
+            pedidoItemModel.setAcrescimo(0.00);
+        }
+        if(pedidoItemModel.getDesconto()==null){
+            pedidoItemModel.setDesconto(0.00);
+        }
+        if (pedidoItemModel.getQuantidade()==null){
+            throw new ResourceBadRequest("Favor adicionar a quantidade a ser comprada");
+        }
+        if (pedidoItemModel.getProduto()==null){
+            throw new ResourceBadRequest("Favor adicionar o produto a ser comprado");
+        }
+
+        ChecaValores.verificaValorDoubleMenorQueZero(pedidoItemModel.getAcrescimo());
+        ChecaValores.verificaValorDoubleMenorQueZero(pedidoItemModel.getDesconto());
+        ChecaValores.verificaValorInt(pedidoItemModel.getQuantidade());
+
         pedidoItemModel = calcularSubTotal(pedidoItemModel);
         pedidoItemModel.setId(0);
         pedidoItemRepository.save(pedidoItemModel);
@@ -95,6 +114,10 @@ public class PedidoItemService {
         if (pedidoItemModel.getPedido() == null){
             pedidoItemModel.setPedido(pedidoItemBase.getPedido());
         }
+
+        ChecaValores.verificaValorDoubleMenorQueZero(pedidoItemModel.getAcrescimo());
+        ChecaValores.verificaValorDoubleMenorQueZero(pedidoItemModel.getDesconto());
+        ChecaValores.verificaValorInt(pedidoItemModel.getQuantidade());
 
         pedidoItemModel = calcularSubTotal(pedidoItemModel);
         pedidoItemModel.setId(id);

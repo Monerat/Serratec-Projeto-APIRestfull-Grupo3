@@ -22,8 +22,11 @@ import br.com.techtoy.techtoy.model.PedidoItem;
 import br.com.techtoy.techtoy.model.Usuario;
 import br.com.techtoy.techtoy.model.Enum.EnumLog;
 import br.com.techtoy.techtoy.model.Enum.EnumTipoEntidade;
+
 import br.com.techtoy.techtoy.model.exceptions.OutofStockException;
 import br.com.techtoy.techtoy.model.exceptions.ResourceNotFound;
+import br.com.techtoy.techtoy.model.exceptions.ResourceBadRequest;
+
 import br.com.techtoy.techtoy.repository.PedidoRepository;
 
 @Service
@@ -57,7 +60,13 @@ public class PedidoService {
         //CRIAR NOVA VARIAVEL DE PEDIDOITEMREQUESTDTO
         List<PedidoItemRequestDTO> pedidoItemRequest = pedidoRequest.getPedidoItens();
 
+        if (pedidoModel.getFormaPagamento()==null){
+            throw new ResourceBadRequest("Favor adicionar a forma de pagamento");
+        }
+
         pedidoModel.setId(0);
+        pedidoModel.setUsuario(logService.verificarUsuarioLogado());
+        pedidoModel = pedidoRepository.save(pedidoModel);
 
         Usuario usuarioLogado = logService.verificarUsuarioLogado();
 
@@ -143,7 +152,8 @@ public class PedidoService {
         }
         
         pedidoModel.setId(id);
-        //pedidoModel = calcularValoresTotais(pedidoModel);
+        pedidoModel.setUsuario(logService.verificarUsuarioLogado());
+        pedidoModel = calcularValoresTotais(pedidoModel);
         pedidoModel = pedidoRepository.save(pedidoModel);
        
         //Fazer Auditoria
@@ -158,7 +168,6 @@ public class PedidoService {
         return mapper.map(pedidoModel, PedidoResponseDTO.class);
     }
     
-
     //Delete
     public void deletar(Long id){
         obterPorId(id);
