@@ -15,10 +15,14 @@ import br.com.techtoy.techtoy.dto.Pedido.PedidoResponseDTO;
 import br.com.techtoy.techtoy.dto.log.LogRequestDTO;
 import br.com.techtoy.techtoy.dto.pedidoItem.PedidoItemRequestDTO;
 import br.com.techtoy.techtoy.dto.pedidoItem.PedidoItemResponseDTO;
+import br.com.techtoy.techtoy.dto.produto.ProdutoRequestDTO;
+import br.com.techtoy.techtoy.dto.produto.ProdutoResponseDTO;
 import br.com.techtoy.techtoy.model.Pedido;
 import br.com.techtoy.techtoy.model.PedidoItem;
 import br.com.techtoy.techtoy.model.Enum.EnumLog;
 import br.com.techtoy.techtoy.model.Enum.EnumTipoEntidade;
+import br.com.techtoy.techtoy.model.exceptions.OutofStockException;
+import br.com.techtoy.techtoy.model.exceptions.ResourceNotFound;
 import br.com.techtoy.techtoy.repository.PedidoRepository;
 
 @Service
@@ -29,6 +33,9 @@ public class PedidoService {
 
     @Autowired
     private PedidoItemService pedidoItemService;
+
+    @Autowired
+    private ProdutoService produtoService;
 
     @Autowired
     private LogService logService;
@@ -62,8 +69,9 @@ public class PedidoService {
         logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, EnumLog.CREATE, EnumTipoEntidade.PEDIDO, "", 
                     logService.mapearObjetoParaString(pedidoModel));
 
+        diminuirEstoque(pedidoModel);    
         pedidoResponse = mapper.map(pedidoModel, PedidoResponseDTO.class);
-
+        
         return pedidoResponse;
     }
 
@@ -97,7 +105,7 @@ public class PedidoService {
         Optional<Pedido> optpedido = pedidoRepository.findById(id);
 
         if(optpedido.isEmpty()){
-            throw new RuntimeException("Pedido não foi encontrado na base com o Id: "+id);
+            throw new ResourceNotFound("Pedido não foi encontrado na base com o Id: "+id);
         }
         
         return mapper.map(optpedido.get(), PedidoResponseDTO.class);
@@ -172,4 +180,22 @@ public class PedidoService {
         return pedido;
     }
     
+    public void diminuirEstoque(Pedido pedido){
+        Integer estoque;
+        Integer quantidade;
+
+        for(PedidoItem pedidoItem : pedido.getPedidoItens()){
+            ProdutoResponseDTO produtoAtual = produtoService.obterPorId(pedidoItem.getProduto().getId());
+            estoque = produtoAtual.getEstoque();
+            quantidade = pedidoItem.getQuantidade();
+            estoque = estoque - quantidade;
+            if (estoque<0){
+                throw new OutofStockException("Estamos sem estoque suficiente do item " + produtoAtual.getNome());
+            }
+
+            produtoAtual.setEstoque(estoque);
+            produtoService.atualizar(produtoAtual.getId(),mapper.map(produtoAtual, ProdutoRequestDTO.class));
+        }
+    }
+
 }

@@ -1,12 +1,10 @@
 package br.com.techtoy.techtoy.service;
 
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.persistence.Column;
 import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
@@ -26,7 +24,7 @@ import br.com.techtoy.techtoy.dto.usuario.UsuarioResponseDTO;
 import br.com.techtoy.techtoy.model.Usuario;
 import br.com.techtoy.techtoy.model.Enum.EnumLog;
 import br.com.techtoy.techtoy.model.Enum.EnumTipoEntidade;
-import br.com.techtoy.techtoy.model.Enum.EnumTipoUsuario;
+
 import br.com.techtoy.techtoy.model.exceptions.ResourceBadRequest;
 import br.com.techtoy.techtoy.model.exceptions.ResourceNotFound;
 import br.com.techtoy.techtoy.repository.UsuarioRepository;
