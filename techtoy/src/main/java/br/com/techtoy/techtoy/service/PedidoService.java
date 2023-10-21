@@ -19,6 +19,7 @@ import br.com.techtoy.techtoy.dto.produto.ProdutoRequestDTO;
 import br.com.techtoy.techtoy.dto.produto.ProdutoResponseDTO;
 import br.com.techtoy.techtoy.model.Pedido;
 import br.com.techtoy.techtoy.model.PedidoItem;
+import br.com.techtoy.techtoy.model.Usuario;
 import br.com.techtoy.techtoy.model.Enum.EnumLog;
 import br.com.techtoy.techtoy.model.Enum.EnumTipoEntidade;
 import br.com.techtoy.techtoy.model.exceptions.OutofStockException;
@@ -41,6 +42,9 @@ public class PedidoService {
     private LogService logService;
 
     @Autowired
+    private EmailService emailService;
+
+    @Autowired
     private ModelMapper mapper;
 
     //CRUD
@@ -54,8 +58,12 @@ public class PedidoService {
         List<PedidoItemRequestDTO> pedidoItemRequest = pedidoRequest.getPedidoItens();
 
         pedidoModel.setId(0);
-        pedidoModel = pedidoRepository.save(pedidoModel);
 
+        Usuario usuarioLogado = logService.verificarUsuarioLogado();
+
+        pedidoModel.setUsuario(usuarioLogado);
+        pedidoModel = pedidoRepository.save(pedidoModel);
+        
         //adicionar pedidoItens no pedido
         List<PedidoItemResponseDTO> itens = adicionarItens(pedidoItemRequest, pedidoModel);
         PedidoResponseDTO pedidoResponse = mapper.map(pedidoModel, PedidoResponseDTO.class); 
@@ -66,10 +74,13 @@ public class PedidoService {
 
         //Fazer Auditoria
         LogRequestDTO logRequestDTO = new LogRequestDTO();
-        logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, EnumLog.CREATE, EnumTipoEntidade.PEDIDO, "", 
+
+        logService.adicionar(usuarioLogado, logRequestDTO, EnumLog.CREATE, EnumTipoEntidade.PEDIDO, "", 
                     logService.mapearObjetoParaString(pedidoModel));
 
-        diminuirEstoque(pedidoModel);    
+        diminuirEstoque(pedidoModel);
+        emailService.dispararEmailPedido(usuarioLogado.getEmail(), usuarioLogado.getNome(), pedidoModel);
+
         pedidoResponse = mapper.map(pedidoModel, PedidoResponseDTO.class);
         
         return pedidoResponse;
