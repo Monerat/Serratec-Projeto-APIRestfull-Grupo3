@@ -19,6 +19,7 @@ import br.com.techtoy.techtoy.model.Pedido;
 import br.com.techtoy.techtoy.model.PedidoItem;
 import br.com.techtoy.techtoy.model.Enum.EnumLog;
 import br.com.techtoy.techtoy.model.Enum.EnumTipoEntidade;
+import br.com.techtoy.techtoy.model.exceptions.ResourceBadRequest;
 import br.com.techtoy.techtoy.repository.PedidoRepository;
 
 @Service
@@ -46,7 +47,12 @@ public class PedidoService {
         //CRIAR NOVA VARIAVEL DE PEDIDOITEMREQUESTDTO
         List<PedidoItemRequestDTO> pedidoItemRequest = pedidoRequest.getPedidoItens();
 
+        if (pedidoModel.getFormaPagamento()==null){
+            throw new ResourceBadRequest("Favor adicionar a forma de pagamento");
+        }
+
         pedidoModel.setId(0);
+        pedidoModel.setUsuario(logService.verificarUsuarioLogado());
         pedidoModel = pedidoRepository.save(pedidoModel);
 
         //adicionar pedidoItens no pedido
@@ -124,7 +130,8 @@ public class PedidoService {
         }
         
         pedidoModel.setId(id);
-        //pedidoModel = calcularValoresTotais(pedidoModel);
+        pedidoModel.setUsuario(logService.verificarUsuarioLogado());
+        pedidoModel = calcularValoresTotais(pedidoModel);
         pedidoModel = pedidoRepository.save(pedidoModel);
        
         //Fazer Auditoria
