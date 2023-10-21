@@ -21,7 +21,7 @@ import br.com.techtoy.techtoy.repository.CategoriaRepository;
 
 @Service
 public class CategoriaService {
-    
+
     @Autowired
     private CategoriaRepository categoriaRepository;
 
@@ -30,144 +30,155 @@ public class CategoriaService {
 
     @Autowired
     private ModelMapper mapper;
-    //CRUD
+    // CRUD
 
-    //Create
+    // Create
     @Transactional
-    public CategoriaResponseDTO adicionar(CategoriaRequestDTO categoriaRequest){
-        
-        Categoria categoria = mapper.map(categoriaRequest, Categoria.class);
+    public CategoriaResponseDTO adicionar(CategoriaRequestDTO categoriaRequest) {
 
-        categoria.setId(0);
-        categoria = categoriaRepository.save(categoria);
-        
-        //Fazer Auditoria
+        Categoria categoriaModel = mapper.map(categoriaRequest, Categoria.class);
+
+        if (categoriaRepository.findByNome(categoriaModel.getNome()).isPresent()) {
+            throw new ResourceBadRequest("Nome da categoria deve ser único.");
+        }
+        if (categoriaModel.getNome() == null) {
+            throw new ResourceBadRequest("Você não inseriu o nome da categoria, que é um campo que não pode ser nulo");
+        }
+
+        categoriaModel.setId(0);
+        categoriaModel = categoriaRepository.save(categoriaModel);
+
+        // Fazer Auditoria
         LogRequestDTO logRequestDTO = new LogRequestDTO();
-        logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, EnumLog.CREATE, EnumTipoEntidade.CATEGORIA, "", 
-                   logService.mapearObjetoParaString(categoria));
+        logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, EnumLog.CREATE,
+                EnumTipoEntidade.CATEGORIA, "",
+                logService.mapearObjetoParaString(categoriaModel));
 
-        return mapper.map(categoria, CategoriaResponseDTO.class);
+        return mapper.map(categoriaModel, CategoriaResponseDTO.class);
     }
 
-    //Read publico
-    public List<CategoriaResponseDTO> obterTodosPublic(){
+    // Read publico
+    public List<CategoriaResponseDTO> obterTodosPublic() {
         List<Categoria> categoriasModel = categoriaRepository.findAll();
         List<CategoriaResponseDTO> categoriaResponse = new ArrayList<>();
 
-        for(Categoria categoria : categoriasModel){            
-            //verifica se a Categoria está ativa.
-            if(categoria.getAtivo()){
-                categoriaResponse.add(mapper.map(categoria, CategoriaResponseDTO.class));                
+        for (Categoria categoria : categoriasModel) {
+            // verifica se a Categoria está ativa.
+            if (categoria.getAtivo()) {
+                categoriaResponse.add(mapper.map(categoria, CategoriaResponseDTO.class));
             }
         }
         return categoriaResponse;
     }
 
-    public CategoriaResponseDTO obterPorNomePublic(String Nome){
+    public CategoriaResponseDTO obterPorNomePublic(String Nome) {
         Optional<Categoria> categoria = categoriaRepository.findByNome(Nome);
         CategoriaResponseDTO categoriaResponse = new CategoriaResponseDTO();
 
-        if(categoria.isEmpty()){
-            throw new ResourceNotFound("Categoria não foi encontrada na base com o Nome: "+Nome);
+        if (categoria.isEmpty()) {
+            throw new ResourceNotFound("Categoria não foi encontrada na base com o Nome: " + Nome);
         }
-        
-        if(categoria.get().getAtivo()){
+
+        if (categoria.get().getAtivo()) {
             categoriaResponse = mapper.map(categoria.get(), CategoriaResponseDTO.class);
-        }else{
-            throw new ResourceBadRequest("A Categoria com id "+Nome+" está inativa");
-        }     
+        } else {
+            throw new ResourceBadRequest("A Categoria com id " + Nome + " está inativa");
+        }
         return categoriaResponse;
     }
 
-    public CategoriaResponseDTO obterPorIdPublic(Long id){
+    public CategoriaResponseDTO obterPorIdPublic(Long id) {
         Optional<Categoria> categoria = categoriaRepository.findById(id);
         CategoriaResponseDTO categoriaResponse = new CategoriaResponseDTO();
 
-        if(categoria.isEmpty()){
-            throw new ResourceNotFound("Categoria não foi encontrada na base com o Id: "+id);
+        if (categoria.isEmpty()) {
+            throw new ResourceNotFound("Categoria não foi encontrada na base com o Id: " + id);
         }
-        
-        if(categoria.get().getAtivo()){
+
+        if (categoria.get().getAtivo()) {
             categoriaResponse = mapper.map(categoria.get(), CategoriaResponseDTO.class);
-        }else{
-            throw new ResourceBadRequest("A Categoria com id "+id+" está inativa");
-        }     
+        } else {
+            throw new ResourceBadRequest("A Categoria com id " + id + " está inativa");
+        }
         return categoriaResponse;
     }
 
-    //Read private
-    public List<CategoriaResponseDTO> obterTodos(){
-        
+    // Read private
+    public List<CategoriaResponseDTO> obterTodos() {
+
         List<Categoria> categorias = categoriaRepository.findAll();
 
         List<CategoriaResponseDTO> categoriasResponse = new ArrayList<>();
 
-        for (Categoria categoria : categorias){
+        for (Categoria categoria : categorias) {
             categoriasResponse.add(mapper.map(categoria, CategoriaResponseDTO.class));
         }
-        
+
         return categoriasResponse;
     }
+
     public CategoriaResponseDTO obterPorId(Long id) {
         Optional<Categoria> optCategoria = categoriaRepository.findById(id);
 
-        if(optCategoria.isEmpty()){
+        if (optCategoria.isEmpty()) {
             throw new ResourceNotFound("Não existe uma categoria com o ID " + id);
         }
         return mapper.map(optCategoria.get(), CategoriaResponseDTO.class);
     }
-    //Update
+
+    // Update
     @Transactional
-    public CategoriaResponseDTO atualizar(Long id, CategoriaRequestDTO categoriaRequest){
-        
+    public CategoriaResponseDTO atualizar(Long id, CategoriaRequestDTO categoriaRequest) {
+
         Categoria categoriaBase = mapper.map(obterPorId(id), Categoria.class);
-        
+
         Categoria categoriaModel = mapper.map(categoriaRequest, Categoria.class);
 
         categoriaModel.setId(id);
-        if(categoriaModel.getNome() == null){
+        if (categoriaModel.getNome() == null) {
             categoriaModel.setNome(categoriaBase.getNome());
         }
-        if(categoriaModel.getObservacao() == null){
+        if (categoriaModel.getObservacao() == null) {
             categoriaModel.setObservacao(categoriaBase.getNome());
         }
-        if(categoriaBase.getAtivo() == null){
+        if (categoriaBase.getAtivo() == null) {
             categoriaModel.setAtivo(categoriaBase.getAtivo());
         }
 
         categoriaModel = categoriaRepository.save(categoriaModel);
-        
-        //Fazer Auditoria
+
+        // Fazer Auditoria
         LogRequestDTO logRequestDTO = new LogRequestDTO();
 
-        //Verificar se o Produto foi ativado
-        if (categoriaBase.getAtivo() != categoriaModel.getAtivo()){
-            // Usando a porra do ternario aqui, se ativo for true ele ACTIVOU, cc ele DESACTIVOU :D
+        // Verificar se o Produto foi ativado
+        if (categoriaBase.getAtivo() != categoriaModel.getAtivo()) {
+            // Usando a porra do ternario aqui, se ativo for true ele ACTIVOU, cc ele
+            // DESACTIVOU :D
             EnumLog logStatus = categoriaModel.getAtivo() ? EnumLog.ACTIVATE : EnumLog.DEACTIVATE;
-            logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, logStatus, EnumTipoEntidade.CATEGORIA, 
+            logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, logStatus,
+                    EnumTipoEntidade.CATEGORIA,
                     logService.mapearObjetoParaString(categoriaBase),
-                    logService.mapearObjetoParaString(categoriaModel)
-                    );
+                    logService.mapearObjetoParaString(categoriaModel));
         }
 
-        //Registrar Mudanças UPDATE na Auditoria
-        logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, EnumLog.UPDATE, EnumTipoEntidade.CATEGORIA, 
-                    logService.mapearObjetoParaString(categoriaBase),
-                    logService.mapearObjetoParaString(categoriaModel)
-                    );
-        
+        // Registrar Mudanças UPDATE na Auditoria
+        logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, EnumLog.UPDATE,
+                EnumTipoEntidade.CATEGORIA,
+                logService.mapearObjetoParaString(categoriaBase),
+                logService.mapearObjetoParaString(categoriaModel));
 
         return mapper.map(categoriaModel, CategoriaResponseDTO.class);
     }
-    //Delete
-    public void deletar(Long id){
+
+    // Delete
+    public void deletar(Long id) {
         obterPorId(id);
         categoriaRepository.deleteById(id);
 
-    //Fazer Auditoria
-    LogRequestDTO logRequestDTO = new LogRequestDTO();
-    logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, EnumLog.DELETE, EnumTipoEntidade.CATEGORIA, "", "");
-        
+        // Fazer Auditoria
+        LogRequestDTO logRequestDTO = new LogRequestDTO();
+        logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, EnumLog.DELETE,
+                EnumTipoEntidade.CATEGORIA, "", "");
+
     }
 }
-

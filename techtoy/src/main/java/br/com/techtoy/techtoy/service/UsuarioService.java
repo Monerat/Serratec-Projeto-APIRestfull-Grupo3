@@ -16,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
 
 import br.com.techtoy.techtoy.dto.log.LogRequestDTO;
 import br.com.techtoy.techtoy.dto.usuario.UsuarioLoginResponseDTO;
@@ -212,5 +213,17 @@ public class UsuarioService {
 
         // Crio e devolvo o DTO esperado.
         return new UsuarioLoginResponseDTO(token, usuarioResponse);
+    }
+
+    // quem sou eu
+    public UsuarioResponseDTO obterUsuarioLogado() {
+
+        if (!jwtService.isAuthenticated()) {
+            throw new ResourceAccessException("Usuário não está authenticado!");
+        }
+        return mapper.map(SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal(), UsuarioResponseDTO.class);
     }
 }

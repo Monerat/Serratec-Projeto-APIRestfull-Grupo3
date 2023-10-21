@@ -117,5 +117,11 @@ public class UsuarioController {
             .status(200)
             .body(usuarioLogado);
     }
-}
 
+    @GetMapping("/public")
+    public ResponseEntity<UsuarioResponseDTO> obterPorIdPublicoLogado() {
+        return ResponseEntity
+            .status(200)
+            .body(usuarioService.obterUsuarioLogado());
+    }
+}
