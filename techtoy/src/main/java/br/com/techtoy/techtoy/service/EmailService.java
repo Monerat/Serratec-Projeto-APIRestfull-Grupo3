@@ -11,6 +11,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import br.com.techtoy.techtoy.common.dateConverter;
 import br.com.techtoy.techtoy.model.Pedido;
 import br.com.techtoy.techtoy.model.PedidoItem;
 import br.com.techtoy.techtoy.model.email.Email;
@@ -65,31 +66,52 @@ public class EmailService {
 
         List<String> destinatarios = new ArrayList<>();
         destinatarios.add(destinatario);
-        
-        Double subtotal = 0.0;
-        String produtos = "";
-        Integer produtoQuantidade = 0;
 
-        
+        Integer produtoQuantidade = 0;
+        String mensagemProduto = "";
 
         for (PedidoItem pedidoItem : pedido.getPedidoItens()) {
-            subtotal += pedidoItem.getSubTotal();
+
             pedidoItem.setProduto(produtoRepository.findById(pedidoItem.getProduto().getId()).get());
-            produtos += pedidoItem.getProduto().getNome() + " ,";
             produtoQuantidade += pedidoItem.getQuantidade();
+
+            mensagemProduto += "<br><li><span style=\"font-size:16px\"><strong>Produtos: "
+                    + pedidoItem.getProduto().getNome() + ".</strong></span></li>" +
+                    "    <li><span style=\"font-size:16px\"><strong>Quantidade: " + produtoQuantidade
+                    + ".</strong></span></li>" +
+                    "    <li><span style=\"font-size:16px\"><strong>SubTotal: " + pedidoItem.getSubTotal()
+                    + ".</strong></span></li>";
         }
-        
-        String mensagem = "Olá!<br>" +
-                "Cadastro de pedido realizado com sucesso para o usuario: " + nome + "<br><br>" +
-                "Número do pedido: " + pedido.getId() + "<br>" +
-                "Data do pedido: " + pedido.getDataPedido() + "<br><br>" +
 
-                "Produto: " + produtos + "<br>" +
-                "Quantidade: " + produtoQuantidade + "<br>" +
-                "Subtotal: " + subtotal + "<br>" +
-
-                "Valor total do pedido: R$" + pedido.getValorTotal() + "<br><br>" +
-                "Tenha um excelente dia!<br><br> Sincerely <br>O grupo 3 da disciplina de API Restful do Serratec";
+        String mensagem = "<h1><span style=\"text-align:center; margin: 20vw\" ><span style=\"font-size:36px\"><strong>Cadastro de Pedido</strong></span></span></h1>"
+                +
+                "<p style=\"text-align:center\"><span style=\"font-size:16px\"><strong>" + nome
+                + " , seu pedido foi cadastrado com sucesso.</strong></span></p>"
+                +
+                "<ul>" +
+                "    <li><span style=\"font-size:16px\"><strong>Numero do pedido: " + pedido.getId()
+                + ".</strong></span></li>" +
+                "    <li><span style=\"font-size:16px\"><strong>Data do pedido: "
+                + dateConverter.converter(pedido.getDataPedido()) + ".</strong></span></li>" +
+                "</ul>" +
+                "<ul>" +
+                "    <li><span style=\"font-size:16px\"><strong>" + mensagemProduto + "</strong></span></li>" +
+                "    <li><span style=\"font-size:16px\"><strong>Quantidade de itens: " + produtoQuantidade + ".</strong></span></li>" +
+                "</ul>" +
+                "<ul>" +
+                "<br><li><span style=\"font-size:16px\"><strong>Valor total do pedido: R$: " + pedido.getValorTotal()
+                + ".</strong></span></li>"
+                +
+                "</ul>" +
+                "<p style=\"text-align:center\"><strong><img alt=\"caixa\" src=\"https://cdn-icons-png.flaticon.com/512/4829/4829979.png\" style=\"height:250px; width:250px\" /></strong></p>"
+                +
+                "<p style=\"text-align:center\">&nbsp;</p>" +
+                "<p style=\"text-align:center\"><span style=\"font-size:16px\"><strong>Tenha um excelente dia!</strong></span></p>"
+                +
+                "<p style=\"text-align:center\"><span style=\"font-size:16px\"><strong>Sincerely</strong></span></p>" +
+                "<p style=\"text-align:center\"><span style=\"font-size:16px\"><strong>O Grupo 3 da disciplina de API Restful do Serratec</strong></span></p>"
+                +
+                "<p>&nbsp;</p>";
 
         Email email = new Email("Cadastro de Pedido", mensagem, destinatarios);
 
