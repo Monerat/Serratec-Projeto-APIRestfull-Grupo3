@@ -31,7 +31,7 @@ O seu grupo foi convidado a desenvolver uma API para um novo sistema de E Commer
 	- Cada item poderá ter (quantidade, valor unitário,  desconto, acréscimo e valorTotal) ✔️
 	- Cálculo do valor do item (valor unitário - desconto + acréscimo) * quantidade ✔️
 	- Forma de pagamento ✔️
-	- Quando o pedido for cadastrado, deve enviar um email automaticamente para o cliente informando os dados do pedido. Nesse e-mail envie um layout bonitinho do tipo HTML. ~
+	- Quando o pedido for cadastrado, deve enviar um email automaticamente para o cliente informando os dados do pedido. Nesse e-mail envie um layout bonitinho do tipo HTML. ✔️
 	
 - Deve existir um usuário do tipo Admin ✔️
 - Todo usuário admin, pode fazer tudo na API. ✔️
