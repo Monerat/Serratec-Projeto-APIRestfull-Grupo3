@@ -87,7 +87,7 @@ public class PedidoService {
         logService.adicionar(usuarioLogado, logRequestDTO, EnumLog.CREATE, EnumTipoEntidade.PEDIDO, "", 
                     logService.mapearObjetoParaString(pedidoModel));
 
-        //diminuirEstoque(pedidoModel);
+        diminuirEstoque(pedidoModel);
         emailService.dispararEmailPedido(usuarioLogado.getEmail(), usuarioLogado.getNome(), pedidoModel);
 
         pedidoResponse = mapper.map(pedidoModel, PedidoResponseDTO.class);

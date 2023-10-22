@@ -37,6 +37,9 @@ public class ProdutoService {
     private LogService logService;
 
     @Autowired
+    private CategoriaService categoriaService;
+
+    @Autowired
     private ModelMapper mapper;
     // CRUD
 
@@ -65,11 +68,15 @@ public class ProdutoService {
             throw new ResourceBadRequest(
                     "Você não inseriu se o produto está ativo ou não, que é um campo que não pode ser nulo");
         }
+        // desativar produto caso cat esteja desativada
+        if (!categoriaService.obterPorId(produtoModel.getCategoria().getId()).isAtivo()) {
+            produtoModel.setAtivo(false);
+        }
 
         produtoModel.setId(0);
 
         produtoModel = produtoRepository.save(produtoModel);
-        produtoModel.setImagem(verificaImagem(produtoModel.getId()));
+        produtoModel.setImagem(adicionarImagem(produtoModel.getId()));
         produtoRepository.save(produtoModel);
 
         // Fazer Auditoria
@@ -150,9 +157,6 @@ public class ProdutoService {
         Produto produtoBase = mapper.map(obterPorId(id), Produto.class);
         Produto produtoModel = mapper.map(produtoRequest, Produto.class);
 
-        ChecaValores.verificaValorDouble(produtoModel.getValorUn());
-        ChecaValores.verificaValorInt(produtoModel.getEstoque());
-
         produtoModel.setId(id);
         if (produtoModel.getNome() == null) {
             produtoModel.setNome(produtoBase.getNome());
@@ -171,12 +175,15 @@ public class ProdutoService {
         }
 
         if (produtoModel.getImagem() == null) {
-            produtoModel.setCategoria(produtoBase.getCategoria());
+            produtoModel.setImagem(produtoBase.getImagem());
         }
 
         if (produtoModel.getCategoria() == null) {
             produtoModel.setCategoria(produtoBase.getCategoria());
         }
+
+        ChecaValores.verificaValorDouble(produtoModel.getValorUn());
+        ChecaValores.verificaValorInt(produtoModel.getEstoque());
 
         produtoModel.setImagem(verificaImagem(produtoModel.getId()));
         produtoModel = produtoRepository.save(produtoModel);
@@ -214,8 +221,8 @@ public class ProdutoService {
 
     }
 
-    // Verificar a Imagem
-    public String verificaImagem(Long id) {
+    // Adicionar imagem ao novo produto
+    public String adicionarImagem(Long id) {
         String folderPath = "src/main/resources/img/produtos/";
         String fileName = String.valueOf(id);
 
@@ -224,7 +231,25 @@ public class ProdutoService {
         if (file.exists()) {
             return file.getAbsolutePath();
         }
-        
+
+        throw new ResourceNotFound("Imagem não encontrada na base com o nome: " + fileName);
+    }
+
+    // Verificar a existência de Imagem de um produto
+    public String verificaImagem(Long id) {
+
+        String fileName = String.valueOf(id);
+
+        try {
+            File file = new File(obterPorId(id).getImagem());
+
+            if (file.exists()) {
+                return file.getAbsolutePath();
+            }
+        } catch (Exception e) {
+            throw new ResourceNotFound("Imagem não encontrada na base com o nome: " + fileName);
+        }
+
         throw new ResourceNotFound("Imagem não encontrada na base com o nome: " + fileName);
     }
 

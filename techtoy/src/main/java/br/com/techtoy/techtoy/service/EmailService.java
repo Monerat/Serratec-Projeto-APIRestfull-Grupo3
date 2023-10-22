@@ -77,7 +77,7 @@ public class EmailService {
 
             mensagemProduto += "<br><li><span style=\"font-size:16px\"><strong>Produtos: "
                     + pedidoItem.getProduto().getNome() + ".</strong></span></li>" +
-                    "    <li><span style=\"font-size:16px\"><strong>Quantidade: " + produtoQuantidade
+                    "    <li><span style=\"font-size:16px\"><strong>Quantidade: " + pedidoItem.getQuantidade()
                     + ".</strong></span></li>" +
                     "    <li><span style=\"font-size:16px\"><strong>SubTotal: " + pedidoItem.getSubTotal()
                     + ".</strong></span></li>";
@@ -96,7 +96,7 @@ public class EmailService {
                 "</ul>" +
                 "<ul>" +
                 "    <li><span style=\"font-size:16px\"><strong>" + mensagemProduto + "</strong></span></li>" +
-                "    <li><span style=\"font-size:16px\"><strong>Quantidade de itens: " + produtoQuantidade + ".</strong></span></li>" +
+                "    <br><li><span style=\"font-size:16px\"><strong>Quantidade de itens: " + produtoQuantidade + ".</strong></span></li>" +
                 "</ul>" +
                 "<ul>" +
                 "<br><li><span style=\"font-size:16px\"><strong>Valor total do pedido: R$: " + pedido.getValorTotal()
