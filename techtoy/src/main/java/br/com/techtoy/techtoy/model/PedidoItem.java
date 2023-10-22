@@ -73,7 +73,7 @@ public class PedidoItem {
         this.desconto = desconto;
         this.acrescimo = acrescimo;
     }
-    
+
     /**
      * Construtor padrão para criar um novo item de pedido.
      */
@@ -138,4 +138,3 @@ public class PedidoItem {
         this.produto = produto;
     }
 }
-

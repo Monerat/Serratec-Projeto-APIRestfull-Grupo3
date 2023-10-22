@@ -19,7 +19,7 @@ import br.com.techtoy.techtoy.model.Enum.EnumTipoEntidade;
 @Entity
 @Table(name = "log")
 public class Log {
-    
+
     /**
      * ID único do log.
      */
@@ -49,13 +49,13 @@ public class Log {
     /**
      * Valor original associado à ação .
      */
-    @Column(columnDefinition="text")
+    @Column(columnDefinition = "text")
     private String valorOriginal;
 
     /**
      * Valor atual associado à ação .
      */
-    @Column(columnDefinition="text")
+    @Column(columnDefinition = "text")
     private String valorAtual;
 
     /**
@@ -149,4 +149,3 @@ public class Log {
         this.valorAtual = valorAtual;
     }
 }
-

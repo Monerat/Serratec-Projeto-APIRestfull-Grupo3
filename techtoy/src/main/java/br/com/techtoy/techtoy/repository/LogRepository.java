@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import br.com.techtoy.techtoy.model.Log;
 
-public interface LogRepository extends JpaRepository<Log,Long>{
-    
+public interface LogRepository extends JpaRepository<Log, Long> {
+
 }

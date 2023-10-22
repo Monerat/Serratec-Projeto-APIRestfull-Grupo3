@@ -30,15 +30,16 @@ public class LogService {
     @Autowired
     private ModelMapper modelMapper;
 
-    //CRUD
+    // CRUD
 
-    //Create
+    // Create
     @Transactional
-    public LogResponseDTO adicionar(Usuario usuario, LogRequestDTO logRequestDTO, EnumLog tipoAcao, EnumTipoEntidade tipoEntidade,
-                                    String valorOriginal, String valorAtual){
+    public LogResponseDTO adicionar(Usuario usuario, LogRequestDTO logRequestDTO, EnumLog tipoAcao,
+            EnumTipoEntidade tipoEntidade,
+            String valorOriginal, String valorAtual) {
         Log log = modelMapper.map(logRequestDTO, Log.class);
-            
-        //Setar valores que a gente puxou
+
+        // Setar valores que a gente puxou
         log.setId(0);
         log.setTipoAcao(tipoAcao);
         log.setTipoEntidade(tipoEntidade);
@@ -49,30 +50,29 @@ public class LogService {
 
         return modelMapper.map(savedLog, LogResponseDTO.class);
     }
-    
-    //Read
-    public List<LogResponseDTO> obterTodos(){
+
+    // Read
+    public List<LogResponseDTO> obterTodos() {
         List<Log> logs = logRepository.findAll();
         return logs.stream()
                 .map(log -> modelMapper.map(log, LogResponseDTO.class))
                 .collect(Collectors.toList());
     }
 
-    
-    public LogResponseDTO obterPorId(Long id){
+    public LogResponseDTO obterPorId(Long id) {
         Optional<Log> log = logRepository.findById(id);
 
-        if(log.isEmpty()){
-            throw new ResourceNotFound("Nenhum registro encontrado para o ID: "+id);
+        if (log.isEmpty()) {
+            throw new ResourceNotFound("Nenhum registro encontrado para o ID: " + id);
         }
         return modelMapper.map(log.get(), LogResponseDTO.class);
     }
 
-    //Fazer o Mapper
-    public String mapearObjetoParaString(Object object){
+    // Fazer o Mapper
+    public String mapearObjetoParaString(Object object) {
         ObjectMapper objectMapper = new ObjectMapper();
         String objectString = new String();
-        
+
         try {
             objectString = objectMapper.writeValueAsString(object);
         } catch (Exception e) {

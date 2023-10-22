@@ -57,15 +57,16 @@ public class Produto {
     /**
      * Construtor que inicializa um objeto de Produto com os parâmetros fornecidos.
      *
-     * @param id           O ID do produto.
-     * @param nome         O nome do produto.
-     * @param observacao   Uma observação sobre o produto.
-     * @param estoque      A quantidade em estoque do produto.
-     * @param valorUn      O valor unitário do produto.
-     * @param ativo        O estado de ativação do produto.
-     * @param pedidoItem   O item de pedido associado ao produto.
+     * @param id         O ID do produto.
+     * @param nome       O nome do produto.
+     * @param observacao Uma observação sobre o produto.
+     * @param estoque    A quantidade em estoque do produto.
+     * @param valorUn    O valor unitário do produto.
+     * @param ativo      O estado de ativação do produto.
+     * @param pedidoItem O item de pedido associado ao produto.
      */
-    public Produto(long id, String nome, String observacao, int estoque, Double valorUn, Boolean ativo,String imagem, PedidoItem pedidoItem) {
+    public Produto(long id, String nome, String observacao, int estoque, Double valorUn, Boolean ativo, String imagem,
+            PedidoItem pedidoItem) {
         this.id = id;
         this.nome = nome;
         this.observacao = observacao;
@@ -165,7 +166,5 @@ public class Produto {
     }
 
     // Getters e Setters
-
-    
 
 }

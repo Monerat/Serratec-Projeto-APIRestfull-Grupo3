@@ -13,7 +13,7 @@ public class PedidoResponseDTO extends PedidoBaseDTO {
     private UsuarioResponseDTO usuario;
 
     private Date dataPedido;
-    
+
     private List<PedidoItemResponseDTO> pedidoItens;
 
     public UsuarioResponseDTO getUsuario() {

@@ -81,7 +81,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/api/usuarios", "/api/usuarios/login")
                 .permitAll()// informo que todos podem acessar esses endpoints sem autenticação.
                 .antMatchers(HttpMethod.GET, "/api/produtos/public", "/api/produtos/public/{id}",
-                        "/api/categorias/public/", "/api/categorias/public/{id}", "/api/categorias/public/nome/{nome}", "api/usuarios/public/")
+                        "/api/categorias/public/", "/api/categorias/public/{id}", "/api/categorias/public/nome/{nome}",
+                        "api/usuarios/public/")
                 .permitAll()
                 .antMatchers("/v3/api-docs/**", "/swagger-ui/**",
                         "/swagger-ui.html")

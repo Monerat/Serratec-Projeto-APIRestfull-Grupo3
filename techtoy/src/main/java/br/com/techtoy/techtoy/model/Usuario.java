@@ -184,9 +184,9 @@ public class Usuario implements UserDetails {
 
         // Converter a lista de perfis em uma lista de Authorities
         return perfis.stream()
-            .map(perf -> new SimpleGrantedAuthority(perf))
-            // .map(SimpleGrantedAuthority::new)
-            .collect(Collectors.toList());
+                .map(perf -> new SimpleGrantedAuthority(perf))
+                // .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
 
     @Override

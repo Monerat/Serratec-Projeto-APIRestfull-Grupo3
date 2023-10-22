@@ -3,7 +3,7 @@ package br.com.techtoy.techtoy.model.email;
 import java.util.List;
 
 public class Email {
-    
+
     private String assunto;
     private String mensagem;
     private String remetente;
@@ -11,6 +11,7 @@ public class Email {
 
     /**
      * Construtor para criar um objeto de e-mail com atributos específicos.
+     * 
      * @param assunto       O assunto do e-mail.
      * @param mensagem      O conteúdo da mensagem do e-mail.
      * @param destinatarios A lista de destinatários do e-mail.
@@ -32,6 +33,7 @@ public class Email {
 
     /**
      * Obtém o assunto do e-mail.
+     * 
      * @return O assunto do e-mail.
      */
     public String getAssunto() {
@@ -40,6 +42,7 @@ public class Email {
 
     /**
      * Define o assunto do e-mail.
+     * 
      * @param assunto O assunto a ser definido.
      */
     public void setAssunto(String assunto) {
@@ -48,6 +51,7 @@ public class Email {
 
     /**
      * Obtém a mensagem do e-mail.
+     * 
      * @return A mensagem do e-mail.
      */
     public String getMensagem() {
@@ -56,6 +60,7 @@ public class Email {
 
     /**
      * Define a mensagem do e-mail.
+     * 
      * @param mensagem A mensagem a ser definida.
      */
     public void setMensagem(String mensagem) {
@@ -64,6 +69,7 @@ public class Email {
 
     /**
      * Obtém o remetente do e-mail.
+     * 
      * @return O remetente do e-mail.
      */
     public String getRemetente() {
@@ -72,6 +78,7 @@ public class Email {
 
     /**
      * Define o remetente do e-mail.
+     * 
      * @param remetente O remetente a ser definido.
      */
     public void setRemetente(String remetente) {
@@ -80,6 +87,7 @@ public class Email {
 
     /**
      * Obtém a lista de destinatários do e-mail.
+     * 
      * @return A lista de destinatários.
      */
     public List<String> getDestinatarios() {
@@ -88,10 +96,10 @@ public class Email {
 
     /**
      * Define a lista de destinatários do e-mail.
+     * 
      * @param destinatarios A lista de destinatários a ser definida.
      */
     public void setDestinatarios(List<String> destinatarios) {
         this.destinatarios = destinatarios;
-    }    
+    }
 }
-

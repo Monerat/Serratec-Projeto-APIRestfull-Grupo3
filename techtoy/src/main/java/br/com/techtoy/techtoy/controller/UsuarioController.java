@@ -21,14 +21,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
-
-
 @RestController
 @RequestMapping("/api/usuarios")
 @CrossOrigin("*")
 public class UsuarioController {
-    
+
     @Autowired
     private UsuarioService usuarioService;
 
@@ -41,8 +38,8 @@ public class UsuarioController {
     @PostMapping
     public ResponseEntity<UsuarioResponseDTO> adicionar(@RequestBody UsuarioRequestDTO usuario) {
         return ResponseEntity
-            .status(201)
-            .body(usuarioService.adicionar(usuario));
+                .status(201)
+                .body(usuarioService.adicionar(usuario));
     }
 
     /**
@@ -54,8 +51,8 @@ public class UsuarioController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<UsuarioResponseDTO>> obterTodos() {
         return ResponseEntity
-            .status(200)
-            .body(usuarioService.obterTodos());
+                .status(200)
+                .body(usuarioService.obterTodos());
     }
 
     /**
@@ -68,23 +65,24 @@ public class UsuarioController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<UsuarioResponseDTO> obterPorId(@PathVariable Long id) {
         return ResponseEntity
-            .status(200)
-            .body(usuarioService.obterPorId(id));
+                .status(200)
+                .body(usuarioService.obterPorId(id));
     }
 
     /**
      * Atualiza um usuário por ID (requer autorização ADMIN).
      *
      * @param id      O ID do usuário a ser atualizado.
-     * @param usuario O objeto UsuarioRequestDTO contendo os novos detalhes do usuário.
+     * @param usuario O objeto UsuarioRequestDTO contendo os novos detalhes do
+     *                usuário.
      * @return Um ResponseEntity contendo o UsuarioResponseDTO atualizado.
      */
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<UsuarioResponseDTO> atualizar(@PathVariable Long id, @RequestBody UsuarioRequestDTO usuario) {
         return ResponseEntity
-            .status(200)
-            .body(usuarioService.atualizar(id, usuario)); 
+                .status(200)
+                .body(usuarioService.atualizar(id, usuario));
     }
 
     /**
@@ -98,30 +96,33 @@ public class UsuarioController {
     public ResponseEntity<?> deletar(@PathVariable Long id) {
         usuarioService.deletar(id);
         return ResponseEntity
-            .status(204)
-            .build();
+                .status(204)
+                .build();
     }
 
     /**
      * Realiza o login de um usuário.
      *
-     * @param usuariologinRequest O objeto UsuarioLoginRequestDTO contendo as credenciais de login.
-     * @return Um ResponseEntity contendo o UsuarioLoginResponseDTO com as informações do usuário logado.
+     * @param usuariologinRequest O objeto UsuarioLoginRequestDTO contendo as
+     *                            credenciais de login.
+     * @return Um ResponseEntity contendo o UsuarioLoginResponseDTO com as
+     *         informações do usuário logado.
      */
     @PostMapping("/login")
     public ResponseEntity<UsuarioLoginResponseDTO> logar(@RequestBody UsuarioLoginRequestDTO usuariologinRequest) {
 
-        UsuarioLoginResponseDTO usuarioLogado = usuarioService.logar(usuariologinRequest.getEmail(), usuariologinRequest.getSenha());
+        UsuarioLoginResponseDTO usuarioLogado = usuarioService.logar(usuariologinRequest.getEmail(),
+                usuariologinRequest.getSenha());
 
         return ResponseEntity
-            .status(200)
-            .body(usuarioLogado);
+                .status(200)
+                .body(usuarioLogado);
     }
 
     @GetMapping("/public")
     public ResponseEntity<UsuarioResponseDTO> obterPorIdPublicoLogado() {
         return ResponseEntity
-            .status(200)
-            .body(usuarioService.obterUsuarioLogado());
+                .status(200)
+                .body(usuarioService.obterUsuarioLogado());
     }
 }

@@ -1,7 +1,7 @@
 package br.com.techtoy.techtoy.dto.usuario;
 
-public class UsuarioLoginResponseDTO  {
-  
+public class UsuarioLoginResponseDTO {
+
     private String token;
 
     private UsuarioResponseDTO usuario;
@@ -10,10 +10,9 @@ public class UsuarioLoginResponseDTO  {
         this.token = token;
         this.usuario = usuario;
     }
-    
+
     public UsuarioLoginResponseDTO() {
     }
-
 
     public String getToken() {
         return token;

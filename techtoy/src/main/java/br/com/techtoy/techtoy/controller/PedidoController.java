@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 @RequestMapping("/api/pedidos")
 public class PedidoController {
-    
+
     @Autowired
     private PedidoService pedidoService;
 
@@ -29,34 +29,34 @@ public class PedidoController {
     @PostMapping
     public ResponseEntity<PedidoResponseDTO> adicionar(@RequestBody PedidoRequestDTO pedido) {
         return ResponseEntity
-            .status(201)
-            .body(pedidoService.adicionar(pedido));
+                .status(201)
+                .body(pedidoService.adicionar(pedido));
     }
-    
+
     // Obtém todos os pedidos (restrito a administradores).
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<List<PedidoResponseDTO>> obterTodos(){
+    public ResponseEntity<List<PedidoResponseDTO>> obterTodos() {
         return ResponseEntity
-            .status(200)
-            .body(pedidoService.obterTodos());
+                .status(200)
+                .body(pedidoService.obterTodos());
     }
 
     // Obtém um pedido por ID (restrito a administradores).
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<PedidoResponseDTO> obterPorId(@PathVariable Long id){
+    public ResponseEntity<PedidoResponseDTO> obterPorId(@PathVariable Long id) {
         return ResponseEntity
-            .status(200)
-            .body(pedidoService.obterPorId(id));
+                .status(200)
+                .body(pedidoService.obterPorId(id));
     }
 
     // Atualiza um pedido por ID.
     @PutMapping("/{id}")
-    public ResponseEntity<PedidoResponseDTO> atualizar(@PathVariable Long id, @RequestBody PedidoRequestDTO pedido){
+    public ResponseEntity<PedidoResponseDTO> atualizar(@PathVariable Long id, @RequestBody PedidoRequestDTO pedido) {
         return ResponseEntity
-            .status(200)
-            .body(pedidoService.atualizar(id, pedido)); 
+                .status(200)
+                .body(pedidoService.atualizar(id, pedido));
     }
 
     // Exclusão de pedido (Restrito a administradores)
@@ -64,11 +64,10 @@ public class PedidoController {
     // Deleta um pedido por ID (restrito a administradores).
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> deletar(@PathVariable Long id){
+    public ResponseEntity<?> deletar(@PathVariable Long id) {
         pedidoService.deletar(id);
         return ResponseEntity
-            .status(204)
-            .build();
+                .status(204)
+                .build();
     }
 }
-

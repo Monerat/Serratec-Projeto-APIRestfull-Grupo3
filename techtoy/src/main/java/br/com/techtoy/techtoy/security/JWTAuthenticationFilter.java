@@ -29,37 +29,38 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-    
-            // 1° Pegar o token da requição...
-            String token = obterToken(request);
 
-            // 2° Pegar o id do token.
-            Optional<Long> id = jwtService.obterIdDoUsuario(token);
+        // 1° Pegar o token da requição...
+        String token = obterToken(request);
 
-            // 3° Saber se o id existe, se veio algum id no token.
-            if(id.isPresent()){
+        // 2° Pegar o id do token.
+        Optional<Long> id = jwtService.obterIdDoUsuario(token);
 
-                // Pego o usuario dono do token pelo seu id.
-                UserDetails usuario = customUserDetailsService.obterUsuarioPeloId(id.get());
+        // 3° Saber se o id existe, se veio algum id no token.
+        if (id.isPresent()) {
 
-                // Nesse ponto verificamos se o usuario está autenticado ou não.
-                // Aqui também poderiamos validar as permissões.
-                UsernamePasswordAuthenticationToken autenticacao = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
+            // Pego o usuario dono do token pelo seu id.
+            UserDetails usuario = customUserDetailsService.obterUsuarioPeloId(id.get());
 
-                // Mudo a autenticação para a propria requisicao.
-                autenticacao.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            // Nesse ponto verificamos se o usuario está autenticado ou não.
+            // Aqui também poderiamos validar as permissões.
+            UsernamePasswordAuthenticationToken autenticacao = new UsernamePasswordAuthenticationToken(usuario, null,
+                    usuario.getAuthorities());
 
-                // Repasso a autenticação para o contexto do srping security
-                // A partir de agora o spring toma conta de tudo pra mim.
-                SecurityContextHolder.getContext().setAuthentication(autenticacao);
-            }
+            // Mudo a autenticação para a propria requisicao.
+            autenticacao.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-            // 4° filtrar regras do usuario... 
-            filterChain.doFilter(request, response);
+            // Repasso a autenticação para o contexto do srping security
+            // A partir de agora o spring toma conta de tudo pra mim.
+            SecurityContextHolder.getContext().setAuthentication(autenticacao);
+        }
+
+        // 4° filtrar regras do usuario...
+        filterChain.doFilter(request, response);
 
     }
 
-    private String obterToken(HttpServletRequest request){
+    private String obterToken(HttpServletRequest request) {
 
         String token = request.getHeader("Authorization");
 
@@ -70,5 +71,5 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
         // Bearer asuhdhausduhsad1asd4asd4as5d2sad4sa4.dasa5sd1asd4.adsd1as5d1as1d1asd
         return token.substring(7);
     }
-    
+
 }

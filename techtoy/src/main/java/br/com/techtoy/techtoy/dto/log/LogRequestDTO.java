@@ -9,12 +9,12 @@ public class LogRequestDTO {
     private EnumTipoEntidade tipoEntidade;
     private String valorOriginal;
     private String valorAtual;
-    private UsuarioRequestDTO usuario; //verificar como vai ser a criação do Usuario ResponseDTO
+    private UsuarioRequestDTO usuario; // verificar como vai ser a criação do Usuario ResponseDTO
 
-    //não colocar id pois é gerado automaticamente e dataAcao vai ser gerado junto
+    // não colocar id pois é gerado automaticamente e dataAcao vai ser gerado junto
 
     public LogRequestDTO(EnumLog tipoAcao, EnumTipoEntidade tipoEntidade, String valorOriginal, String valorAtual,
-        UsuarioRequestDTO usuario) {
+            UsuarioRequestDTO usuario) {
         this.tipoAcao = tipoAcao;
         this.tipoEntidade = tipoEntidade;
         this.valorOriginal = valorOriginal;
@@ -24,22 +24,27 @@ public class LogRequestDTO {
 
     public LogRequestDTO() {
     }
-    
+
     public EnumLog getTipoAcao() {
         return tipoAcao;
     }
+
     public void setTipoAcao(EnumLog tipoAcao) {
         this.tipoAcao = tipoAcao;
     }
+
     public UsuarioRequestDTO getUsuario() {
         return usuario;
     }
+
     public void setUsuario(UsuarioRequestDTO usuario) {
         this.usuario = usuario;
     }
+
     public EnumTipoEntidade getTipoEntidade() {
         return tipoEntidade;
     }
+
     public void setTipoEntidade(EnumTipoEntidade tipoEntidade) {
         this.tipoEntidade = tipoEntidade;
     }
@@ -60,6 +65,4 @@ public class LogRequestDTO {
         this.valorAtual = valorAtual;
     }
 
-
-    
 }

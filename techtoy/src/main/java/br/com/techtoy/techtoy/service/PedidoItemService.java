@@ -23,35 +23,35 @@ import br.com.techtoy.techtoy.repository.PedidoItemRepository;
 
 @Service
 public class PedidoItemService {
-    
+
     @Autowired
     private PedidoItemRepository pedidoItemRepository;
 
     @Autowired
     private ProdutoService produtoService;
-    
+
     @Autowired
     private LogService logService;
 
     @Autowired
     private ModelMapper mapper;
-    //CRUD
+    // CRUD
 
-    //Create
+    // Create
     @Transactional
-    public PedidoItemResponseDTO adicionar(PedidoItemRequestDTO pedidoItemRequest){
+    public PedidoItemResponseDTO adicionar(PedidoItemRequestDTO pedidoItemRequest) {
         PedidoItem pedidoItemModel = mapper.map(pedidoItemRequest, PedidoItem.class);
-        
-        if(pedidoItemModel.getAcrescimo()==null){
+
+        if (pedidoItemModel.getAcrescimo() == null) {
             pedidoItemModel.setAcrescimo(0.00);
         }
-        if(pedidoItemModel.getDesconto()==null){
+        if (pedidoItemModel.getDesconto() == null) {
             pedidoItemModel.setDesconto(0.00);
         }
-        if (pedidoItemModel.getQuantidade()==null){
+        if (pedidoItemModel.getQuantidade() == null) {
             throw new ResourceBadRequest("Favor adicionar a quantidade a ser comprada");
         }
-        if (pedidoItemModel.getProduto()==null){
+        if (pedidoItemModel.getProduto() == null) {
             throw new ResourceBadRequest("Favor adicionar o produto a ser comprado");
         }
 
@@ -63,55 +63,56 @@ public class PedidoItemService {
         pedidoItemModel.setId(0);
         pedidoItemRepository.save(pedidoItemModel);
 
-        //Fazer Auditoria
+        // Fazer Auditoria
         LogRequestDTO logRequestDTO = new LogRequestDTO();
-        logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, EnumLog.CREATE, EnumTipoEntidade.PEDIDOITEM, "", 
-                    logService.mapearObjetoParaString(pedidoItemModel));
-        
+        logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, EnumLog.CREATE,
+                EnumTipoEntidade.PEDIDOITEM, "",
+                logService.mapearObjetoParaString(pedidoItemModel));
+
         return mapper.map(pedidoItemModel, PedidoItemResponseDTO.class);
     }
 
-    //Read
-     public List<PedidoItemResponseDTO> obterTodos(){
-        
+    // Read
+    public List<PedidoItemResponseDTO> obterTodos() {
+
         List<PedidoItem> pedidoItemModel = pedidoItemRepository.findAll();
         List<PedidoItemResponseDTO> pedidoItemResponse = new ArrayList<>();
 
-        for (PedidoItem pedidoItem : pedidoItemModel){
+        for (PedidoItem pedidoItem : pedidoItemModel) {
             pedidoItemResponse.add(mapper.map(pedidoItem, PedidoItemResponseDTO.class));
         }
         return pedidoItemResponse;
     }
 
-    public PedidoItemResponseDTO obterPorId(Long id){
+    public PedidoItemResponseDTO obterPorId(Long id) {
         Optional<PedidoItem> pedidoItem = pedidoItemRepository.findById(id);
 
-        if(pedidoItem.isEmpty()){
-            throw new ResourceNotFound("Pedido Item não foi encontrado na base com o Id: "+id);
+        if (pedidoItem.isEmpty()) {
+            throw new ResourceNotFound("Pedido Item não foi encontrado na base com o Id: " + id);
         }
-            return mapper.map(pedidoItem.get(), PedidoItemResponseDTO.class);
+        return mapper.map(pedidoItem.get(), PedidoItemResponseDTO.class);
     }
 
-    //update
+    // update
     @Transactional
-    public PedidoItemResponseDTO atualizar(Long id, PedidoItemRequestDTO pedidoItemRequest){
+    public PedidoItemResponseDTO atualizar(Long id, PedidoItemRequestDTO pedidoItemRequest) {
         PedidoItem pedidoItemBase = mapper.map(obterPorId(id), PedidoItem.class);
-        
+
         PedidoItem pedidoItemModel = mapper.map(pedidoItemRequest, PedidoItem.class);
-        
-        if (pedidoItemModel.getAcrescimo() == null){
+
+        if (pedidoItemModel.getAcrescimo() == null) {
             pedidoItemModel.setAcrescimo(pedidoItemBase.getAcrescimo());
         }
-        if (pedidoItemModel.getDesconto() == null){
+        if (pedidoItemModel.getDesconto() == null) {
             pedidoItemModel.setDesconto(pedidoItemBase.getDesconto());
         }
-        if (pedidoItemModel.getQuantidade() == null){
+        if (pedidoItemModel.getQuantidade() == null) {
             pedidoItemModel.setQuantidade(pedidoItemBase.getQuantidade());
         }
-        if (pedidoItemModel.getProduto() == null){
+        if (pedidoItemModel.getProduto() == null) {
             pedidoItemModel.setProduto(pedidoItemBase.getProduto());
         }
-        if (pedidoItemModel.getPedido() == null){
+        if (pedidoItemModel.getPedido() == null) {
             pedidoItemModel.setPedido(pedidoItemBase.getPedido());
         }
 
@@ -122,35 +123,37 @@ public class PedidoItemService {
         pedidoItemModel = calcularSubTotal(pedidoItemModel);
         pedidoItemModel.setId(id);
         pedidoItemModel = pedidoItemRepository.save(pedidoItemModel);
-        
-        //Fazer Auditoria
+
+        // Fazer Auditoria
         LogRequestDTO logRequestDTO = new LogRequestDTO();
 
-        //Registrar Mudanças UPDATE na Auditoria
-        logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, EnumLog.UPDATE, EnumTipoEntidade.PEDIDOITEM, 
-                    logService.mapearObjetoParaString(pedidoItemBase),
-                    logService.mapearObjetoParaString(pedidoItemModel)
-                    );
-        
+        // Registrar Mudanças UPDATE na Auditoria
+        logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, EnumLog.UPDATE,
+                EnumTipoEntidade.PEDIDOITEM,
+                logService.mapearObjetoParaString(pedidoItemBase),
+                logService.mapearObjetoParaString(pedidoItemModel));
+
         return mapper.map(pedidoItemModel, PedidoItemResponseDTO.class);
     }
 
-    //Delete
-    public void deletar(Long id){
+    // Delete
+    public void deletar(Long id) {
         obterPorId(id);
         pedidoItemRepository.deleteById(id);
 
-        //Fazer Auditoria
+        // Fazer Auditoria
         LogRequestDTO logRequestDTO = new LogRequestDTO();
-        logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, EnumLog.DELETE, EnumTipoEntidade.PEDIDOITEM, "", "");
+        logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, EnumLog.DELETE,
+                EnumTipoEntidade.PEDIDOITEM, "", "");
 
     }
 
-    public PedidoItem calcularSubTotal(PedidoItem pedidoItemModel){
+    public PedidoItem calcularSubTotal(PedidoItem pedidoItemModel) {
 
         ProdutoResponseDTO produto = produtoService.obterPorId(pedidoItemModel.getProduto().getId());
-        double subTotal = (produto.getValorUn() - pedidoItemModel.getDesconto() + pedidoItemModel.getAcrescimo()) * pedidoItemModel.getQuantidade();
-        
+        double subTotal = (produto.getValorUn() - pedidoItemModel.getDesconto() + pedidoItemModel.getAcrescimo())
+                * pedidoItemModel.getQuantidade();
+
         pedidoItemModel.setSubTotal(subTotal);
 
         return pedidoItemModel;

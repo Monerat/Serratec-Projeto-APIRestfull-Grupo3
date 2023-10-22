@@ -15,18 +15,18 @@ import br.com.techtoy.techtoy.dto.log.LogResponseDTO;
 @RestController
 @RequestMapping("/api/logs")
 public class LogController {
-    
+
     @Autowired
     private LogService logService;
 
-    //Read
+    // Read
     @GetMapping
     public ResponseEntity<List<LogResponseDTO>> obterTodos() {
         List<LogResponseDTO> logs = logService.obterTodos();
         return ResponseEntity.ok(logs);
     }
 
-    //Read by ID
+    // Read by ID
     @GetMapping("/{id}")
     public ResponseEntity<LogResponseDTO> obterPorId(@PathVariable Long id) {
         LogResponseDTO log = logService.obterPorId(id);

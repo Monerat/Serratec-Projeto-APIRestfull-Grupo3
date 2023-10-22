@@ -41,7 +41,7 @@ public class Pedido {
      */
     @Column(nullable = false)
     private EnumFormaPagamento formaPagamento;
-   
+
     /**
      * Valor total do pedido.
      */
@@ -74,7 +74,7 @@ public class Pedido {
      * Itens associados ao pedido.
      */
     @OneToMany(mappedBy = "pedido")
-    private List<PedidoItem> pedidoItens; //Transient evita que o JSON crie recursão infinita.
+    private List<PedidoItem> pedidoItens; // Transient evita que o JSON crie recursão infinita.
 
     /**
      * Construtor padrão para criar um novo pedido com valores padrão e data atual.
@@ -115,108 +115,72 @@ public class Pedido {
         return id;
     }
 
-
-
     public void setId(long id) {
         this.id = id;
     }
-
-
 
     public Date getDataPedido() {
         return dataPedido;
     }
 
-
-
     public void setDataPedido(Date dataPedido) {
         this.dataPedido = dataPedido;
     }
-
-
 
     public EnumFormaPagamento getFormaPagamento() {
         return formaPagamento;
     }
 
-
-
     public void setFormaPagamento(EnumFormaPagamento formaPagamento) {
         this.formaPagamento = formaPagamento;
     }
-
-
 
     public double getValorTotal() {
         return valorTotal;
     }
 
-
-
     public void setValorTotal(double valorTotal) {
         this.valorTotal = valorTotal;
     }
-
-    
 
     public double getAcrescimoTotal() {
         return acrescimoTotal;
     }
 
-
-
     public void setAcrescimoTotal(double acrescimoTotal) {
         this.acrescimoTotal = acrescimoTotal;
     }
-
-
 
     public double getDescontoTotal() {
         return descontoTotal;
     }
 
-
-
     public void setDescontoTotal(double descontoTotal) {
         this.descontoTotal = descontoTotal;
     }
-
-
 
     public String getObservacao() {
         return observacao;
     }
 
-
-
     public void setObservacao(String observacao) {
         this.observacao = observacao;
     }
-
-
 
     public Usuario getUsuario() {
         return usuario;
     }
 
-
-
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
-
-
 
     public List<PedidoItem> getPedidoItens() {
         return pedidoItens;
     }
 
-
-
     public void setPedidoItens(List<PedidoItem> pedidoItens) {
         this.pedidoItens = pedidoItens;
     }
-    
 
 }
-

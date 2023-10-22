@@ -18,7 +18,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "categoria")
 public class Categoria {
-    
+
     // Atributos
 
     @Id
@@ -38,13 +38,14 @@ public class Categoria {
     private List<Produto> produtos;
 
     /**
-     * Construtor que inicializa um objeto de Categoria com os parâmetros fornecidos.
+     * Construtor que inicializa um objeto de Categoria com os parâmetros
+     * fornecidos.
      *
-     * @param id          O ID da categoria.
-     * @param nome        O nome da categoria.
-     * @param observacao  Uma observação sobre a categoria.
-     * @param ativo       O estado de ativação da categoria.
-     * @param produto     O produto associado à categoria.
+     * @param id         O ID da categoria.
+     * @param nome       O nome da categoria.
+     * @param observacao Uma observação sobre a categoria.
+     * @param ativo      O estado de ativação da categoria.
+     * @param produto    O produto associado à categoria.
      */
     public Categoria(long id, String nome, String observacao, boolean ativo, Produto produto) {
         this.id = id;
@@ -111,8 +112,5 @@ public class Categoria {
     public void setProdutos(List<Produto> produtos) {
         this.produtos = produtos;
     }
-
-
-    
 
 }

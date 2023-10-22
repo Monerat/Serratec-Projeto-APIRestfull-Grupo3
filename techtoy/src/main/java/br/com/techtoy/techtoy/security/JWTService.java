@@ -41,12 +41,11 @@ public class JWTService {
     // retorna o token jwt.
     return Jwts.builder()
         .setSubject(usuario.getId().toString()) // Identificador unico do usuario
-        .setIssuedAt(new Date()) //Data da geração do token.
+        .setIssuedAt(new Date()) // Data da geração do token.
         .setExpiration(dataExpiracao) // Data de expiração do token.
-        .signWith(SignatureAlgorithm.HS256, SECURITY_KEY) //Algoritimo de criptografia e a chave secreta.
+        .signWith(SignatureAlgorithm.HS256, SECURITY_KEY) // Algoritimo de criptografia e a chave secreta.
         .compact(); // Aqui pega tudo e gera o token...
   }
-
 
   /**
    * Método para retornar o id do usuário dono do token.
@@ -54,7 +53,7 @@ public class JWTService {
    * @param token Token do usuario
    * @return Id do usuario
    */
-  public Optional<Long> obterIdDoUsuario(String token){
+  public Optional<Long> obterIdDoUsuario(String token) {
     try {
       // Aqui pego a claim do token para achar o usuario dono dele.
       Claims claims = Jwts.parser().setSigningKey(SECURITY_KEY).parseClaimsJws(token).getBody();

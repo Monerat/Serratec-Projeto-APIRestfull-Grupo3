@@ -31,7 +31,7 @@ import br.com.techtoy.techtoy.repository.PedidoRepository;
 
 @Service
 public class PedidoService {
-    
+
     @Autowired
     private PedidoRepository pedidoRepository;
 
@@ -50,56 +50,56 @@ public class PedidoService {
     @Autowired
     private ModelMapper mapper;
 
-    //CRUD
+    // CRUD
 
-    //Create
+    // Create
     @Transactional
-    public PedidoResponseDTO adicionar(PedidoRequestDTO pedidoRequest){
+    public PedidoResponseDTO adicionar(PedidoRequestDTO pedidoRequest) {
         Pedido pedidoModel = mapper.map(pedidoRequest, Pedido.class);
 
-        //CRIAR NOVA VARIAVEL DE PEDIDOITEMREQUESTDTO
+        // CRIAR NOVA VARIAVEL DE PEDIDOITEMREQUESTDTO
         List<PedidoItemRequestDTO> pedidoItemRequest = pedidoRequest.getPedidoItens();
 
-        if (pedidoModel.getFormaPagamento()==null){
+        if (pedidoModel.getFormaPagamento() == null) {
             throw new ResourceBadRequest("Favor adicionar a forma de pagamento");
         }
 
         pedidoModel.setId(0);
-        pedidoModel.setUsuario(logService.verificarUsuarioLogado()); //precisa dessas linhas?
+        pedidoModel.setUsuario(logService.verificarUsuarioLogado()); // precisa dessas linhas?
         pedidoModel = pedidoRepository.save(pedidoModel);
 
         Usuario usuarioLogado = logService.verificarUsuarioLogado();
 
         pedidoModel.setUsuario(usuarioLogado);
         pedidoModel = pedidoRepository.save(pedidoModel);
-        
-        //adicionar pedidoItens no pedido
+
+        // adicionar pedidoItens no pedido
         List<PedidoItemResponseDTO> itens = adicionarItens(pedidoItemRequest, pedidoModel);
-        PedidoResponseDTO pedidoResponse = mapper.map(pedidoModel, PedidoResponseDTO.class); 
+        PedidoResponseDTO pedidoResponse = mapper.map(pedidoModel, PedidoResponseDTO.class);
         pedidoResponse.setPedidoItens(itens);
         pedidoModel = mapper.map(pedidoResponse, Pedido.class);
 
         pedidoModel = pedidoRepository.save(calcularValoresTotais(pedidoModel));
 
-        //Fazer Auditoria
+        // Fazer Auditoria
         LogRequestDTO logRequestDTO = new LogRequestDTO();
 
-        logService.adicionar(usuarioLogado, logRequestDTO, EnumLog.CREATE, EnumTipoEntidade.PEDIDO, "", 
-                    logService.mapearObjetoParaString(pedidoModel));
+        logService.adicionar(usuarioLogado, logRequestDTO, EnumLog.CREATE, EnumTipoEntidade.PEDIDO, "",
+                logService.mapearObjetoParaString(pedidoModel));
 
         diminuirEstoque(pedidoModel);
         emailService.dispararEmailPedido(usuarioLogado.getEmail(), usuarioLogado.getNome(), pedidoModel);
 
         pedidoResponse = mapper.map(pedidoModel, PedidoResponseDTO.class);
-        
+
         return pedidoResponse;
     }
 
-    private List<PedidoItemResponseDTO> adicionarItens(List<PedidoItemRequestDTO> pedidosRequest, Pedido pedidoModel){
-        
+    private List<PedidoItemResponseDTO> adicionarItens(List<PedidoItemRequestDTO> pedidosRequest, Pedido pedidoModel) {
+
         List<PedidoItemResponseDTO> adicionadas = new ArrayList<>();
 
-        for(PedidoItemRequestDTO pedidoItemRequest : pedidosRequest){
+        for (PedidoItemRequestDTO pedidoItemRequest : pedidosRequest) {
 
             PedidoItem pedidoItem = mapper.map(pedidoItemRequest, PedidoItem.class);
             pedidoItem.setPedido(pedidoModel);
@@ -108,78 +108,78 @@ public class PedidoService {
 
         return adicionadas;
 
-    }  
+    }
 
-    //Read
-    public List<PedidoResponseDTO> obterTodos(){
+    // Read
+    public List<PedidoResponseDTO> obterTodos() {
 
         List<Pedido> pedidos = pedidoRepository.findAll();
 
         return pedidos.stream().map(pedido -> mapper
-        .map(pedido, PedidoResponseDTO.class))
-        .collect(Collectors.toList());
+                .map(pedido, PedidoResponseDTO.class))
+                .collect(Collectors.toList());
     }
 
-    public PedidoResponseDTO obterPorId(Long id){
+    public PedidoResponseDTO obterPorId(Long id) {
 
         Optional<Pedido> optpedido = pedidoRepository.findById(id);
 
-        if(optpedido.isEmpty()){
-            throw new ResourceNotFound("Pedido não foi encontrado na base com o Id: "+id);
+        if (optpedido.isEmpty()) {
+            throw new ResourceNotFound("Pedido não foi encontrado na base com o Id: " + id);
         }
-        
+
         return mapper.map(optpedido.get(), PedidoResponseDTO.class);
     }
 
-    //Update
+    // Update
     @Transactional
-    public PedidoResponseDTO atualizar(Long id, PedidoRequestDTO pedidoRequest){
-        Pedido pedidoBase = mapper.map(obterPorId(id),Pedido.class);
+    public PedidoResponseDTO atualizar(Long id, PedidoRequestDTO pedidoRequest) {
+        Pedido pedidoBase = mapper.map(obterPorId(id), Pedido.class);
         Pedido pedidoModel = mapper.map(pedidoRequest, Pedido.class);
-    
-        
-        if (pedidoModel.getDataPedido()==null){
+
+        if (pedidoModel.getDataPedido() == null) {
             pedidoModel.setDataPedido(pedidoBase.getDataPedido());
         }
-        if (pedidoModel.getFormaPagamento()==null){
+        if (pedidoModel.getFormaPagamento() == null) {
             pedidoModel.setFormaPagamento(pedidoBase.getFormaPagamento());
         }
-        if (pedidoModel.getObservacao()==null){
+        if (pedidoModel.getObservacao() == null) {
             pedidoModel.setObservacao(pedidoBase.getObservacao());
         }
-        if (pedidoModel.getUsuario()==null){
+        if (pedidoModel.getUsuario() == null) {
             pedidoModel.setUsuario(pedidoBase.getUsuario());
         }
-        
+
         pedidoModel.setId(id);
         pedidoModel.setUsuario(logService.verificarUsuarioLogado());
         pedidoModel = calcularValoresTotais(pedidoModel);
         pedidoModel = pedidoRepository.save(pedidoModel);
-       
-        //Fazer Auditoria
+
+        // Fazer Auditoria
         LogRequestDTO logRequestDTO = new LogRequestDTO();
 
-        //Registrar Mudanças UPDATE na Auditoria
-        logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, EnumLog.UPDATE, EnumTipoEntidade.PEDIDO, 
-                    logService.mapearObjetoParaString(pedidoBase),
-                    logService.mapearObjetoParaString(pedidoModel)
-                    );
+        // Registrar Mudanças UPDATE na Auditoria
+        logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, EnumLog.UPDATE,
+                EnumTipoEntidade.PEDIDO,
+                logService.mapearObjetoParaString(pedidoBase),
+                logService.mapearObjetoParaString(pedidoModel));
 
         return mapper.map(pedidoModel, PedidoResponseDTO.class);
     }
-    
-    //Delete
-    public void deletar(Long id){
+
+    // Delete
+    public void deletar(Long id) {
         obterPorId(id);
         pedidoRepository.deleteById(id);
-        
-        //Fazer Auditoria
+
+        // Fazer Auditoria
         LogRequestDTO logRequestDTO = new LogRequestDTO();
-        logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, EnumLog.DELETE, EnumTipoEntidade.PEDIDO, "", "");
+        logService.adicionar(logService.verificarUsuarioLogado(), logRequestDTO, EnumLog.DELETE,
+                EnumTipoEntidade.PEDIDO, "", "");
 
     }
 
-    public Pedido calcularValoresTotais (Pedido pedido){
+    public Pedido calcularValoresTotais(Pedido pedido) {
 
         List<PedidoItem> pedidosItens = pedido.getPedidoItens();
 
@@ -187,34 +187,34 @@ public class PedidoService {
         Double descontoTotal = 0.0;
         Double acrescimoTotal = 0.0;
 
-        for(PedidoItem pedidoItem:pedidosItens){
-            acrescimoTotal += pedidoItem.getAcrescimo()*pedidoItem.getQuantidade();
-            descontoTotal += pedidoItem.getDesconto()*pedidoItem.getQuantidade();
+        for (PedidoItem pedidoItem : pedidosItens) {
+            acrescimoTotal += pedidoItem.getAcrescimo() * pedidoItem.getQuantidade();
+            descontoTotal += pedidoItem.getDesconto() * pedidoItem.getQuantidade();
             valorTotal += pedidoItem.getSubTotal();
         }
-        
+
         pedido.setAcrescimoTotal(acrescimoTotal);
         pedido.setDescontoTotal(descontoTotal);
         pedido.setValorTotal(valorTotal);
 
         return pedido;
     }
-    
-    public void diminuirEstoque(Pedido pedido){
+
+    public void diminuirEstoque(Pedido pedido) {
         Integer estoque;
         Integer quantidade;
 
-        for(PedidoItem pedidoItem : pedido.getPedidoItens()){
+        for (PedidoItem pedidoItem : pedido.getPedidoItens()) {
             ProdutoResponseDTO produtoAtual = produtoService.obterPorId(pedidoItem.getProduto().getId());
             estoque = produtoAtual.getEstoque();
             quantidade = pedidoItem.getQuantidade();
             estoque = estoque - quantidade;
-            if (estoque<0){
+            if (estoque < 0) {
                 throw new OutofStockException("Estamos sem estoque suficiente do item " + produtoAtual.getNome());
             }
 
             produtoAtual.setEstoque(estoque);
-            produtoService.atualizar(produtoAtual.getId(),mapper.map(produtoAtual, ProdutoRequestDTO.class));
+            produtoService.atualizar(produtoAtual.getId(), mapper.map(produtoAtual, ProdutoRequestDTO.class));
         }
     }
 

@@ -1,8 +1,9 @@
 package br.com.techtoy.techtoy.dto.Pedido;
 
 import br.com.techtoy.techtoy.model.Enum.EnumFormaPagamento;
+
 public class PedidoBaseDTO {
-    
+
     protected Long id;
     protected EnumFormaPagamento formaPagamento;
     protected String observacao;
@@ -10,6 +11,7 @@ public class PedidoBaseDTO {
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -29,5 +31,5 @@ public class PedidoBaseDTO {
     public void setObservacao(String observacao) {
         this.observacao = observacao;
     }
-    
+
 }

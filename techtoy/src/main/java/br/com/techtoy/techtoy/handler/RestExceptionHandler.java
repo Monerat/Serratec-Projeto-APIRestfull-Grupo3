@@ -42,27 +42,28 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler(OutofStockException.class)
-    public ResponseEntity<ErrorResponse> OutofStockException(Exception ex){
+    public ResponseEntity<ErrorResponse> OutofStockException(Exception ex) {
 
-        ErrorResponse erro = new ErrorResponse(400, "Bad Request", "Não temos estoque suficiente do item", dateConverter.converter(new Date()));
+        ErrorResponse erro = new ErrorResponse(400, "Bad Request", "Não temos estoque suficiente do item",
+                dateConverter.converter(new Date()));
 
         return new ResponseEntity<>(erro, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ErrorResponse> handlerBadCredentialsException(Exception ex){
+    public ResponseEntity<ErrorResponse> handlerBadCredentialsException(Exception ex) {
 
-        ErrorResponse erro = new ErrorResponse(401, "Unauthorized", "Usuário ou senha inválidos", dateConverter.converter(new Date()));
+        ErrorResponse erro = new ErrorResponse(401, "Unauthorized", "Usuário ou senha inválidos",
+                dateConverter.converter(new Date()));
 
         return new ResponseEntity<>(erro, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ErrorResponse> handlerAccessDeniedException(AccessDeniedException ex){
+    public ResponseEntity<ErrorResponse> handlerAccessDeniedException(AccessDeniedException ex) {
 
         ErrorResponse erro = new ErrorResponse(403, "Forbidden", ex.getMessage(), dateConverter.converter(new Date()));
 
         return new ResponseEntity<>(erro, HttpStatus.FORBIDDEN);
     }
 }
-
