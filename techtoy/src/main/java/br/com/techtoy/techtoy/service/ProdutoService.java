@@ -188,6 +188,10 @@ public class ProdutoService {
             produtoModel.setCategoria(produtoBase.getCategoria());
         }
 
+        if (!categoriaService.obterPorId(produtoModel.getCategoria().getId()).isAtivo()) {
+            produtoModel.setAtivo(false);
+        }
+
         ChecaValores.verificaValorDouble(produtoModel.getValorUn());
         ChecaValores.verificaValorInt(produtoModel.getEstoque());
 
