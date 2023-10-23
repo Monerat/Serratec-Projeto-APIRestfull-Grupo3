@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.techtoy.techtoy.common.ChecaValores;
 import br.com.techtoy.techtoy.dto.Pedido.PedidoRequestDTO;
 import br.com.techtoy.techtoy.dto.Pedido.PedidoResponseDTO;
 import br.com.techtoy.techtoy.dto.log.LogRequestDTO;
@@ -121,6 +122,7 @@ public class PedidoService {
     }
 
     public PedidoResponseDTO obterPorId(Long id) {
+        ChecaValores.verificaValorInt(id.intValue());
 
         Optional<Pedido> optpedido = pedidoRepository.findById(id);
 
@@ -134,6 +136,8 @@ public class PedidoService {
     // Update
     @Transactional
     public PedidoResponseDTO atualizar(Long id, PedidoRequestDTO pedidoRequest) {
+        ChecaValores.verificaValorInt(id.intValue());
+
         Pedido pedidoBase = mapper.map(obterPorId(id), Pedido.class);
         Pedido pedidoModel = mapper.map(pedidoRequest, Pedido.class);
 
@@ -169,6 +173,7 @@ public class PedidoService {
 
     // Delete
     public void deletar(Long id) {
+        ChecaValores.verificaValorInt(id.intValue());
         obterPorId(id);
         pedidoRepository.deleteById(id);
 

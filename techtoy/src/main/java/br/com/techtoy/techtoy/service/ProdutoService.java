@@ -110,6 +110,7 @@ public class ProdutoService {
     }
 
     public ProdutoResponseDTO obterPorIdPublic(Long id) {
+        ChecaValores.verificaValorInt(id.intValue());
         Optional<Produto> produto = produtoRepository.findById(id);
         ProdutoResponseDTO produtoResponse = new ProdutoResponseDTO();
 
@@ -142,6 +143,7 @@ public class ProdutoService {
     }
 
     public ProdutoResponseDTO obterPorId(Long id) {
+        ChecaValores.verificaValorInt(id.intValue());
         Optional<Produto> produto = produtoRepository.findById(id);
 
         if (produto.isEmpty()) {
@@ -154,6 +156,8 @@ public class ProdutoService {
     // Update
     @Transactional
     public ProdutoResponseDTO atualizar(Long id, ProdutoRequestDTO produtoRequest) {
+        ChecaValores.verificaValorInt(id.intValue());
+
         Produto produtoBase = mapper.map(obterPorId(id), Produto.class);
         Produto produtoModel = mapper.map(produtoRequest, Produto.class);
 
@@ -211,6 +215,7 @@ public class ProdutoService {
 
     // Delete
     public void deletar(Long id) {
+        ChecaValores.verificaValorInt(id.intValue());
         obterPorId(id);
         produtoRepository.deleteById(id);
 
@@ -223,6 +228,7 @@ public class ProdutoService {
 
     // Adicionar imagem ao novo produto
     public String adicionarImagem(Long id) {
+        ChecaValores.verificaValorInt(id.intValue());
         String folderPath = "src/main/resources/img/produtos/";
         String fileName = String.valueOf(id);
 
@@ -237,6 +243,7 @@ public class ProdutoService {
 
     // Verificar a existência de Imagem de um produto
     public String verificaImagem(Long id) {
+        ChecaValores.verificaValorInt(id.intValue());
 
         String fileName = String.valueOf(id);
 

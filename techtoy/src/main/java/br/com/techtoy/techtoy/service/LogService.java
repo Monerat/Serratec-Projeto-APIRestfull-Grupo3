@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import br.com.techtoy.techtoy.common.ChecaValores;
 import br.com.techtoy.techtoy.dto.log.LogRequestDTO;
 import br.com.techtoy.techtoy.dto.log.LogResponseDTO;
 import br.com.techtoy.techtoy.model.Log;
@@ -60,6 +61,7 @@ public class LogService {
     }
 
     public LogResponseDTO obterPorId(Long id) {
+        ChecaValores.verificaValorInt(id.intValue());
         Optional<Log> log = logRepository.findById(id);
 
         if (log.isEmpty()) {

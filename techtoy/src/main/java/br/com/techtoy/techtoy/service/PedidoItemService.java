@@ -85,6 +85,7 @@ public class PedidoItemService {
     }
 
     public PedidoItemResponseDTO obterPorId(Long id) {
+        ChecaValores.verificaValorInt(id.intValue());
         Optional<PedidoItem> pedidoItem = pedidoItemRepository.findById(id);
 
         if (pedidoItem.isEmpty()) {
@@ -96,6 +97,7 @@ public class PedidoItemService {
     // update
     @Transactional
     public PedidoItemResponseDTO atualizar(Long id, PedidoItemRequestDTO pedidoItemRequest) {
+        ChecaValores.verificaValorInt(id.intValue());
         PedidoItem pedidoItemBase = mapper.map(obterPorId(id), PedidoItem.class);
 
         PedidoItem pedidoItemModel = mapper.map(pedidoItemRequest, PedidoItem.class);
@@ -138,6 +140,7 @@ public class PedidoItemService {
 
     // Delete
     public void deletar(Long id) {
+        ChecaValores.verificaValorInt(id.intValue());
         obterPorId(id);
         pedidoItemRepository.deleteById(id);
 

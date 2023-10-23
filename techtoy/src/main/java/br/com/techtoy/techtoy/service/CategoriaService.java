@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.techtoy.techtoy.common.ChecaValores;
 import br.com.techtoy.techtoy.dto.categoria.CategoriaRequestDTO;
 import br.com.techtoy.techtoy.dto.categoria.CategoriaResponseDTO;
 import br.com.techtoy.techtoy.dto.log.LogRequestDTO;
@@ -88,6 +89,7 @@ public class CategoriaService {
     }
 
     public CategoriaResponseDTO obterPorIdPublic(Long id) {
+        ChecaValores.verificaValorInt(id.intValue());
         Optional<Categoria> categoria = categoriaRepository.findById(id);
         CategoriaResponseDTO categoriaResponse = new CategoriaResponseDTO();
 
@@ -118,6 +120,7 @@ public class CategoriaService {
     }
 
     public CategoriaResponseDTO obterPorId(Long id) {
+        ChecaValores.verificaValorInt(id.intValue());
         Optional<Categoria> optCategoria = categoriaRepository.findById(id);
 
         if (optCategoria.isEmpty()) {
@@ -129,6 +132,7 @@ public class CategoriaService {
     // Update
     @Transactional
     public CategoriaResponseDTO atualizar(Long id, CategoriaRequestDTO categoriaRequest) {
+        ChecaValores.verificaValorInt(id.intValue());
 
         Categoria categoriaBase = mapper.map(obterPorId(id), Categoria.class);
 
@@ -172,6 +176,7 @@ public class CategoriaService {
 
     // Delete
     public void deletar(Long id) {
+        ChecaValores.verificaValorInt(id.intValue());
         obterPorId(id);
         categoriaRepository.deleteById(id);
 

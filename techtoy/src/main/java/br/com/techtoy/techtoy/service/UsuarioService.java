@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 
+import br.com.techtoy.techtoy.common.ChecaValores;
 import br.com.techtoy.techtoy.dto.log.LogRequestDTO;
 import br.com.techtoy.techtoy.dto.usuario.UsuarioLoginResponseDTO;
 import br.com.techtoy.techtoy.dto.usuario.UsuarioRequestDTO;
@@ -120,6 +121,7 @@ public class UsuarioService {
     }
 
     public UsuarioResponseDTO obterPorId(Long id) {
+        ChecaValores.verificaValorInt(id.intValue());
         Optional<Usuario> optUsuario = usuarioRepository.findById(id);
 
         if (optUsuario.isEmpty()) {
@@ -131,6 +133,7 @@ public class UsuarioService {
     // Update
     @Transactional
     public UsuarioResponseDTO atualizar(Long id, UsuarioRequestDTO usuarioRequest) {
+        ChecaValores.verificaValorInt(id.intValue());
         Usuario usuarioBase = mapper.map(obterPorId(id), Usuario.class);
 
         Usuario usuarioModel = mapper.map(usuarioRequest, Usuario.class);
@@ -173,6 +176,7 @@ public class UsuarioService {
 
     // Delete
     public void deletar(Long id) {
+        ChecaValores.verificaValorInt(id.intValue());
         obterPorId(id);
         usuarioRepository.deleteById(id);
 
