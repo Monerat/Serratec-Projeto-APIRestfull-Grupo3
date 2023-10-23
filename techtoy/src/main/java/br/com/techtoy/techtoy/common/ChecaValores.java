@@ -24,4 +24,10 @@ public class ChecaValores {
             throw new ResourceBadRequest("Não pode ter valor negativo");
         }
     }
+
+    public static void verificaValorLong(Long numero) {
+        if (numero <= 0) {
+            throw new ResourceBadRequest("Não pode ter valor zero ou negativo");
+        }
+    }
 }

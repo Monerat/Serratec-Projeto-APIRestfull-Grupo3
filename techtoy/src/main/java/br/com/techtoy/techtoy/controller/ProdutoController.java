@@ -147,4 +147,11 @@ public class ProdutoController {
                 .status(204)
                 .build();
     }
+
+    @GetMapping("/public/nome/{nome}")
+    public ResponseEntity<List<ProdutoResponseDTO>> obterPorCategoria(@PathVariable String nome) {
+        return ResponseEntity
+                .status(200)
+                .body(produtoService.obterPorCategoria(nome));
+    }
 }

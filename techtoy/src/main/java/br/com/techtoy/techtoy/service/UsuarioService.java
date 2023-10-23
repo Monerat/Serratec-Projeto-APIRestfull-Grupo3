@@ -121,7 +121,7 @@ public class UsuarioService {
     }
 
     public UsuarioResponseDTO obterPorId(Long id) {
-        ChecaValores.verificaValorInt(id.intValue());
+        ChecaValores.verificaValorLong(id);
         Optional<Usuario> optUsuario = usuarioRepository.findById(id);
 
         if (optUsuario.isEmpty()) {
@@ -133,7 +133,7 @@ public class UsuarioService {
     // Update
     @Transactional
     public UsuarioResponseDTO atualizar(Long id, UsuarioRequestDTO usuarioRequest) {
-        ChecaValores.verificaValorInt(id.intValue());
+        ChecaValores.verificaValorLong(id);
         Usuario usuarioBase = mapper.map(obterPorId(id), Usuario.class);
 
         Usuario usuarioModel = mapper.map(usuarioRequest, Usuario.class);
@@ -176,7 +176,7 @@ public class UsuarioService {
 
     // Delete
     public void deletar(Long id) {
-        ChecaValores.verificaValorInt(id.intValue());
+        ChecaValores.verificaValorLong(id);
         obterPorId(id);
         usuarioRepository.deleteById(id);
 

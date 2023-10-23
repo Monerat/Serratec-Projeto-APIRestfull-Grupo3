@@ -61,7 +61,7 @@ public class LogService {
     }
 
     public LogResponseDTO obterPorId(Long id) {
-        ChecaValores.verificaValorInt(id.intValue());
+        ChecaValores.verificaValorLong(id);
         Optional<Log> log = logRepository.findById(id);
 
         if (log.isEmpty()) {

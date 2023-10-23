@@ -83,13 +83,13 @@ public class CategoriaService {
         if (categoria.get().getAtivo()) {
             categoriaResponse = mapper.map(categoria.get(), CategoriaResponseDTO.class);
         } else {
-            throw new ResourceBadRequest("A Categoria com id " + Nome + " está inativa");
+            throw new ResourceBadRequest("A Categoria com o nome " + Nome + " está inativa");
         }
         return categoriaResponse;
     }
 
     public CategoriaResponseDTO obterPorIdPublic(Long id) {
-        ChecaValores.verificaValorInt(id.intValue());
+        ChecaValores.verificaValorLong(id);
         Optional<Categoria> categoria = categoriaRepository.findById(id);
         CategoriaResponseDTO categoriaResponse = new CategoriaResponseDTO();
 
@@ -120,7 +120,7 @@ public class CategoriaService {
     }
 
     public CategoriaResponseDTO obterPorId(Long id) {
-        ChecaValores.verificaValorInt(id.intValue());
+        ChecaValores.verificaValorLong(id);
         Optional<Categoria> optCategoria = categoriaRepository.findById(id);
 
         if (optCategoria.isEmpty()) {
@@ -132,7 +132,7 @@ public class CategoriaService {
     // Update
     @Transactional
     public CategoriaResponseDTO atualizar(Long id, CategoriaRequestDTO categoriaRequest) {
-        ChecaValores.verificaValorInt(id.intValue());
+        ChecaValores.verificaValorLong(id);
 
         Categoria categoriaBase = mapper.map(obterPorId(id), Categoria.class);
 
@@ -176,7 +176,7 @@ public class CategoriaService {
 
     // Delete
     public void deletar(Long id) {
-        ChecaValores.verificaValorInt(id.intValue());
+        ChecaValores.verificaValorLong(id);
         obterPorId(id);
         categoriaRepository.deleteById(id);
 

@@ -122,7 +122,7 @@ public class PedidoService {
     }
 
     public PedidoResponseDTO obterPorId(Long id) {
-        ChecaValores.verificaValorInt(id.intValue());
+        ChecaValores.verificaValorLong(id);
 
         Optional<Pedido> optpedido = pedidoRepository.findById(id);
 
@@ -136,7 +136,7 @@ public class PedidoService {
     // Update
     @Transactional
     public PedidoResponseDTO atualizar(Long id, PedidoRequestDTO pedidoRequest) {
-        ChecaValores.verificaValorInt(id.intValue());
+        ChecaValores.verificaValorLong(id);
 
         Pedido pedidoBase = mapper.map(obterPorId(id), Pedido.class);
         Pedido pedidoModel = mapper.map(pedidoRequest, Pedido.class);
@@ -173,7 +173,7 @@ public class PedidoService {
 
     // Delete
     public void deletar(Long id) {
-        ChecaValores.verificaValorInt(id.intValue());
+        ChecaValores.verificaValorLong(id);
         obterPorId(id);
         pedidoRepository.deleteById(id);
 
