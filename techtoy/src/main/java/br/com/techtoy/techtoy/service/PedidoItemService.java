@@ -140,6 +140,7 @@ public class PedidoItemService {
 
     // Delete
     public void deletar(Long id) {
+        //teste
         ChecaValores.verificaValorLong(id);
         obterPorId(id);
         pedidoItemRepository.deleteById(id);
