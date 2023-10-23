@@ -49,8 +49,7 @@ public class ProdutoService {
     public ProdutoResponseDTO adicionar(ProdutoRequestDTO produtoRequest) {
         Produto produtoModel = mapper.map(produtoRequest, Produto.class);
 
-        ChecaValores.verificaValorDouble(produtoModel.getValorUn());
-        ChecaValores.verificaValorInt(produtoModel.getEstoque());
+        
 
         if (produtoModel.getNome() == null) {
             throw new ResourceBadRequest("Você não inseriu o nome do produto, que é um campo que não pode ser nulo");
@@ -74,6 +73,8 @@ public class ProdutoService {
             produtoModel.setAtivo(false);
         }
 
+        ChecaValores.verificaValorDouble(produtoModel.getValorUn());
+        ChecaValores.verificaValorInt(produtoModel.getEstoque());
         produtoModel.setId(0);
 
         produtoModel = produtoRepository.save(produtoModel);
