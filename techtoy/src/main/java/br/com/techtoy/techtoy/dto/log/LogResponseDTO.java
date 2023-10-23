@@ -2,8 +2,6 @@ package br.com.techtoy.techtoy.dto.log;
 
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import br.com.techtoy.techtoy.dto.usuario.UsuarioResponseDTO;
 import br.com.techtoy.techtoy.model.Enum.EnumLog;
 import br.com.techtoy.techtoy.model.Enum.EnumTipoEntidade;
@@ -16,7 +14,7 @@ public class LogResponseDTO {
     private Date dataAcao;
     private String valorOriginal;
     private String valorAtual;
- 
+
     private UsuarioResponseDTO usuario; // verificar como vai ser a criação do Usuario ResponseDTO
 
     public long getId() {

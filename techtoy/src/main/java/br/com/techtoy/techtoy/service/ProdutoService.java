@@ -276,10 +276,5 @@ public class ProdutoService {
 
         return produto;
     }
-    
-    public List<ProdutoResponseDTO> obterPorCategoria(String nome) {
-        CategoriaResponseDTO categoriaEncontrada = categoriaService.obterPorNomePublic(nome);
 
-        return categoriaEncontrada.getProdutos();
-    }
 }
