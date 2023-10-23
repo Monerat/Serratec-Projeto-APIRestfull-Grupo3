@@ -3,12 +3,16 @@ package br.com.techtoy.techtoy.dto.usuario;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import br.com.techtoy.techtoy.dto.Pedido.PedidoResponseDTO;
 import br.com.techtoy.techtoy.dto.log.LogResponseDTO;
 
 public class UsuarioResponseDTO extends UsuarioBaseDTO {
 
+    @JsonBackReference
     private List<LogResponseDTO> logs;
+    
     private List<PedidoResponseDTO> pedidos;
     private Date dataCadastro;
 

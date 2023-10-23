@@ -16,7 +16,7 @@ public class LogResponseDTO {
     private Date dataAcao;
     private String valorOriginal;
     private String valorAtual;
-    @JsonBackReference
+ 
     private UsuarioResponseDTO usuario; // verificar como vai ser a criação do Usuario ResponseDTO
 
     public long getId() {
